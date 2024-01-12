@@ -2,13 +2,12 @@
 
 ### Cose da fare
 
-- [ ] Kanban board su trellow
-- [ ] Gant con requisiti, definizione task e priorità
-- [ ] Definizione di sprint
-- [ ] Creare 3 milestone con dei test alla fine del milestone e specie di demo
-- [ ] Ogni giorno specie di daily revue. Cose da fare, cose rimaste in sospeso
+- [ ] Trello
+- [ ] GitHub
+- [ ] Gant con requisiti, definire task e priorità
+- [ ] Definire dei mini sprint
+- [ ] Creare 3 milestone
 - [ ] Diario
-- [ ] Doc alla fine dei task
 - [ ] requisiti tecnici
 
 >Consegna
