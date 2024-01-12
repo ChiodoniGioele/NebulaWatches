@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 # NebulaWatches
 
 ### Cose da fare
