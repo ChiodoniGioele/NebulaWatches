@@ -8,3 +8,4 @@
 >
 > 17 / 25 presentazioni
 
+https://www.nobledesktop.com/learn/git/git-branches
