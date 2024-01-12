@@ -1,0 +1,5 @@
+#Ignora .obsidian
+.obsidian/
+
+#Ignora file ~
+~*.docx
