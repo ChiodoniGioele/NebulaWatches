@@ -1,0 +1,82 @@
+server:
+  port: 8080
+
+logging:
+  pattern:
+    level: "trace_id=%mdc{traceId} span_id=%mdc{spanId} trace_flags=%mdc{traceFlags} %p"
+
+  level:
+    root: ERROR
+    ch.chiodoni: DEBUG
+    org.springframework: WARN
+    org.springframework.transaction: TRACE
+    org.h2: DEBUG
+
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  endpoint.health:
+    show-details: always
+    show-components: always
+    probes.enabled: true
+  security.enabled: false
+  endpoints.web.exposure.include: '*'
+  metrics:
+    enable:
+      jvm: true
+
+spring:
+  application:
+    name: cal
+  output:
+    ansi:
+      enabled: ALWAYS
+  resources:
+    cache:
+      period: 0
+    chain:
+      enabled: true
+      cache: false
+  datasource:
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 10
+    url: jdbc:h2:mem:cal
+    driverClassName: org.h2.Driver
+    username: sa
+    password: admin
+  jpa:
+    open-in-view: false
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: true
+    show-sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings.trace: false
+      settings.web-allow-others: true
+
+springdoc:
+  version: 1.0
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger
+    operationsSorter: alpha
+    tagsSorter: alpha
+  show-actuator: false
+
+cal:
+  service:
+    counter:
+      fixedDelay:
+        in:
+          milliseconds: 10000

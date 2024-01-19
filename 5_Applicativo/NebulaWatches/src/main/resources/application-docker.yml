@@ -1,0 +1,16 @@
+management:
+  zipkin:
+    tracing:
+      endpoint: ${TRACING_ENDPOINT}
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    driverClassName: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  h2:
+    console:
+      enabled: false
