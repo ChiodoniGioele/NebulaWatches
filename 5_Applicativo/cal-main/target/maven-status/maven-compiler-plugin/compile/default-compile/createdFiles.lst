@@ -1,9 +1,0 @@
-ch/chiodoni/cal/repository/ItemRepository.class
-ch/chiodoni/cal/model/Item.class
-ch/chiodoni/cal/api/Category$CategoryModel.class
-ch/chiodoni/cal/service/ItemCounter.class
-ch/chiodoni/cal/config/OpenApi.class
-ch/chiodoni/cal/Application.class
-ch/chiodoni/cal/config/Database.class
-ch/chiodoni/cal/config/Observability.class
-ch/chiodoni/cal/api/Category.class
