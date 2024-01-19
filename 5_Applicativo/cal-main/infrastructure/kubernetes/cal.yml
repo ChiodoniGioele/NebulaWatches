@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cal
+  template:
+    metadata:
+      labels:
+        app: cal
+    spec:
+      containers:
+        - name: cal
+          image: cal:1.0.0-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "kubernetes"
+            - name: TRACING_ENDPOINT
+              value: "http://zipkin:9411/api/v2/spans"
+            - name: DB_URL
+              value: "jdbc:postgresql://postgres:5432/cal"
+            - name: DB_USERNAME
+              value: "cal"
+            - name: DB_PASSWORD
+              value: "cal-secret"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cal
+spec:
+  selector:
+    app: cal
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: LoadBalancer
