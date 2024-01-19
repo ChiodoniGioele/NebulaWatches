@@ -1,0 +1,8 @@
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/model/Item.java
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/repository/ItemRepository.java
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/config/OpenApi.java
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/config/Observability.java
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/Application.java
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/service/ItemCounter.java
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/config/Database.java
+/home/progetto-nebu/Documents/NebulaWatches/5_Applicativo/cal-main/src/main/java/ch/chiodoni/cal/api/Category.java
