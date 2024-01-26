@@ -434,7 +434,7 @@ class WatchDatabase:
 
 class OldWatchDatabase:
     def __init__(self):
-        self.db_file_path = '/home/progetto-nebu/Desktop/old_watches.db'
+        self.db_file_path = '/Users/alexandruciobanu/Developer/WatchesScraper'
         self.cursor_obj = None
         self.conn = None
         self.create_db_connection()
