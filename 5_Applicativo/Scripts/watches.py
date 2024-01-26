@@ -418,13 +418,9 @@ class WatchDatabase:
             # input()
 
             query = f'INSERT INTO watch({optional_values_cols}, image) VALUES({optional_values}, %s)'
-            # print(query)
-            # print('QUERY DA FARE')
-            self.cursor_obj.execute(query, (watch.image_data))
-            # print('QUERY FATTA')
-            #self.cursor_obj(query)
+            self.cursor_obj.execute(query, (watch.image_data,))
+
             self.conn.commit()
-            # print('QUERY COMMIT')
 
             for mat in all_materials_used:
                 self.add_watch_material_relationship(watch.reference,self.add_material(mat))
@@ -434,7 +430,7 @@ class WatchDatabase:
 
 class OldWatchDatabase:
     def __init__(self):
-        self.db_file_path = '/Users/alexandruciobanu/Developer/WatchesScraper'
+        self.db_file_path = '/Users/alexandruciobanu/Developer/WatchesScraper/old_watches.db'
         self.cursor_obj = None
         self.conn = None
         self.create_db_connection()
