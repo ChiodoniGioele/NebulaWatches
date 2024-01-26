@@ -1,0 +1,9 @@
+ch/nebulaWatches/service/ItemCounter.class
+ch/nebulaWatches/config/Observability.class
+ch/nebulaWatches/api/Category.class
+ch/nebulaWatches/repository/ItemRepository.class
+ch/nebulaWatches/api/Category$CategoryModel.class
+ch/nebulaWatches/config/OpenApi.class
+ch/nebulaWatches/config/Database.class
+ch/nebulaWatches/model/Item.class
+ch/nebulaWatches/Application.class
