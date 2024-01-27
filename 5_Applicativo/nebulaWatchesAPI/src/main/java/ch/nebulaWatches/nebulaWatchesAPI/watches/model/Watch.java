@@ -1,36 +1,34 @@
 package ch.nebulaWatches.nebulaWatchesAPI.watches.model;
 
+import ch.nebulaWatches.nebulaWatchesAPI.watches.dto.WatchDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Blob;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "watch")
 public class Watch {
     @Id
     private String reference;
-    @Column(nullable = true)
-    private float retailPrice;
+    private Float retailPrice;
     private String name;
-    @Column(nullable = true)
-    private int movementId;
+    private Integer movementId;
     private String movementName;
     private String productionTime;
     private String isLimitedTo;
-    @Column(nullable = true, columnDefinition = "TINYINT(1)")
-    private boolean isBackOpen;
-    @Column(nullable = true)
-    private float diameterInMm;
-    @Column(nullable = true)
-    private float heightInMm;
-    @Column(name = "water_resistance_m", nullable = true)
-    private float waterResistanceM;
+    @Column(columnDefinition = "TINYINT(1)")
+    private Boolean isBackOpen;
+    private Float diameterInMm;
+    private Float heightInMm;
+    @Column(name = "water_resistance_m")
+    private Float waterResistanceM;
     @Column(length = 2500)
     private String description;
     private String nickname;
-    @Column(nullable = true)
-    private float lugWidth;
+    private Float lugWidth;
     @Lob
     private Blob image;
 
@@ -75,6 +73,7 @@ public class Watch {
     @JoinColumn(name = "hands_name")
     private Hands hands;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "watch", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WatchUsesMaterials> materialsUsed;
 
@@ -88,11 +87,11 @@ public class Watch {
         this.reference = reference;
     }
 
-    public float getRetailPrice() {
+    public Float getRetailPrice() {
         return retailPrice;
     }
 
-    public void setRetailPrice(float retailPrice) {
+    public void setRetailPrice(Float retailPrice) {
         this.retailPrice = retailPrice;
     }
 
@@ -104,11 +103,11 @@ public class Watch {
         this.name = name;
     }
 
-    public int getMovementId() {
+    public Integer getMovementId() {
         return movementId;
     }
 
-    public void setMovementId(int movementId) {
+    public void setMovementId(Integer movementId) {
         this.movementId = movementId;
     }
 
@@ -136,35 +135,35 @@ public class Watch {
         this.isLimitedTo = isLimitedTo;
     }
 
-    public boolean isBackOpen() {
+    public Boolean getBackOpen() {
         return isBackOpen;
     }
 
-    public void setBackOpen(boolean backOpen) {
+    public void setBackOpen(Boolean backOpen) {
         isBackOpen = backOpen;
     }
 
-    public float getDiameterInMm() {
+    public Float getDiameterInMm() {
         return diameterInMm;
     }
 
-    public void setDiameterInMm(float diameterInMm) {
+    public void setDiameterInMm(Float diameterInMm) {
         this.diameterInMm = diameterInMm;
     }
 
-    public float getHeightInMm() {
+    public Float getHeightInMm() {
         return heightInMm;
     }
 
-    public void setHeightInMm(float heightInMm) {
+    public void setHeightInMm(Float heightInMm) {
         this.heightInMm = heightInMm;
     }
 
-    public float getWaterResistanceM() {
+    public Float getWaterResistanceM() {
         return waterResistanceM;
     }
 
-    public void setWaterResistanceM(float waterResistanceM) {
+    public void setWaterResistanceM(Float waterResistanceM) {
         this.waterResistanceM = waterResistanceM;
     }
 
@@ -184,20 +183,12 @@ public class Watch {
         this.nickname = nickname;
     }
 
-    public float getLugWidth() {
+    public Float getLugWidth() {
         return lugWidth;
     }
 
-    public void setLugWidth(float lugWidth) {
+    public void setLugWidth(Float lugWidth) {
         this.lugWidth = lugWidth;
-    }
-
-    public Blob getImage() {
-        return image;
-    }
-
-    public void setImage(Blob image) {
-        this.image = image;
     }
 
     public Family getFamily() {
@@ -287,4 +278,54 @@ public class Watch {
     public void setMaterialsUsed(List<WatchUsesMaterials> materialsUsed) {
         this.materialsUsed = materialsUsed;
     }
+
+    @JsonIgnore
+    public Blob getImage() {
+        return image;
+    }
+
+    private void setImage(Blob image) {
+        this.image = image;
+    }
+
+    public WatchDTO toDTO() {
+        WatchDTO watchDTO = new WatchDTO();
+        watchDTO.setReference(this.reference);
+        watchDTO.setRetailPrice(this.retailPrice);
+        watchDTO.setName(this.name);
+        watchDTO.setMovementId(this.movementId);
+        watchDTO.setMovementName(this.movementName);
+        watchDTO.setProductionTime(this.productionTime);
+        watchDTO.setIsLimitedTo(this.isLimitedTo);
+        watchDTO.setIsBackOpen(this.isBackOpen);
+        watchDTO.setDiameterInMm(this.diameterInMm);
+        watchDTO.setHeightInMm(this.heightInMm);
+        watchDTO.setWaterResistanceM(this.waterResistanceM);
+        watchDTO.setDescription(this.description);
+        watchDTO.setNickname(this.nickname);
+        watchDTO.setLugWidth(this.lugWidth);
+
+        if (this.materialsUsed != null) {
+            List<String> materialNames = this.materialsUsed.stream()
+                    .map(wum -> wum.getMaterial().getName())
+                    .collect(Collectors.toList());
+            watchDTO.setMaterialsUsedNames(materialNames);
+        }
+
+        watchDTO.setFamily(this.family != null ? this.family.getName() : null);
+        watchDTO.setCaseMaterial(this.caseMaterial != null ? this.caseMaterial.getName() : null);
+        watchDTO.setBezelMaterial(this.bezelMaterial != null ? this.bezelMaterial.getName() : null);
+        watchDTO.setGlassMaterial(this.glassMaterial != null ? this.glassMaterial.getName() : null);
+        watchDTO.setCoatingMaterial(this.coatingMaterial != null ? this.coatingMaterial.getName() : null);
+        watchDTO.setWatchShape(this.watchShape != null ? this.watchShape.getName() : null);
+        watchDTO.setDialColor(this.dialColor != null ? this.dialColor.getName() : null);
+        watchDTO.setDialFinish(this.dialFinish != null ? this.dialFinish.getName() : null);
+        watchDTO.setWatchIndexes(this.watchIndexes != null ? this.watchIndexes.getName() : null);
+        watchDTO.setHands(this.hands != null ? this.hands.getName() : null);
+        watchDTO.setBrand(family != null ? family.getBrand().getName() : null);
+
+        return watchDTO;
+    }
+
+
 }
