@@ -250,7 +250,7 @@ class WatchDatabase:
 
     #@handle_sql_exceptions
     def watch_material_relationship_exists(self, watch_reference, material_name):
-        self.cursor_obj.execute('SELECT * FROM watchUsesMaterials WHERE watch_reference LIKE %s AND material_name LIKE %s', (watch_reference, material_name,))
+        self.cursor_obj.execute('SELECT * FROM watch_uses_materials WHERE watch_reference LIKE %s AND material_name LIKE %s', (watch_reference, material_name,))
         rows = self.cursor_obj.fetchall()
         return rows[0][0] if len(rows) > 0 else None
 
@@ -264,7 +264,7 @@ class WatchDatabase:
         existing_watch_material_relationship = self.watch_material_relationship_exists(watch_reference, material_name)
 
         if not existing_watch_material_relationship:
-            self.cursor_obj.execute('INSERT INTO watchUsesMaterials(watch_reference, material_name) VALUES(%s, %s)', (watch_reference, material_name,))
+            self.cursor_obj.execute('INSERT INTO watch_uses_materials(watch_reference, material_name) VALUES(%s, %s)', (watch_reference, material_name,))
             self.conn.commit()
         else:
             return existing_watch_material_relationship
@@ -371,7 +371,7 @@ class WatchDatabase:
                     optional_values_cols += 'dial_color_name, '
                     optional_values += self.add_optional_value_string(self.add_dial_color(value))
                 elif header == 'indexes':
-                    optional_values_cols += 'indexes_name, '
+                    optional_values_cols += 'watch_indexes_name, '
                     optional_values += self.add_optional_value_string(self.add_indexes(value))
                 elif header == 'hands':
                     optional_values_cols += 'hands_name, '
