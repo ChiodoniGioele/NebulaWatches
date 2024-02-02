@@ -29,9 +29,14 @@ public class WatchService {
         return watchDTOs;
     }
 
-    public Optional<WatchDTO> getWatch(String reference) {
-        Optional<Watch> watchOptional = watchRepository.findById(reference);
-        return watchOptional.map(Watch::toDTO);
+    public Optional<WatchDTO> getWatchDTO(String reference) {
+        Optional<Watch> watch = watchRepository.findById(reference);
+        return watch.map(Watch::toDTO);
+    }
+
+    public Optional<Watch> getWatch(String reference) {
+        Optional<Watch> watch = watchRepository.findById(reference);
+        return watch;
     }
 
 }
