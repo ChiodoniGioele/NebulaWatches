@@ -2,9 +2,12 @@ package ch.nebulaWatches.nebulaWatchesAPI.watches.model;
 
 import ch.nebulaWatches.nebulaWatchesAPI.watches.dto.WatchDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
 
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -282,6 +285,13 @@ public class Watch {
     @JsonIgnore
     public Blob getImage() {
         return image;
+    }
+
+    @JsonIgnore
+    public byte[] getImageBytes() throws SQLException {
+        int blobLength = (int) image.length();
+        byte[] blobAsBytes = image.getBytes(1, blobLength);
+        return blobAsBytes;
     }
 
     private void setImage(Blob image) {
