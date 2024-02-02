@@ -86,7 +86,6 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>6.2.1</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>
