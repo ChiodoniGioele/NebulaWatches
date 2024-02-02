@@ -1,4 +1,4 @@
-package ch.chiodonig.LogIn;
+package ch.nebulaWatches.nebulaWatchesAPI.security.controllers;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,14 +12,14 @@ import java.security.Principal;
 @RestController
 public class HelloController {
     @GetMapping("/hello")
-    public String hello(Authentication authentication) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String currentPrincipalName = authentication.getName();
+    public String hello(Authentication authentication2) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
 
-        DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
-        var email = principal.getAttribute("email");
+       // DefaultOidcUser principal = (DefaultOidcUser) authentication2.getPrincipal();
+       // var email = principal.getAttribute("email");
 
-        return String.format("Hello %s", email);
+        return String.format("Hello %s", currentPrincipalName);
     }
 }

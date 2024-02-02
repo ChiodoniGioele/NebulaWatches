@@ -25,7 +25,8 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private static final String[] WHITE_LIST_URL = {
-            "/api/v1/auth/**"};
+            "/api/v1/auth/**",
+            "/hello"};
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
