@@ -18,4 +18,5 @@ public class HelloController {
 
         return String.format("Hello %s", currentPrincipalName);
     }
+
 }
