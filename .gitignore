@@ -3,3 +3,9 @@
 
 #Ignora file ~
 ~*.docx
+
+#Ignora gli errori
+errors.log
+
+#Ignora i file di environment che contengono 
+.env

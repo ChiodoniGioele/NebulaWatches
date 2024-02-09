@@ -250,7 +250,7 @@ class WatchDatabase:
 
     #@handle_sql_exceptions
     def watch_material_relationship_exists(self, watch_reference, material_name):
-        self.cursor_obj.execute('SELECT * FROM watchUsesMaterials WHERE watch_reference LIKE %s AND material_name LIKE %s', (watch_reference, material_name,))
+        self.cursor_obj.execute('SELECT * FROM watch_uses_materials WHERE watch_reference LIKE %s AND material_name LIKE %s', (watch_reference, material_name,))
         rows = self.cursor_obj.fetchall()
         return rows[0][0] if len(rows) > 0 else None
 
@@ -264,7 +264,7 @@ class WatchDatabase:
         existing_watch_material_relationship = self.watch_material_relationship_exists(watch_reference, material_name)
 
         if not existing_watch_material_relationship:
-            self.cursor_obj.execute('INSERT INTO watchUsesMaterials(watch_reference, material_name) VALUES(%s, %s)', (watch_reference, material_name,))
+            self.cursor_obj.execute('INSERT INTO watch_uses_materials(watch_reference, material_name) VALUES(%s, %s)', (watch_reference, material_name,))
             self.conn.commit()
         else:
             return existing_watch_material_relationship
@@ -371,7 +371,7 @@ class WatchDatabase:
                     optional_values_cols += 'dial_color_name, '
                     optional_values += self.add_optional_value_string(self.add_dial_color(value))
                 elif header == 'indexes':
-                    optional_values_cols += 'indexes_name, '
+                    optional_values_cols += 'watch_indexes_name, '
                     optional_values += self.add_optional_value_string(self.add_indexes(value))
                 elif header == 'hands':
                     optional_values_cols += 'hands_name, '
@@ -418,13 +418,9 @@ class WatchDatabase:
             # input()
 
             query = f'INSERT INTO watch({optional_values_cols}, image) VALUES({optional_values}, %s)'
-            # print(query)
-            # print('QUERY DA FARE')
-            self.cursor_obj.execute(query, (watch.image_data))
-            # print('QUERY FATTA')
-            #self.cursor_obj(query)
+            self.cursor_obj.execute(query, (watch.image_data,))
+
             self.conn.commit()
-            # print('QUERY COMMIT')
 
             for mat in all_materials_used:
                 self.add_watch_material_relationship(watch.reference,self.add_material(mat))
@@ -434,7 +430,7 @@ class WatchDatabase:
 
 class OldWatchDatabase:
     def __init__(self):
-        self.db_file_path = '/Users/alexandruciobanu/Developer/WatchesScraper'
+        self.db_file_path = '/home/progetto-nebu/Documents/db.db'
         self.cursor_obj = None
         self.conn = None
         self.create_db_connection()

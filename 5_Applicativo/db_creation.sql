@@ -70,7 +70,7 @@ CREATE TABLE watch (
     water_resistance_m REAL,
     dial_color_name VARCHAR(150),
     dial_finish_name VARCHAR(150),
-    indexes_name VARCHAR(150),
+    watch_indexes_name VARCHAR(150),
     hands_name VARCHAR(150),
     description VARCHAR(1500),
 
@@ -120,7 +120,7 @@ CREATE TABLE watch (
         ON UPDATE CASCADE
         ON DELETE SET NULL,
 
-    FOREIGN KEY (indexes_name)
+    FOREIGN KEY (watch_indexes_name)
         REFERENCES watch_indexes (name)
         ON UPDATE CASCADE
         ON DELETE SET NULL,
@@ -131,8 +131,8 @@ CREATE TABLE watch (
         ON DELETE SET NULL
 );
 
-DROP TABLE IF EXISTS watchUsesMaterials; 
-CREATE TABLE watchUsesMaterials(
+DROP TABLE IF EXISTS watch_uses_materials; 
+CREATE TABLE watch_uses_materials(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     watch_reference VARCHAR(150),
     material_name VARCHAR(150),
