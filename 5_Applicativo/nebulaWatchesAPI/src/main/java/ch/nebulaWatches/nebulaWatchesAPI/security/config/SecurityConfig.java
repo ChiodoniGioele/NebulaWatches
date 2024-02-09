@@ -26,6 +26,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private static final String[] WHITE_LIST_URL = {
+<<<<<<< HEAD
             "/"
     };
 
@@ -33,6 +34,11 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
+=======
+            "/auth/**"};
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+>>>>>>> origin/watches-gui
         http
                 .securityMatcher("/login/1")
                 .csrf(AbstractHttpConfigurer::disable)

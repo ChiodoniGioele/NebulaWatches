@@ -11,8 +11,10 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@radix-icons/vue": "^1.0.0",
     "@vee-validate/zod": "^4.12.4",
     "@vueuse/core": "^10.7.2",
+    "axios": "^1.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "embla-carousel": "^8.0.0-rc21",

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("")
+=======
+>>>>>>> origin/watches-gui
 @RequiredArgsConstructor
 public class AuthenticationController {
 
