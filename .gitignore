@@ -9,3 +9,6 @@ errors.log
 
 #Ignora i file di environment che contengono 
 .env
+
+#Ignora file tmp
+~.tmp
