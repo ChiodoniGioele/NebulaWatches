@@ -35,11 +35,21 @@
                                 </label>
                             </div>
 
-
                         </PopoverContent>
                     </Popover>
                 </div>
                 
+                <div class="mt-12 flex flex-wrap gap-5">
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                    <div class="border-2 border-gray-200 rounded-md " style="height: 200px; width: 200px;"></div>
+                </div>
 
             </div>
         </div>

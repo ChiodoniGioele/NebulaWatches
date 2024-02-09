@@ -4,18 +4,23 @@
         <div class="px-3 py-2">
           <div class="space-y-1">
             <Button variant="ghost" class="w-full justify-start">
-              <span class="text-gray-800">Watches</span>
+                <img class="me-3" height="20px" width="20px" src="@/assets/icons/Watch.png"/>
+                <span class="text-gray-800">Watches</span>
             </Button>
             <Button variant="ghost" class="w-full justify-start">
-                <span class="text-gray-800">Inventory</span>
+                <img class="me-3" height="20px" width="20px" src="@/assets/icons/Boxes.png"/>
+                <span class="text-gray-800">Storage</span>
             </Button>
             <Button variant="ghost" class="w-full justify-start">
+                <img class="me-3" height="20px" width="20px" src="@/assets/icons/Customer.png"/>
                 <span class="text-gray-800">Clients</span>
             </Button>
             <Button variant="ghost" class="w-full justify-start">
+                <img class="me-3" height="20px" width="20px" src="@/assets/icons/User Account.png"/>
                 <span class="text-gray-800">Team</span>              
             </Button>
             <Button variant="ghost" class="w-full justify-start">
+                <img class="me-3" height="20px" width="20px" src="@/assets/icons/Chat.png"/>
                 <span class="text-gray-800">Comunication</span>              
             </Button>
           </div>
