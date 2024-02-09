@@ -26,31 +26,7 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private static final String[] WHITE_LIST_URL = {
-<<<<<<< HEAD
-            "/"
-    };
-
-/*
-    @Bean
-    @Order(1)
-    public SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
-=======
             "/auth/**"};
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
->>>>>>> origin/watches-gui
-        http
-                .securityMatcher("/login/1")
-                .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(c -> c.requestMatchers(WHITE_LIST_URL).permitAll().anyRequest().authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
-*/
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
