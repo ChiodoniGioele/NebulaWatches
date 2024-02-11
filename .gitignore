@@ -4,6 +4,7 @@
 #Ignora file ~
 ~*.docx
 ~*.tmp
+~*
 
 # Mac
 .DS*
