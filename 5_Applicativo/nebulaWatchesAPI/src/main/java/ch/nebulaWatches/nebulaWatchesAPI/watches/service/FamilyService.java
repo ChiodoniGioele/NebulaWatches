@@ -19,4 +19,8 @@ public class FamilyService {
     public List<Family> getFamilies(){
         return familyRepository.findAll();
     }
+
+    public List<Family> getFamiliesByBrand(String brandName){
+        return familyRepository.findByBrand(brandName);
+    }
 }

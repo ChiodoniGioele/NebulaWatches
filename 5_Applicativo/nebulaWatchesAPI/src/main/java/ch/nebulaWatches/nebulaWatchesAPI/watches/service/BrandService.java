@@ -21,4 +21,5 @@ public class BrandService {
     public List<Brand> getBrands(){
         return brandRepository.findAll();
     }
+
 }
