@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "serve":"vite serve --host 0.0.0.0",
+    "serve": "vite serve --host 0.0.0.0",
     "dev": "vite --host 0.0.0.0",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -21,6 +21,7 @@
     "embla-carousel": "^8.0.0-rc21",
     "embla-carousel-vue": "^8.0.0-rc21",
     "lucide-vue-next": "^0.316.0",
+    "os": "^0.1.2",
     "radix-vue": "^1.3.2",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
@@ -33,7 +34,7 @@
   },
   "devDependencies": {
     "@tsconfig/node18": "^18.2.2",
-    "@types/node": "^18.19.10",
+    "@types/node": "^18.19.18",
     "@vitejs/plugin-vue": "^4.5.2",
     "@vue/tsconfig": "^0.5.0",
     "autoprefixer": "^10.4.17",

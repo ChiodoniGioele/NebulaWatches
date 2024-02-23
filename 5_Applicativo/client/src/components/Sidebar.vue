@@ -78,6 +78,7 @@
 <script setup>
 import { Button } from '../components/ui/button'
 import { useRouter } from 'vue-router';
+
 const router = useRouter();
 async function logout() {
     try {        

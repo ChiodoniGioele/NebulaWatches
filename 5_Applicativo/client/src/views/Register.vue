@@ -61,6 +61,8 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { apiServerAddress } from '@/main.ts'
+
 const username = ref('');
 const email = ref('');
 const password = ref('');
@@ -69,7 +71,7 @@ const registerFailed = ref(false);
 
 async function register() {
     try {
-        const response = await axios.post('http://localhost:64321/auth/register', {
+        const response = await axios.post(`${apiServerAddress}/auth/register`, {
             username: username.value,
             email: email.value,
             password: password.value

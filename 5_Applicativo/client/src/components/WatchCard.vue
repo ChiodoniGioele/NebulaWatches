@@ -37,6 +37,7 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
+import { apiServerAddress } from '@/main.ts'
 
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
@@ -50,7 +51,7 @@ const piecesProduced = ref('')
 
 async function fetchRandomWatchFromBrandImage() {
     try {
-        const endpoint = 'http://localhost:64321/v1/watches/' + props.watch.reference + '/image'
+        const endpoint = `${apiServerAddress}/v1/watches/` + props.watch.reference + '/image'
         const response = await axios.get(endpoint, {
             responseType: 'arraybuffer',
             headers: {
