@@ -96,7 +96,7 @@ async function logout() {
 }
 async function fetchUserName() {
     try {
-        const response = await axios.get(`${apiServerAddress}:64321/user/getName`, 
+        const response = await axios.get(`${apiServerAddress}/user/getName`, 
         {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
