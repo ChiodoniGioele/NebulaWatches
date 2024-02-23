@@ -98,6 +98,7 @@ async function login() {
         
         const token = response.data.token;
         localStorage.setItem('token', token);
+        sessionStorage.setItem('email', email.value);
         router.push('/');
     } catch (error) {
         loginFailed.value = true;
