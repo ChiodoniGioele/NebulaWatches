@@ -80,6 +80,7 @@ import { Button } from '../components/ui/button'
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { apiServerAddress } from '@/main.ts'
 
 const router = useRouter();
 const username = ref('');
@@ -95,7 +96,7 @@ async function logout() {
 }
 async function fetchUserName() {
     try {
-        const response = await axios.get('http://localhost:64321/user/getName', 
+        const response = await axios.get(`${apiServerAddress}:64321/user/getName`, 
         {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
