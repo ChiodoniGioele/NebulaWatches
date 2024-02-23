@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { Separator } from 'radix-vue';
-import { Button } from '../components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
     Card,
     CardContent,
@@ -72,14 +72,14 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from '../components/ui/card'
-import { Input } from '../components/ui/input'
-import { Label } from '../components/ui/label'
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { AlertCircle } from 'lucide-vue-next'
-import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const email = ref('');
 const password = ref('');
@@ -92,7 +92,6 @@ async function login() {
         const response = await axios.post('http://localhost:64321/auth/authenticate', {
             email: email.value,
             password: password.value
-            
         });
         
         const token = response.data.token;
