@@ -49,6 +49,7 @@ import WatchCard from '@/components/WatchCard.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { apiServerAddress } from '@/main.ts'
 
 import axios from 'axios';
 
@@ -64,7 +65,7 @@ const familyName = ref('')
 
 async function fetchFamiliesOfBrand() {
     try {
-        const response = await axios.get(`http://localhost:64321/v1/families/${familyId}/watches`, 
+        const response = await axios.get(`${apiServerAddress}/v1/families/${familyId}/watches`, 
         {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),

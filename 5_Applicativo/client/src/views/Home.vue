@@ -72,6 +72,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 
+import { apiServerAddress } from '@/main.ts'
 
 import {
   Popover,
@@ -86,7 +87,7 @@ const brands = ref([])
 
 async function fetchBrands() {
     try {
-        const response = await axios.get('http://localhost:64321/v1/brands', 
+        const response = await axios.get(`${apiServerAddress}/v1/brands`, 
         {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),

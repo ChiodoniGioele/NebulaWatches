@@ -18,6 +18,7 @@
 
 <script setup>
 import { Skeleton } from "@/components/ui/skeleton"
+import { apiServerAddress } from '@/main.ts'
 
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
@@ -28,7 +29,7 @@ const isLoading = ref(true);
 
 async function fetchRandomWatchFromBrandImage() {
     try {
-        const endpoint = 'http://localhost:64321/v1/families/' + props.family.id + '/rndimage'
+        const endpoint = `${apiServerAddress}/v1/families/` + props.family.id + '/rndimage'
         const response = await axios.get(endpoint, {
             responseType: 'arraybuffer',
             headers: {

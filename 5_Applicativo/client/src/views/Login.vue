@@ -80,6 +80,8 @@ import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { apiServerAddress } from '@/main.ts'
+
 
 const email = ref('');
 const password = ref('');
@@ -89,7 +91,7 @@ const loginFailed = ref(false);
 async function login() {
     console.log(email.value);
     try {
-        const response = await axios.post('http://localhost:64321/auth/authenticate', {
+        const response = await axios.post(`${apiServerAddress}/auth/authenticate`, {
             email: email.value,
             password: password.value
         });

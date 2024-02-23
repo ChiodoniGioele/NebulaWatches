@@ -148,6 +148,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { apiServerAddress } from '@/main.ts'
 
 import axios from 'axios';
 
@@ -162,7 +163,7 @@ const watchImage = ref();
 
 async function fetchWatch() {
     try {
-        const response = await axios.get(`http://localhost:64321/v1/watches/${reference}`, 
+        const response = await axios.get(`${apiServerAddress}/v1/watches/${reference}`, 
         {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -178,7 +179,7 @@ async function fetchWatch() {
 
 async function fetchWatchImage() {
     try {
-        const endpoint = 'http://localhost:64321/v1/watches/' + reference + '/image'
+        const endpoint = `${apiServerAddress}/v1/watches/` + reference + '/image'
         const response = await axios.get(endpoint, {
             responseType: 'arraybuffer',
             headers: {

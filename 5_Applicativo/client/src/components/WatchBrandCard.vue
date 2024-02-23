@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { apiServerAddress } from '@/main.ts'
 
 const props = defineProps(['brand'])
 const randomWatchFromBrandImage = ref('')
@@ -31,7 +32,7 @@ const isLoading = ref(true);
 
 async function fetchRandomWatchFromBrandImage() {
     try {
-        const endpoint = 'http://localhost:64321/v1/brands/' + props.brand.name + '/rndimage'
+        const endpoint = `${apiServerAddress}/v1/brands/` + props.brand.name + '/rndimage'
         const response = await axios.get(endpoint, {
             responseType: 'arraybuffer',
             headers: {
