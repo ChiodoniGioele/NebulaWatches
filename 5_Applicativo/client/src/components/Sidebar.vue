@@ -54,14 +54,14 @@
                               <img class="w-8 h-8 rounded-full" src="@/assets/icons/Profile.png" alt="User image">  
                           </div>
                           <div class="flex-1 min-w-0">
-                              <p class="text-sm font-semibold text-gray-900 truncate dark:text-white">
-                                  Username
+                              <p class="text-sm font-semibold text-gray-900 truncate dark:text-white" >
+                                  {{ username }}
                               </p>
                               <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                  email@test.com
+                                {{ email }}
                               </p>
                           </div>
-                          <div class="flex space-x-2">
+                          <div class="flex space-x-3">
                               <img class="w-5 h-5 rounded-full" src="@/assets/icons/Settings.png" alt="Settings image">
                               <img class="w-5 h-5" src="@/assets/icons/Exit.png" alt="Logout image" @click="logout">
                           </div>
@@ -77,14 +77,39 @@
 
 <script setup>
 import { Button } from '../components/ui/button'
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+
 const router = useRouter();
+const username = ref('');
+const email = ref('');
 async function logout() {
     try {        
         localStorage.removeItem('token');
+        sessionStorage.removeItem('email')
         router.push('/login');
     } catch (error) {
         console.error(error)
     }
 }
+async function fetchUserName() {
+    try {
+        const response = await axios.get('http://localhost:64321/user/getName', 
+        {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+        email.value = sessionStorage.getItem('email');
+        username.value = response.data;
+
+  } catch (error) {
+    console.error('Failed to get username:', error);
+  }
+}
+
+onMounted(async () => {
+    fetchUserName();
+});
 </script>
