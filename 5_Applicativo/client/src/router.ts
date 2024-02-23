@@ -5,7 +5,6 @@ import Register from '@/views/Register.vue';
 import Brand from '@/views/Brand.vue';
 import Family from '@/views/Family.vue';
 import Watch from '@/views/Watch.vue';
-import Verify from './views/Verify.vue';
 import Team from './views/Team.vue';
 
 
@@ -17,7 +16,6 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/brand/:brandName/family/:familyId/watches', component: Family},
     { path: '/watch/:reference', component: Watch },
     { path: '/team', component: Team },
-    { path: '/verify', component: Verify }
 ];
 
 const router = createRouter({
