@@ -1,4 +1,5 @@
-package ch.nebulaWatches.nebulaWatchesAPI.security.models;
+package ch.nebulaWatches.nebulaWatchesAPI.security.model;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
