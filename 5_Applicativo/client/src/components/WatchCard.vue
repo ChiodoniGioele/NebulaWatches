@@ -33,7 +33,7 @@
     
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Skeleton } from "@/components/ui/skeleton"
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'

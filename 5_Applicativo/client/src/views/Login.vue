@@ -62,7 +62,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Separator } from 'radix-vue';
 import { Button } from '@/components/ui/button'
 import {

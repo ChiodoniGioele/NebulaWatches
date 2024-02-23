@@ -64,7 +64,7 @@
  
 </template>
   
-<script setup lang="ts">
+<script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import WatchBrandCard from '@/components/WatchBrandCard.vue'
 

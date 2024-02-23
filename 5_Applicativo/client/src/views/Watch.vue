@@ -142,7 +142,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -157,7 +157,7 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const reference = route.params.reference;
-const watch = ref('');
+const watch = ref({});
 const watchImage = ref();
 
 async function fetchWatch() {

@@ -43,7 +43,7 @@
  
 </template>
   
-<script setup lang="ts">
+<script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import WatchCard from '@/components/WatchCard.vue'
 import { Input } from '@/components/ui/input'

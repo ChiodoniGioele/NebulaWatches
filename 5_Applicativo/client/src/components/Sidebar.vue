@@ -49,6 +49,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Button } from '@/components/ui/button'
 </script>

@@ -19,7 +19,7 @@
     
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { Skeleton } from "@/components/ui/skeleton"
 
 import axios from 'axios';

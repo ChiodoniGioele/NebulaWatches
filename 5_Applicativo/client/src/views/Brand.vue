@@ -41,7 +41,7 @@
     </div>
 </template>
   
-<script setup lang="ts">
+<script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import WatchFamilyCard from '@/components/WatchFamilyCard.vue'
 import { Input } from '@/components/ui/input'
