@@ -6,7 +6,7 @@
       <div class="px-3 py-2 w-[100%] ">
         <div class="space-y-1 flex flex-wrap justify-center items-center">
           <div class="w-[60%]">
-            <Button variant="ghost" class="w-full justify-start">
+            <Button variant="ghost" class="w-full justify-start" @click="toHome">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Watch.png" />
               <span class="text-gray-800 text-base font-semibold">Watches</span>
             </Button>
@@ -29,7 +29,7 @@
           </div>
 
           <div class="w-[60%]">
-            <Button variant="ghost" class="w-full justify-start">
+            <Button variant="ghost" class="w-full justify-start" @click="toTeam">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/User Account.png" />
               <span class="text-gray-800 text-base font-semibold">Team</span>
             </Button>
@@ -107,6 +107,12 @@ async function fetchUserName() {
   } catch (error) {
     console.error('Failed to get username:', error);
   }
+}
+async function toTeam(){
+  router.push('/team');
+}
+async function toHome(){
+  router.push('/');
 }
 
 onMounted(async () => {

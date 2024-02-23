@@ -103,4 +103,5 @@ async function fetchBrands() {
 onMounted(async () => {
     fetchBrands();
 });
+
 </script>
