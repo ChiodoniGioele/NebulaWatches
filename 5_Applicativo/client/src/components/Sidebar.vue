@@ -61,7 +61,7 @@
                                   email@test.com
                               </p>
                           </div>
-                          <div class="flex ml-auto items-center">
+                          <div class="flex space-x-2">
                               <img class="w-5 h-5 rounded-full" src="@/assets/icons/Settings.png" alt="Settings image">
                               <img class="w-5 h-5" src="@/assets/icons/Exit.png" alt="Logout image" @click="logout">
                           </div>
