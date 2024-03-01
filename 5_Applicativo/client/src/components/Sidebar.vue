@@ -13,7 +13,7 @@
           </div>
 
           <div class="w-[60%]">
-            <Button variant="ghost" class="w-full justify-start">
+            <Button variant="ghost" class="w-full justify-start" @click="toStorage">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Boxes.png" />
               <span class="text-inherit text-base font-semibold">Storage</span>
             </Button>
@@ -114,6 +114,9 @@ async function toTeam(){
 }
 async function toHome(){
   router.push('/');
+}
+async function toStorage(){
+  router.push('/storage');
 }
 
 onMounted(async () => {

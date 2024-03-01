@@ -149,6 +149,32 @@ CREATE TABLE watch_uses_materials(
 );
 
 
+DROP table if exists user_favors_watch;
+CREATE TABLE user_favors_watch(
+	id INT AUTO_INCREMENT,
+    watchReference VARCHAR(255),
+    userId INT,
+    PRIMARY KEY(id),
+	FOREIGN KEY(watchReference) REFERENCES watch(reference),
+    FOREIGN KEY(userId) REFERENCES user(id)
+);
 
+DROP table if exists status;
+CREATE TABLE status(
+	name VARCHAR(50),
+    PRIMARY KEY(name)
+);
+
+DROP table if exists stored_watches;
+CREATE TABLE stored_watches (
+    id INT AUTO_INCREMENT,
+    watchReference VARCHAR(255),
+    userId INT,
+    statusName VARCHAR(50),
+    PRIMARY KEY(id),
+    FOREIGN KEY(watchReference) REFERENCES watch(reference),
+    FOREIGN KEY(userId) REFERENCES user(id),
+    FOREIGN KEY(statusName) REFERENCES status(name)
+);
 
 
