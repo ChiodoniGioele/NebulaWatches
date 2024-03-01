@@ -7,12 +7,11 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin
+@RequestMapping("/auth")
 public class AuthController {
     private final AuthService tokenService;
     private final UserRepository repository;
@@ -24,16 +23,15 @@ public class AuthController {
         this.repository = repository;
     }
 
-    @GetMapping("/api/user")
+    @GetMapping("/authenticate")
     public AuthService.Access user(Authentication authentication) {
         return tokenService.access(authentication);
     }
 
     @PostMapping("/register")
     public AuthService.Access register(@RequestBody RegisterRequest request) {
-        User user = new User(request.getUsername(), request.getEmail(), passwordEncoder.encode(request.getPassword()), "ADMIN");
+        User user = new User(request.getUsername(), request.getEmail(), passwordEncoder.encode(request.getPassword()), "USER");
         repository.save(user);
-        return  tokenService.register(request);
+        return tokenService.register(request);
     }
-
 }

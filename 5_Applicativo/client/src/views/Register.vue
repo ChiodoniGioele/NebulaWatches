@@ -71,12 +71,13 @@ const registerFailed = ref(false);
 
 async function register() {
     try {
-        const response = await axios.post(`${apiServerAddress}/auth/register`, {
+        const response = await axios.post(`${apiServerAddress}/register`, {
             username: username.value,
             email: email.value,
             password: password.value
         });
         const token = response.data.token;
+        console.log(token)
         localStorage.setItem('token', token);
         sessionStorage.setItem('email', email.value);
         router.push('/');

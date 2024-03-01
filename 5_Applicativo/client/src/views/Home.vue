@@ -4,6 +4,8 @@
         <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col"> 
             <div class="px-4 py-6 lg:px-8"> 
 
+                <a href="http://localhost:64321/v1/watches">CIAOOOO SONO UN LINK</a>
+
                 <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
@@ -89,6 +91,7 @@ async function fetchBrands() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/brands`, 
         {
+            maxRedirects: 5,
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
             },

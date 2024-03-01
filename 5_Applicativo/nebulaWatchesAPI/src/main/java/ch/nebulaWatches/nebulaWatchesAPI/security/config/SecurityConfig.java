@@ -50,7 +50,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/actuator/**", "/register").permitAll()
+                        .requestMatchers( "/actuator/**", "/auth/register","login.html").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
@@ -58,7 +58,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .httpBasic(withDefaults())
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/auth")
+                        .defaultSuccessUrl("http://localhost:5173/", true)
                         .permitAll()
                 )
                 // Federated login with Google

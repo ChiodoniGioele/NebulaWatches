@@ -12,18 +12,21 @@
                 </CardTitle>
             </CardHeader>
             <CardContent class="grid gap-4">
-
-                <div class="grid gap-2">
+                <form th:action="@{/login}" method="post">
+                    <div class="grid gap-2">
                     <Label for="email">Email</Label>
-                    <Input id="email" v-model="email" type="email" placeholder="example@gmail.com" class="bg-gray-50" required />
+                    <Input id="email" name="username" v-model="email" type="email" placeholder="example@gmail.com" class="bg-gray-50" required />
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" v-model="password" type="password" placeholder="••••••••" class="bg-gray-50" required />
+                    <Input id="password" v-model="password" name="password" type="password" placeholder="••••••••" class="bg-gray-50" required />
                 </div>
                 <Button class="w-full" @click="login">
                     Login
                 </Button>
+                <input type="submit" value="Login">
+                </form>
+                
 
                 <Alert variant="destructive" v-if="loginFailed">
                     <AlertCircle class="w-4 h-4" />
@@ -91,12 +94,13 @@ const loginFailed = ref(false);
 async function login() {
     console.log(email.value);
     try {
-        const response = await axios.post(`${apiServerAddress}/auth/authenticate`, {
+        const response = await axios.post(`${apiServerAddress}/login`, {
             email: email.value,
             password: password.value
         });
         
         const token = response.data.token;
+
         localStorage.setItem('token', token);
         sessionStorage.setItem('email', email.value);
         router.push('/');

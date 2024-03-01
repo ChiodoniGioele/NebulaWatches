@@ -10,9 +10,13 @@
   const route = useRoute();
   const isLoginPage = computed(() => route.path === '/login');
   
+  router.beforeEach((to, from, next) => {
   if (!localStorage.getItem('token')) {
-    router.push('/login');
+    window.location.href = 'http://localhost:64321/auth';
+  } else {
+    next();
   }
+});
   
   </script>
   
