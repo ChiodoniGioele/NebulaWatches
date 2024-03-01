@@ -1,7 +1,7 @@
 <template>
     <div class="grid lg:grid-cols-5 min-h-screen"> 
         <Sidebar class="hidden lg:block" />
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col"> 
+        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col" > 
             <div class="px-4 py-6 lg:px-8"> 
 
                 <div class="flex w-full items-center gap-2.5">

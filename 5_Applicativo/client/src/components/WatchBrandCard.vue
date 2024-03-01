@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center border border-gray-200 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
+    <div class="text-center border-gray-200 border border-nebula rounded-md  min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] bg-white">
         <router-link class="block p-5" :to="`/brand/${brand.name}`" :brand="brand">
             <div>
                 <div v-if="!isLoading">
@@ -10,7 +10,7 @@
                 <div v-else>
                     <Skeleton class="w-[150px] h-[130px] rounded-md" />
                 </div>
-                <h2 class="mt-2">{{ brand.name }}</h2>
+                <h2 class="mt-2 font-medium">{{ brand.name }}</h2>
             </div>
         </router-link>
     </div>

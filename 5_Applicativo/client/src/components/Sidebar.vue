@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col center justify-center h-screen">
+  <div class="flex flex-col center justify-center h-screen" style="background: linear-gradient(to bottom right, #FFFFFF, #FAF7F4);">
     <div class="space-y-4 py-4 flex-1">
       <img src="@/assets/Logo.png" alt="">
 
@@ -8,14 +8,14 @@
           <div class="w-[60%]">
             <Button variant="ghost" class="w-full justify-start" @click="toHome">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Watch.png" />
-              <span class="text-gray-800 text-base font-semibold">Watches</span>
+              <span class="text-inherit text-base font-semibold">Watches</span>
             </Button>
           </div>
 
           <div class="w-[60%]">
             <Button variant="ghost" class="w-full justify-start">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Boxes.png" />
-              <span class="text-gray-800 text-base font-semibold">Storage</span>
+              <span class="text-inherit text-base font-semibold">Storage</span>
             </Button>
 
           </div>
@@ -23,7 +23,7 @@
           <div class="w-[60%]">
             <Button variant="ghost" class="w-full justify-start">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Customer.png" />
-              <span class="text-gray-800 text-base font-semibold">Clients</span>
+              <span class="text-inherit text-base font-semibold">Clients</span>
             </Button>
 
           </div>
@@ -31,7 +31,7 @@
           <div class="w-[60%]">
             <Button variant="ghost" class="w-full justify-start" @click="toTeam">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/User Account.png" />
-              <span class="text-gray-800 text-base font-semibold">Team</span>
+              <span class="text-inherit text-base font-semibold">Team</span>
             </Button>
 
           </div>
@@ -39,7 +39,7 @@
           <div class="w-[60%]">
             <Button variant="ghost" class="w-full justify-start">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Chat.png" />
-              <span class="text-gray-800 text-base font-semibold">Comunication</span>
+              <span class="text-inherit text-base font-semibold">Comunication</span>
             </Button>
           </div>
 
@@ -54,7 +54,7 @@
                               <img class="w-8 h-8 rounded-full" src="@/assets/icons/Profile.png" alt="User image">  
                           </div>
                           <div class="flex-1 min-w-0">
-                              <p class="text-sm font-semibold text-gray-900 truncate dark:text-white" >
+                              <p class="text-sm font-semibold text-inherit-900 truncate dark:text-white" >
                                   {{ username }}
                               </p>
                               <p class="text-sm text-gray-500 truncate dark:text-gray-400">
