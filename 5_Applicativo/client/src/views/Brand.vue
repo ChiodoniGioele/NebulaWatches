@@ -34,6 +34,8 @@
                     <WatchFamilyCard v-for="family in families" :key="family.id" :family="family" :brandName="brandName" />
                 </div>
 
+                
+
             </div>
 
 
@@ -48,6 +50,17 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Badge } from '@/components/ui/badge'
 import { apiServerAddress } from '@/main.ts'
+
+import {
+  Pagination,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+} from '@/components/ui/pagination'
 
 import axios from 'axios';
 
