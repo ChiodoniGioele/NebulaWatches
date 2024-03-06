@@ -50,28 +50,29 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/actuator/**", "/register").permitAll()
+                        .requestMatchers("/", "/index.html", "/actuator/**", "/register", "/assets/**", "/login/oauth2/code/google", "/oauth2/authorization/google").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-                // A session is still required but only for few seconds between oauth2Login and oauth2.jwt
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .httpBasic(withDefaults())
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/index.html")
                         .permitAll()
                 )
-                // Federated login with Google
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .oidcUserService(this.oidcUserService())
-                        ))
+                ))
                 .logout(logout ->
                         logout.invalidateHttpSession(true)
                                 .logoutUrl("/logout")
                                 .logoutSuccessUrl("/")
                 )
+
                 .build();
+
+
     }
 
     private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
@@ -103,18 +104,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /*
-    @Bean
-    public InMemoryUserDetailsManager users() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("foo")
-                        .password("{noop}foo")
-                        .authorities("user")
-                        .build()
-        );
-    }
-     */
-
     @Bean
     public JwtEncoder jwtEncoder() {
         JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
@@ -126,5 +115,4 @@ public class SecurityConfig {
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
     }
-
 }
