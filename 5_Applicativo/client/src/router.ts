@@ -9,13 +9,14 @@ import Team from './views/Team.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
-    { path: '/', component: Home },
+    { path: '/home', component: Home },
     { path: '/login', component: Login },
     { path: '/register', component: Register },
     { path: '/brand/:brandName', component: Brand },
     { path: '/brand/:brandName/family/:familyId/watches', component: Family},
     { path: '/watch/:reference', component: Watch },
     { path: '/team', component: Team },
+    { path: '/', redirect: '/home' },  // Redirect root URL ("/") to "/home"
 ];
 
 const router = createRouter({
