@@ -29,7 +29,7 @@
                     <AlertCircle class="w-4 h-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        Email or Password Incorrect. Pleasy try again
+                        Email or Password Incorrect. Please try again
                     </AlertDescription>
                 </Alert>
 
@@ -102,8 +102,7 @@ async function login() {
         router.push('/');
     } catch (error) {
         loginFailed.value = true;
-        //console.error('Login failed:', error.response.data.message);
-        console.error(error)
+        console.error("Login Failed")
     }
 }
 </script>

@@ -15,9 +15,17 @@ public class UserService {
     public String getUsername(String email) {
         Optional<User> user = repository.findByEmail(email);
         if (user.isPresent()) {
-            return user.get().getUsername();
+            return user.get().getName();
         }else{
             return "Username";
+        }
+    }
+    public int getId(String email) {
+        Optional<User> user = repository.findByEmail(email);
+        if (user.isPresent()) {
+            return user.get().getId();
+        }else{
+            return 0;
         }
     }
 }

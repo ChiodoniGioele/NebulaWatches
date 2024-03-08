@@ -9,5 +9,4 @@ public class NebulaWatchesApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NebulaWatchesApiApplication.class, args);
 	}
-
 }

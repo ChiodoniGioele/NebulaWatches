@@ -29,11 +29,52 @@
                         </div>
                     </div>
                     <div class="flex gap-2 w-auto">
-                        <Button variant="outline">Add to storage</Button>
-                        <Button variant="outline">
-                            <img class="m-5 h-[25px] w-[25px]" src="@/assets/star.png"/>
-                        </Button>
-                        
+                        <Popover ref="popover">
+                            <PopoverTrigger as-child>
+                                <Button variant="outline">Add to storage</Button>
+                            </PopoverTrigger>
+                            <PopoverContent class="w-80">
+                                <div class="grid gap-4">
+                                <div class="space-y-2">
+                                    <h4 class="font-medium leading-none">Status</h4>
+                                    <p class="text-sm text-muted-foreground">
+                                    What is the status of the watch?
+                                    </p>
+                                </div>
+                                <div class="grid gap-2">
+                                    <div class="grid grid-cols-3 items-center gap-4">
+                                    <Select v-model="selectedStatus">
+                                        <SelectTrigger class="w-[180px]">
+                                        <SelectValue placeholder="Select status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Status</SelectLabel>
+                                            <SelectItem value="Owned">Owned</SelectItem>
+                                            <SelectItem value="Sold">Sold</SelectItem>
+                                            <SelectItem value="Shipped">Shipped</SelectItem>
+                                        </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                    </div>
+                                </div>
+                                <Alert variant="success" v-if="storageSuccesfull">
+                                    <CheckCircle class="w-4 h-4" />
+                                    <AlertTitle>Success</AlertTitle>
+                                    <AlertDescription>
+                                        Watch added to storage!
+                                    </AlertDescription>
+                                </Alert>
+                                <Button variant="outline" @click="addToStorage">Add to storage</Button>
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                    <Button variant="outline" @click="addOrRemoveFavourite">
+                        <!--<transition name="fade" class="transition-opacity">-->
+                            <img v-if="!isStarClicked" class="m-5 h-[25px] w-[25px]" src="@/assets/star.png"/>
+                            <img v-else class="m-5 h-[25px] w-[25px]" src="@/assets/star_full.png"/>
+                        <!--</transition>-->
+                    </Button>
                     </div>
                 </div>
                 
@@ -149,6 +190,22 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { apiServerAddress } from '@/main.ts'
+import { CheckCircle } from 'lucide-vue-next';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 import axios from 'axios';
 
@@ -160,6 +217,9 @@ const route = useRoute();
 const reference = route.params.reference;
 const watch = ref({});
 const watchImage = ref();
+const selectedStatus = ref('Owned');
+const isStarClicked = ref(false);
+const storageSuccesfull = ref(false);
 
 async function fetchWatch() {
     try {
@@ -171,7 +231,6 @@ async function fetchWatch() {
         });
 
         watch.value = response.data;
-        console.log(watch.value);
   } catch (error) {
     console.error('Failed to fetch families:', error);
   }
@@ -194,10 +253,86 @@ async function fetchWatchImage() {
   }
 }
 
+const newStorage = {
+    user_email: sessionStorage.getItem('email'),
+    watch_reference: reference,
+    status: "",
+};
+
+
+async function addToStorage() {
+    try {
+        newStorage.status = selectedStatus.value;
+        const response = await axios.post(`${apiServerAddress}/v1/storage/addWatchToStorage`, newStorage, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+        storageSuccesfull.value = true;
+        console.log('Watch added to storage. ', response.data);
+    } catch (error) {
+        console.error('Failed to add watch to storage:', error);
+    }
+}
+
+const newFavourite = {
+    user_email: sessionStorage.getItem('email'),
+    watch_reference: reference,
+};
+
+async function addOrRemoveFavourite(){
+    if(isStarClicked.value == false){
+        try {
+            isStarClicked.value = !isStarClicked.value;
+
+            const response = await axios.post(`${apiServerAddress}/v1/favourite/addFavouriteWatch`, newFavourite, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            });
+
+            console.log('Watch added to favourites. ', response.data);     
+        } catch (error) {
+            console.error('Failed to add watch to favourites:', error);
+        }
+    }else{
+        try {
+            isStarClicked.value = !isStarClicked.value;
+
+            const response = await axios.post(`${apiServerAddress}/v1/favourite/removeFavouriteWatch`, newFavourite, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            });
+
+            console.log('Watch removed from favourites. ', response.data);     
+        } catch (error) {
+            console.error('Failed to remove watch from favourites:', error);
+        }
+    }
+    
+
+}
+
+async function setIconStar(){
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/favourite/checkFavourite/${reference}/${sessionStorage.getItem('email')}`, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            }
+        );
+        isStarClicked.value = response.data;
+      } catch (error) {
+        console.error('Failed to check if watch is favorite:', error);
+      }
+}
 
 onMounted(async () => {
     fetchWatch();
     fetchWatchImage();
+    setIconStar();
 });
 
 </script>
+

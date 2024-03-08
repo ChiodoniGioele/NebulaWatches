@@ -4,21 +4,17 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.AuthenticationService;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/v1/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @GetMapping("/getName")
-    public String getUser(String email) {
-
+    public String getUser(@RequestParam String email) {
         return userService.getUsername(email);
     }
 }

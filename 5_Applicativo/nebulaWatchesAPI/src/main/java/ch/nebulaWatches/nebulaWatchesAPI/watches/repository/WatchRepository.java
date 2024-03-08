@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -15,4 +16,6 @@ public interface WatchRepository extends JpaRepository<Watch, String> {
 
     @Query("SELECT w FROM Watch w WHERE w.family.id = ?1")
     List<Watch> findByFamily(int familyId);
+
+    Optional<Watch> findByReference(String reference);
 }

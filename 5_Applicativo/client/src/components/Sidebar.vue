@@ -96,18 +96,18 @@ async function logout() {
 }
 async function fetchUserName() {
     try {
-        const response = await axios.get(`${apiServerAddress}/user/getName`, 
-        {
+        email.value = sessionStorage.getItem('email');
+        const response = await axios.get(`${apiServerAddress}/v1/user/getName`, {
+            params: { email: email.value },
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
             },
         });
-        email.value = sessionStorage.getItem('email');
         username.value = response.data;
 
-  } catch (error) {
-    console.error('Failed to get username:', error);
-  }
+    } catch (error) {
+        console.error('Failed to get username:', error);
+    }
 }
 async function toTeam(){
   router.push('/team');

@@ -31,7 +31,7 @@
                     <AlertCircle class="w-4 h-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        Registration failed, username alredy used!
+                        Registration failed, email alredy used!
                     </AlertDescription>
                 </Alert>
             </CardContent>

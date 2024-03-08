@@ -1,7 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.model;
 
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
-
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,10 +9,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "storage")
+@Table(name = "favourite")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Storage {
+public class Favourite {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,8 +24,4 @@ public class Storage {
     @ManyToOne
     @JoinColumn(name = "watch_reference")
     private Watch watch;
-
-    @ManyToOne
-    @JoinColumn(name = "status_name")
-    private StatusStorage status;
 }

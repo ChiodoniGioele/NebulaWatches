@@ -1,11 +1,12 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.controller;
-
+import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StorageRequest;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StorageService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,8 +15,23 @@ import java.util.List;
 @RequestMapping("/v1/storage")
 @RequiredArgsConstructor
 public class StorageController {
-    @GetMapping
-    public List<Watch> getStorage(){
-        return null;
+
+    private final StorageService storageService;
+    private final UserService userService;
+
+    @GetMapping("/{userEmail}")
+    public ResponseEntity<List<Watch>> getWatchesByStorageAndUser(@PathVariable String userEmail) {
+        int userId = userService.getId(userEmail);
+        List<Watch> watches = storageService.getWatchesByUserId(userId);
+        return ResponseEntity.ok(watches);
+    }
+    @PostMapping("/addWatchToStorage")
+    public ResponseEntity<String> addWatchToStorage(@RequestBody StorageRequest request) {
+        try {
+            storageService.addWatchToStorage(request);
+            return ResponseEntity.ok("Watch added to storage successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add watch to storage: " + e.getMessage());
+        }
     }
 }

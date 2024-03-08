@@ -7,6 +7,7 @@
                 <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
+                    <Button class="bg-blue-600" @click="toFavourite"> Favourite Watches</Button>
                 </div>
 
                 <!-- <div class="mt-3 flex gap-2">
@@ -71,18 +72,14 @@ import WatchBrandCard from '@/components/WatchBrandCard.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useRouter } from 'vue-router';
 
 import { apiServerAddress } from '@/main.ts'
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
 
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
+const router = useRouter();
 const brands = ref([])
 
 async function fetchBrands() {
@@ -98,6 +95,10 @@ async function fetchBrands() {
   } catch (error) {
     console.error('Failed to fetch brands:', error);
   }
+}
+
+async function toFavourite(){
+  router.push('/favourite');
 }
 
 onMounted(async () => {

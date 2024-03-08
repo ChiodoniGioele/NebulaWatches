@@ -5,18 +5,19 @@
             <div class="px-4 py-6 lg:px-8"> 
 
                 <div class="flex w-full items-center gap-2.5">
-                    <Input id="email" type="text" placeholder="Search a watch in your storage..." />
+                    <Input id="email" type="text" placeholder="Search a watch in your favourites..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
-                </div>
-
-                <div class="mt-12 px-1 flex gap-7 items-center">
-                    <div class="flex gap-2">
-                        <h1 class="font-semibold "> Storage </h1>
-                    </div>
+                    <Button class="bg-blue-600" @click="toHome"> All Watches</Button>
                 </div>
                 
+                <div class="mt-12 px-1 flex gap-7 items-center">
+                    <div class="flex gap-2">
+                        <h1 class="font-semibold "> Favourites </h1>
+                    </div>
+                </div>
+
                 <div class="mt-5 flex flex-wrap gap-5">
-                    <WatchCard v-for="watch in storedWatches" :key="watch.reference" :watch="watch" />
+                    <WatchCard v-for="watch in favoritedWatches" :key="watch.reference" :watch="watch" />
                 </div>
 
             </div>
@@ -42,24 +43,29 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const storedWatches = ref([]);
+const router = useRouter();
+const favoritedWatches = ref([]);
 
-async function fetchStorage(userEmail) {
+async function fetchFavourite(userEmail) {
     try {
-        const response = await axios.get(`${apiServerAddress}/v1/storage/${userEmail}`, {
+        const response = await axios.get(`${apiServerAddress}/v1/favourite/${userEmail}`, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
             },
         });
 
-        storedWatches.value = response.data;
+        favoritedWatches.value = response.data;
     } catch (error) {
-        console.error('Failed to fetch watches by storage and user:', error);
+        console.error('Failed to fetch favourites watches', error);
     }
+}
+
+async function toHome(){
+  router.push('/');
 }
 
 onMounted(async () => {
     const userEmail = sessionStorage.getItem('email');
-    await fetchStorage(userEmail);
+    await fetchFavourite(userEmail);
 });
 </script>
