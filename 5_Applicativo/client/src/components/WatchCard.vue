@@ -13,7 +13,10 @@
                     </div>
                 </div>
                 <div v-else>
-                    <Skeleton class="w-[150px] h-[130px] rounded-md" />
+                    <div class="flex items-center h-[140px] justify-center">
+                        <Skeleton class="w-[150px] h-[130px] rounded-md" />
+                    </div>
+                    
                 </div>
 
                 <ScrollArea class="max-w-full whitespace-nowrap">

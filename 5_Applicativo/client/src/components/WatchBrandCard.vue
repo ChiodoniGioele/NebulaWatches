@@ -8,7 +8,9 @@
                     </div>
                 </div>
                 <div v-else>
-                    <Skeleton class="w-[150px] h-[130px] rounded-md" />
+                    <div class="flex items-center h-[140px] justify-center">
+                        <Skeleton class="w-[150px] h-[130px] rounded-md" />
+                    </div>
                 </div>
                 <h2 class="mt-2 font-medium">{{ brand.name }}</h2>
             </div>

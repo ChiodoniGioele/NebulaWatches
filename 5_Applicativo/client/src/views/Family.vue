@@ -40,8 +40,8 @@
                     <WatchCard v-for="watch in watches" :key="watch.reference" :watch="watch" />
                 </div>
 
-                <div class="mt-12 px-1 flex gap-7 items-center">
-                    <Pagination class=" w-full" v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
+                <div class="mt-12 px-1 w-full gap-7 flex items-center justify-center">
+                    <Pagination v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
                         <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
                         <PaginationFirst @click="fetchWatchesOfBrands(1)" />
                         <PaginationPrev @click="fetchWatchesOfBrands(actualPage - 1)"/>

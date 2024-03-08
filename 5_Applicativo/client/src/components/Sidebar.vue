@@ -49,7 +49,7 @@
               <div class="py-3 sm:py-4"></div>
               <div class="py-3 sm:py-4">
                   <Button variant="ghost" class="w-full justify-start">
-                      <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                      <div class="flex items-center space-x-3 rtl:space-x-reverse bg-violet-50">
                           <div class="flex-shrink-0">
                               <img class="w-8 h-8 rounded-full" src="@/assets/icons/Profile.png" alt="User image">  
                           </div>
