@@ -1,17 +1,20 @@
 package ch.nebulaWatches.nebulaWatchesAPI.watches.controller;
 
 import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundException;
+import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Brand;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Family;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.service.FamilyService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.service.WatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @CrossOrigin
@@ -29,10 +32,12 @@ public class FamilyController {
         rand = new Random();
     }
 
+    /*
     @GetMapping
     public List<Family> getFamilies(){
         return familyService.getFamilies();
     }
+    */
 
     @GetMapping(path = "{familyId}/rndimage")
     public ResponseEntity<byte[]> getFamilyRandomImage(@PathVariable("familyId") int familyId) {
@@ -49,8 +54,25 @@ public class FamilyController {
         }
     }
 
+    /*
     @GetMapping(path = "{familyId}/watches")
     public List<Watch> getWatchesByFamily(@PathVariable("familyId") int familyId){
         return watchService.getWatchesByFamily(familyId);
     }
+    */
+
+    @GetMapping(path = "{familyId}/watches")
+    public ResponseEntity<Page<Watch>> getWatchesByFamilyPage(@PathVariable("familyId") int familyId,
+                                                         @RequestParam Optional<Integer> page,
+                                                         @RequestParam Optional<String> sortBy) {
+        try{
+            Page<Watch> watchPage = watchService.getWatchesByFamilyPage(familyId, page.orElse(0), 20, sortBy.orElse("name"));
+            return ResponseEntity.ok(watchPage);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

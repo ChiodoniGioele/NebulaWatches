@@ -8,12 +8,14 @@ import ch.nebulaWatches.nebulaWatchesAPI.watches.service.BrandService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.service.FamilyService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.service.WatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @CrossOrigin
@@ -33,9 +35,23 @@ public class BrandController {
         rand = new Random();
     }
 
+    /*
     @GetMapping
     public List<Brand> getBrands(){
         return brandService.getBrands();
+    }
+     */
+
+    @GetMapping
+    public ResponseEntity<Page<Brand>> getBrandsPage(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
+        try{
+            Page<Brand> brandPage = brandService.getBrandsPage(page.orElse(0), 20, sortBy.orElse("id"));
+            return ResponseEntity.ok(brandPage);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping(path = "{brandName}/rndimage")
@@ -53,10 +69,27 @@ public class BrandController {
         }
     }
 
+    /*
     @GetMapping(path = "{brandName}/families")
     public List<Family> getFamilies(@PathVariable("brandName") String brandName){
         List<Family> families = familyService.getFamiliesByBrand(brandName);
         return families;
+    }
+    */
+
+
+    @GetMapping(path = "{brandName}/families")
+    public ResponseEntity<Page<Family>> getFamiliesPage(@PathVariable("brandName") String brandName,
+                                                         @RequestParam Optional<Integer> page,
+                                                         @RequestParam Optional<String> sortBy) {
+        try{
+            Page<Family> familyPage = familyService.getFamiliesByBrandPage(brandName, page.orElse(0), 20, sortBy.orElse("id"));
+            return ResponseEntity.ok(familyPage);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 }

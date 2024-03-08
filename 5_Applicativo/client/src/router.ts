@@ -8,6 +8,7 @@ import Watch from '@/views/Watch.vue';
 import Team from './views/Team.vue';
 import Storage from './views/Storage.vue';
 import Favourite from './views/Favourite.vue';
+import Search from './views/Search.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -20,6 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/team', component: Team },
     { path: '/storage', component: Storage },
     { path: '/favourite', component: Favourite },
+    { path: '/search', component: Search },
 ];
 
 const router = createRouter({

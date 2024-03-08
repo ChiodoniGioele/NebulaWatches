@@ -6,8 +6,8 @@
 
             <div class="px-4 py-6 lg:px-8">
 
-                <div class="flex w-full items-center gap-2.5">
-                    <Input id="email" type="text" placeholder="Search a watch ..." />
+                <div class="flex w-full items-center gap-1.5">
+                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch ..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
                     <Button variant="outline" @click="toFavourite">
                         <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
@@ -212,11 +212,10 @@ import {
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
-
-const route = useRoute();
 const router = useRouter();
+const route = useRoute();
 const reference = route.params.reference;
 const watch = ref({});
 const watchImage = ref();
