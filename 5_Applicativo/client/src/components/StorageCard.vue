@@ -49,7 +49,7 @@ const isLoading = ref(true);
 
 async function fetchRandomWatchFromBrandImage() {
     try {
-        const endpoint = `${apiServerAddress}/v1/watches/` + props.watch.reference + '/image'
+        const endpoint = `${apiServerAddress}/v1/watches/` + props.storage.watch.reference + '/image'
         const response = await axios.get(endpoint, {
             responseType: 'arraybuffer',
             headers: {
