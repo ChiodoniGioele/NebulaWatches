@@ -25,7 +25,7 @@ public class BrandService {
         return brandRepository.findAll();
     }
 
-    public Page<Brand> getBrandsPages(int page, int pageLength, String sortBy) {
+    public Page<Brand> getBrandsPage(int page, int pageLength, String sortBy) {
         if (page < 0 || pageLength <= 0) {
             throw new IllegalArgumentException("Invalid page or length parameters");
         }

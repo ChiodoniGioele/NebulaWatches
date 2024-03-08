@@ -5,6 +5,7 @@ import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundExcepti
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.service.WatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,4 +46,19 @@ public class WatchController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping(path = "search")
+    public ResponseEntity<Page<Watch>> getWatchesBySearchQueryPage(@RequestParam Optional<String> query,
+                                                              @RequestParam Optional<Integer> page,
+                                                              @RequestParam Optional<String> sortBy) {
+        try{
+            Page<Watch> watchPage = watchService.getWatchesBySearchQueryPage(query.orElse(""), page.orElse(0), 20, sortBy.orElse("name"));
+            return ResponseEntity.ok(watchPage);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

@@ -7,7 +7,7 @@
             <div class="px-4 py-6 lg:px-8">
 
                 <div class="flex w-full items-center gap-1.5">
-                    <Input id="email" type="text" placeholder="Search a watch ..." />
+                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch ..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
                 </div>
 

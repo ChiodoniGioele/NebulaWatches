@@ -43,9 +43,9 @@ public class BrandController {
      */
 
     @GetMapping
-    public ResponseEntity<Page<Brand>> getBrandsPages(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
+    public ResponseEntity<Page<Brand>> getBrandsPage(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
         try{
-            Page<Brand> brandPage = brandService.getBrandsPages(page.orElse(0), 20, sortBy.orElse("id"));
+            Page<Brand> brandPage = brandService.getBrandsPage(page.orElse(0), 20, sortBy.orElse("id"));
             return ResponseEntity.ok(brandPage);
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -69,12 +69,27 @@ public class BrandController {
         }
     }
 
+    /*
     @GetMapping(path = "{brandName}/families")
     public List<Family> getFamilies(@PathVariable("brandName") String brandName){
         List<Family> families = familyService.getFamiliesByBrand(brandName);
         return families;
     }
+    */
 
 
+    @GetMapping(path = "{brandName}/families")
+    public ResponseEntity<Page<Family>> getFamiliesPage(@PathVariable("brandName") String brandName,
+                                                         @RequestParam Optional<Integer> page,
+                                                         @RequestParam Optional<String> sortBy) {
+        try{
+            Page<Family> familyPage = familyService.getFamiliesByBrandPage(brandName, page.orElse(0), 20, sortBy.orElse("id"));
+            return ResponseEntity.ok(familyPage);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }
