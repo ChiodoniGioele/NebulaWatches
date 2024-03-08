@@ -53,4 +53,6 @@ public class FamilyController {
     public List<Watch> getWatchesByFamily(@PathVariable("familyId") int familyId){
         return watchService.getWatchesByFamily(familyId);
     }
+
+
 }
