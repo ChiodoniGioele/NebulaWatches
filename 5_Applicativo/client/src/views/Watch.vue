@@ -153,9 +153,9 @@ import { apiServerAddress } from '@/main.ts'
 import axios from 'axios';
 
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
-
+const router = useRouter();
 const route = useRoute();
 const reference = route.params.reference;
 const watch = ref({});

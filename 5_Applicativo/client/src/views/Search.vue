@@ -19,42 +19,39 @@
                     
                 </div>
 
-                <div v-if="isLoading">
-                    <Skeleton class="w-full h-[600px] mt-5 rounded-md" />
-                </div>
-                <div v-else>
-                    <div class="mt-12 px-1 flex gap-7 items-center">
-                        <div class="flex gap-2">
-                            <h1 class="font-semibold "> {{ totalWatchesCount }} watches </h1>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-5 flex flex-wrap gap-5">
-                        <WatchCard v-for="watch in watches" :key="watch.reference" :watch="watch" />
-                    </div>
-
-                    <div class="mt-12 px-1 flex gap-7 items-center">
-                        <Pagination class=" w-full" v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
-                            <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
-                            <PaginationFirst @click="fetchSearchedWatches(1)" />
-                            <PaginationPrev @click="fetchSearchedWatches(actualPage - 1)"/>
-
-                            <template v-for="(item, index) in items">
-                                <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                                <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchSearchedWatches(item.value)">
-                                    {{ item.value }}
-                                    
-                                </Button>
-                                </PaginationListItem>
-                                <PaginationEllipsis v-else :key="item.type" :index="index" />
-                            </template>
-
-                            <PaginationNext @click="fetchSearchedWatches(actualPage + 1)" />
-                            <PaginationLast  @click="fetchSearchedWatches(totalPages)" />
-                            </PaginationList>
-                        </Pagination>
+               
+                <div class="mt-12 px-1 flex gap-7 items-center">
+                    <div class="flex gap-2">
+                        <h1 class="font-semibold "> {{ totalWatchesCount }} watches </h1>
                     </div>
                 </div>
+                
+                <div class="mt-5 flex flex-wrap gap-5">
+                    <WatchCard v-for="watch in watches" :key="watch.reference" :watch="watch" />
+                </div>
+
+                <div class="mt-12 px-1 flex gap-7 items-center">
+                    <Pagination class=" w-full" v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
+                        <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
+                        <PaginationFirst @click="fetchSearchedWatches(1)" />
+                        <PaginationPrev @click="fetchSearchedWatches(actualPage - 1)"/>
+
+                        <template v-for="(item, index) in items">
+                            <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+                            <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchSearchedWatches(item.value)">
+                                {{ item.value }}
+                                
+                            </Button>
+                            </PaginationListItem>
+                            <PaginationEllipsis v-else :key="item.type" :index="index" />
+                        </template>
+
+                        <PaginationNext @click="fetchSearchedWatches(actualPage + 1)" />
+                        <PaginationLast  @click="fetchSearchedWatches(totalPages)" />
+                        </PaginationList>
+                    </Pagination>
+                </div>
+                
                     
 
             </div>

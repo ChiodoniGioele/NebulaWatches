@@ -9,45 +9,40 @@
                     <Button type="submit" class="bg-blue-600"> Search </Button>
                 </div>
 
-                <div v-if="isLoading">
-                    <Skeleton class="w-full h-[600px] mt-5 rounded-md" />
-                </div>
-                <div v-else>
-
-
-                    <div class="mt-12 px-1 flex gap-7 items-center">
+                
+                <div class="mt-12 px-1 flex gap-7 items-center">
                     <div class="flex gap-2">
-                            <h1 class="font-semibold "> {{ totalBrandCount }} brands </h1>
-                        </div>
+                        <h1 class="font-semibold "> {{ totalBrandCount }} brands </h1>
                     </div>
-                    
-                    <div class="mt-5 flex flex-wrap gap-5">
-                        <WatchBrandCard v-for="brand in brands" :key="brand.name" :brand="brand" />
-                    </div>
-
-                    <div class="mt-12 px-1 flex gap-7 items-center">
-                        <Pagination class=" w-full" v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
-                            <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
-                            <PaginationFirst @click="fetchBrands(1)" />
-                            <PaginationPrev @click="fetchBrands(actualPage - 1)"/>
-
-                            <template v-for="(item, index) in items">
-                                <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                                <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchBrands(item.value)">
-                                    {{ item.value }}
-                                    
-                                </Button>
-                                </PaginationListItem>
-                                <PaginationEllipsis v-else :key="item.type" :index="index" />
-                            </template>
-
-                            <PaginationNext @click="fetchBrands(actualPage + 1)" />
-                            <PaginationLast  @click="fetchBrands(totalPages)" />
-                            </PaginationList>
-                        </Pagination>
-                    </div>
-
                 </div>
+                
+                <div class="mt-5 flex flex-wrap gap-5">
+                    <WatchBrandCard v-for="brand in brands" :key="brand.name" :brand="brand" />
+                </div>
+
+                <div class="mt-12 px-1 flex gap-7 items-center">
+                    <Pagination class=" w-full" v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
+                        <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
+                        <PaginationFirst @click="fetchBrands(1)" />
+                        <PaginationPrev @click="fetchBrands(actualPage - 1)"/>
+
+                        <template v-for="(item, index) in items">
+                            <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+                            <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchBrands(item.value)">
+                                {{ item.value }}
+                                
+                            </Button>
+                            </PaginationListItem>
+                            <PaginationEllipsis v-else :key="item.type" :index="index" />
+                        </template>
+
+                        <PaginationNext @click="fetchBrands(actualPage + 1)" />
+                        <PaginationLast  @click="fetchBrands(totalPages)" />
+                        </PaginationList>
+                    </Pagination>
+                </div>
+
+                
 
                 <!-- <div class="mt-3 flex gap-2">
                     <Popover>
