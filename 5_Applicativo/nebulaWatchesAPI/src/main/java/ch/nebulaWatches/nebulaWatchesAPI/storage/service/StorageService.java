@@ -25,7 +25,7 @@ public class StorageService {
         return storageRepository.findAll();
     }
 
-    public List<Watch> getWatchesByUserId(int userId) {
+    public List<Storage> getWatchesByUserId(int userId) {
         return storageRepository.findByUser(userId);
     }
     public void addWatchToStorage(StorageRequest request) {

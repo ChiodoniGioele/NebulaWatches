@@ -1,5 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.controller;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StorageRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StorageService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
@@ -20,11 +21,12 @@ public class StorageController {
     private final UserService userService;
 
     @GetMapping("/{userEmail}")
-    public ResponseEntity<List<Watch>> getWatchesByStorageAndUser(@PathVariable String userEmail) {
+    public ResponseEntity<List<Storage>> getWatchesByStorageAndUser(@PathVariable String userEmail) {
         int userId = userService.getId(userEmail);
-        List<Watch> watches = storageService.getWatchesByUserId(userId);
-        return ResponseEntity.ok(watches);
+        List<Storage> storages = storageService.getWatchesByUserId(userId);
+        return ResponseEntity.ok(storages);
     }
+
     @PostMapping("/addWatchToStorage")
     public ResponseEntity<String> addWatchToStorage(@RequestBody StorageRequest request) {
         try {

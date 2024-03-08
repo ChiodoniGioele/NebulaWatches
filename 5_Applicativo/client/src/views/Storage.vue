@@ -13,10 +13,16 @@
                     <div class="flex gap-2">
                         <h1 class="font-semibold "> Storage </h1>
                     </div>
+                    <div class="w-full flex gap-7 items-center"></div>
+                    <div class="flex gap-2 w-auto">
+                        <Button variant="outline" @click="">
+                            Add Custom Watch
+                        </Button>
+                    </div>
                 </div>
                 
                 <div class="mt-5 flex flex-wrap gap-5">
-                    <WatchCard v-for="watch in storedWatches" :key="watch.reference" :watch="watch" />
+                    <StorageCard v-for="watch in storedWatches" :key="watch.id" :storage="watch" />
                 </div>
 
             </div>
@@ -28,7 +34,7 @@
   
 <script setup>
 import Sidebar from '@/components/Sidebar.vue'
-import WatchCard from '@/components/WatchCard.vue'
+import StorageCard from '@/components/StorageCard.vue'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'

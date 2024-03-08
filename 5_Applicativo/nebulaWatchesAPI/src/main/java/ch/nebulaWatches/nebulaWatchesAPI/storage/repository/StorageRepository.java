@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface StorageRepository extends JpaRepository<Storage, Integer> {
-    @Query("SELECT w FROM Watch w JOIN Storage s ON s.watch.reference = w.reference WHERE s.user.id = ?1")
-    List<Watch> findByUser(int userId);
+    @Query("SELECT s FROM Storage s JOIN Watch w ON s.watch.reference = w.reference WHERE s.user.id = ?1")
+    List<Storage> findByUser(int userId);
 
 }
