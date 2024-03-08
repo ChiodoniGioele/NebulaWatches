@@ -6,9 +6,13 @@
 
             <div class="px-4 py-6 lg:px-8">
 
-                <div class="flex w-full items-center gap-1.5">
+                <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch ..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
+                    <Button variant="outline" @click="toFavourite">
+                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
+                        <p class="m-2">Favourites</p>
+                    </Button>
                 </div>
 
                 <div class="mt-5 flex items-center">
@@ -70,10 +74,8 @@
                             </PopoverContent>
                         </Popover>
                     <Button variant="outline" @click="addOrRemoveFavourite">
-                        <!--<transition name="fade" class="transition-opacity">-->
-                            <img v-if="!isStarClicked" class="m-5 h-[25px] w-[25px]" src="@/assets/star.png"/>
-                            <img v-else class="m-5 h-[25px] w-[25px]" src="@/assets/star_full.png"/>
-                        <!--</transition>-->
+                        <img v-if="!isStarClicked" class="m-5 h-[25px] w-[25px]" src="@/assets/star.png"/>
+                        <img v-else class="m-5 h-[25px] w-[25px]" src="@/assets/star_full.png"/>
                     </Button>
                     </div>
                 </div>
@@ -208,12 +210,13 @@ import {
 } from '@/components/ui/select'
 
 import axios from 'axios';
-
+import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 
 const route = useRoute();
+const router = useRouter();
 const reference = route.params.reference;
 const watch = ref({});
 const watchImage = ref();
@@ -326,6 +329,10 @@ async function setIconStar(){
       } catch (error) {
         console.error('Failed to check if watch is favorite:', error);
       }
+}
+
+async function toFavourite(){
+  router.push('/favourite');
 }
 
 onMounted(async () => {

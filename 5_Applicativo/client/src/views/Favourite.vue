@@ -7,7 +7,7 @@
                 <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch in your favourites..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
-                    <Button class="bg-blue-600" @click="toHome"> All Watches</Button>
+                    <Button variant="outline" @click="toHome"> All Watches</Button>
                 </div>
                 
                 <div class="mt-12 px-1 flex gap-7 items-center">

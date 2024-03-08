@@ -4,9 +4,13 @@
         <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col"> 
             <div class="px-4 py-6 lg:px-8"> 
 
-                <div class="flex w-full items-center gap-1.5">
+                <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch ..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
+                    <Button variant="outline" @click="toFavourite">
+                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
+                        <p class="m-2">Favourites</p>
+                    </Button>
                 </div>
                 
                 <div class="mt-5 flex gap-7 items-center">
@@ -52,7 +56,7 @@ import { Badge } from '@/components/ui/badge'
 import { apiServerAddress } from '@/main.ts'
 
 import axios from 'axios';
-
+import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -62,6 +66,7 @@ const brandName = route.params.brandName;
 const familyId = route.params.familyId;
 const watches = ref([]);
 const familyName = ref('')
+const router = useRouter();
 
 async function fetchFamiliesOfBrand() {
     try {
@@ -79,6 +84,9 @@ async function fetchFamiliesOfBrand() {
   }
 }
 
+async function toFavourite(){
+  router.push('/favourite');
+}
 
 onMounted(async () => {
     fetchFamiliesOfBrand();

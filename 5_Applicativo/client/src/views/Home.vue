@@ -7,13 +7,16 @@
                 <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
-                    <Button class="bg-blue-600" @click="toFavourite"> Favourite Watches</Button>
+                    <Button variant="outline" @click="toFavourite">
+                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
+                        <p class="m-2">Favourites</p>
+                    </Button>
                 </div>
 
                 <!-- <div class="mt-3 flex gap-2">
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Brands ({{ brands.length }})</span> </Button>
+                            <Button > <span class="font-normal">Brands ({{ brands.length }})</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
                             <div v-for="brand in brands" :key="brand.name" :brand="brand" class="flex items-center space-x-2 mb-3">
