@@ -85,7 +85,7 @@
                     <div class="flex gap-20">
                         <img class="h-[300px] border border-gray-200 rounded-lg" :src="watchImage" alt="Watch Image" />
                         <div class="pt-2">
-                            <ScrollArea class="h-[500px]">
+                            <ScrollArea class="h-[70vh] p-7">
                                 <div class="pb-4">
                                 <h1 class="font-semibold text-sm text-gray-400">Reference</h1>
                                 {{ watch.reference }}
