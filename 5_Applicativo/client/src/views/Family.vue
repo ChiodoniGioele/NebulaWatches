@@ -6,7 +6,7 @@
 
                 <div class="flex w-full items-center gap-1.5">
                     <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch ..." />
-                    <Button type="submit" class="bg-blue-600"> Search </Button>
+                    <Button @click="router.push('/search')" type="submit" class="bg-blue-600"> Search </Button>
                     <Button variant="outline" @click="toFavourite">
                         <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
                         <p class="m-2">Favourites</p>

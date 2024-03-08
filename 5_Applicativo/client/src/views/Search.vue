@@ -6,7 +6,7 @@
 
                 <div class="flex w-full items-center gap-1.5">
                     <Input @change="fetchSearchedWatches(1)" v-model="query" id="email" type="text" placeholder="Search a watch ..." />
-                    <Button type="submit" class="bg-blue-600"> Search </Button>
+                    <Button @click="fetchSearchedWatches(1)" type="submit" class="bg-blue-600"> Search </Button>
                 </div>
                 
                 <div class="mt-5 flex gap-7 items-center">
