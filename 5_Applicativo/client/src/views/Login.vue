@@ -12,17 +12,17 @@
                 </CardTitle>
             </CardHeader>
             <CardContent class="grid gap-4">
-              <form th:action="@{/login}" method="post">
                 <div class="grid gap-2">
                   <Label for="email">Email</Label>
-                  <Input id="username" v-model="email" type="text" name="username" placeholder="Username" class="bg-gray-50" required />
+                  <Input id="email" v-model="email" type="email" name="email" placeholder="user@email.com" class="bg-gray-50" required />
                 </div>
                 <div class="grid gap-2">
                   <Label for="password">Password</Label>
                   <Input id="password" v-model="password" type="password" name="password" placeholder="Password" class="bg-gray-50" required />
                 </div>
-                <input type="submit" class="w-full" value="Login" />
-              </form>
+                <button @click="login">
+                  Login
+                </button>
 
 
                 <Alert variant="destructive" v-if="loginFailed">
