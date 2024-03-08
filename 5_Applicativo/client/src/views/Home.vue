@@ -101,7 +101,6 @@ import WatchBrandCard from '@/components/WatchBrandCard.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { useRouter } from 'vue-router';
 import { Skeleton } from '@/components/ui/skeleton'
 
 import {
@@ -140,7 +139,6 @@ async function fetchBrands(pageRequestValue) {
             },
         });
 
-        
         isLoading.value = false;
         console.log(response.data);
 

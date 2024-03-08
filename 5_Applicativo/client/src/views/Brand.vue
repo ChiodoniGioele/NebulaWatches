@@ -76,7 +76,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Badge } from '@/components/ui/badge'
 import { apiServerAddress } from '@/main.ts'
-import { useRouter } from 'vue-router';
 
 import {
   Pagination,
@@ -95,9 +94,9 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 const brandName = route.params.brandName;
 const families = ref([]);
-const router = useRouter();
 
 const totalPages = ref(1)
 const totalFamiliesCount = ref(0)

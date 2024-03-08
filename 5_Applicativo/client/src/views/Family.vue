@@ -89,7 +89,6 @@ import {
 } from '@/components/ui/pagination'
 
 import axios from 'axios';
-import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
