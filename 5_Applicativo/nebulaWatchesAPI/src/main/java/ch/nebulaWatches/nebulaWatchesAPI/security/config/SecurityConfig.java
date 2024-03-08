@@ -51,19 +51,18 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/actuator/**", "/register", "/assets/**", "/login/oauth2/code/google", "/oauth2/authorization/google").permitAll()
+                        .requestMatchers("/login", "index.html","/actuator/**", "/register", "/assets/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 //.httpBasic(withDefaults())
                 .formLogin(form -> form
-
-                        .loginPage("/index.html")
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/index.html")
+                        .loginPage("/login")
                         .userInfoEndpoint(userInfo -> userInfo
                                 .oidcUserService(this.oidcUserService())
                 ))
