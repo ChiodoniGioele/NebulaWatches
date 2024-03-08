@@ -85,6 +85,7 @@ import { apiServerAddress } from '@/main.ts'
 const router = useRouter();
 const username = ref('');
 const email = ref('');
+
 async function logout() {
     try {        
         localStorage.removeItem('token');

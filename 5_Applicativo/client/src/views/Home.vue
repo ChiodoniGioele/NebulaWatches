@@ -24,7 +24,7 @@
                     <WatchBrandCard v-for="brand in brands" :key="brand.name" :brand="brand" />
                 </div>
 
-                <div class="mt-12 px-1 flex gap-7 items-center">
+                <div class="mt-12 px-1 flex gap-7 items-center justify-center">
                     <Pagination class=" w-full" v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
                         <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
                         <PaginationFirst @click="fetchBrands(1)" />
@@ -32,7 +32,7 @@
 
                         <template v-for="(item, index) in items">
                             <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                            <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchBrands(item.value)">
+                            <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchBrands(item.value); scrollToTop()">
                                 {{ item.value }}
                                 
                             </Button>
@@ -45,9 +45,6 @@
                         </PaginationList>
                     </Pagination>
                 </div>
-
-                
-
                 <!-- <div class="mt-3 flex gap-2">
                     <Popover>
                         <PopoverTrigger>
@@ -86,12 +83,9 @@
                     </Popover>
                 </div> -->
 
-                
             </div>
         </div>
     </div>
-    
- 
 </template>
   
 <script setup>
@@ -131,6 +125,7 @@ const isLoading = ref(true)
 
 async function fetchBrands(pageRequestValue) {
     try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         isLoading.value = true;
         const response = await axios.get(`${apiServerAddress}/v1/brands?page=${(pageRequestValue - 1)}&sortBy=name`, 
         {
@@ -147,7 +142,7 @@ async function fetchBrands(pageRequestValue) {
         totalBrandCount.value = response.data.totalElements;
 
         actualPage.value = pageRequestValue;
-
+        
         
         //console.log('Total pages: ' + response.data.totalPages);
     } catch (error) {
@@ -163,5 +158,6 @@ async function toFavourite(){
 onMounted(async () => {
     fetchBrands(1);
 });
+
 
 </script>

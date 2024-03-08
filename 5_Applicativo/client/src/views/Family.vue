@@ -61,12 +61,12 @@
                         </PaginationList>
                     </Pagination>
                 </div>
-
             </div>
         </div>
     </div>
+
     
- 
+
 </template>
   
 <script setup>
@@ -107,6 +107,7 @@ const actualPage = ref(1)
 
 async function fetchWatchesOfBrands(pageRequestValue) {
     try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         const response = await axios.get(`${apiServerAddress}/v1/families/${familyId}/watches?page=${(pageRequestValue - 1)}&sortBy=name`, 
         //const response = await axios.get(`${apiServerAddress}/v1/families/${familyId}/watches`, 
         {
@@ -122,6 +123,7 @@ async function fetchWatchesOfBrands(pageRequestValue) {
         totalWatchesCount.value = response.data.totalElements;
 
         actualPage.value = pageRequestValue;
+        
   } catch (error) {
     console.error('Failed to fetch families:', error);
   }
@@ -134,4 +136,5 @@ async function toFavourite(){
 onMounted(async () => {
     fetchWatchesOfBrands(1);
 });
+
 </script>

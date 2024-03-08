@@ -104,6 +104,7 @@ const actualPage = ref(1)
 
 async function fetchFamiliesOfBrand(pageRequestValue) {
     try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         const response = await axios.get(`${apiServerAddress}/v1/brands/${brandName}/families?page=${(pageRequestValue - 1)}&sortBy=name`, 
         //const response = await axios.get(`${apiServerAddress}/v1/brands/${brandName}/families`,
             {

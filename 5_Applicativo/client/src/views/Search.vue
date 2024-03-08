@@ -97,6 +97,7 @@ const isLoading = ref(true)
 
 async function fetchSearchedWatches(pageRequestValue) {
     try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         isLoading.value = true;
         const response = await axios.get(`${apiServerAddress}/v1/watches/search?query=${query.value}&page=${(pageRequestValue - 1)}&sortBy=name`, 
         //const response = await axios.get(`${apiServerAddress}/v1/families/${familyId}/watches`, 
