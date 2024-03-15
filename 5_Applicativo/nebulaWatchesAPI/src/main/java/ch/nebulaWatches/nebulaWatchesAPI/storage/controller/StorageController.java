@@ -1,5 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.controller;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.FavouriteRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StorageRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StatusStorageService;
@@ -37,6 +38,16 @@ public class StorageController {
             return ResponseEntity.ok("Watch added to storage successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add watch to storage: " + e.getMessage());
+        }
+    }
+    @PostMapping("/removeStorageWatch")
+    public ResponseEntity<String> removeStorageWatch(@RequestBody StorageRequest request) {
+        try {
+            storageService.removeFromStorage(request);
+            return ResponseEntity.ok("Watch removed from storage successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to remove watch from storage: " + e.getMessage());
         }
     }
 }

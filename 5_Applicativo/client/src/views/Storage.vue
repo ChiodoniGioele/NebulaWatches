@@ -15,9 +15,65 @@
                     </div>
                     <div class="w-full flex gap-7 items-center"></div>
                     <div class="flex gap-2 w-auto">
-                        <Button variant="outline" @click="">
-                            Add Custom Watch
-                        </Button>
+                        <Dialog>
+                            <DialogTrigger as-child>
+                            <Button variant="outline" class="h-12">
+                                <!--<img class="w-5 h-5 m-1" src="@/assets/icons/plus.png" alt="+">--> 
+                                <p >Add Custom Watch</p>
+                            </Button>
+                            </DialogTrigger>
+                            <DialogContent class="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>Add a custom watch</DialogTitle>
+                                <DialogDescription>
+                                If your watch is not listed in our watches you can add it by yourself.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div class="grid gap-4 py-4">
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                <Label for="reference" class="text-right">
+                                    Reference
+                                </Label>
+                                <Input id="reference" class="col-span-3" />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                <Label for="name" class="text-right">
+                                    Name
+                                </Label>
+                                <Input id="name"class="col-span-3" />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                <Label for="desc" class="text-right">
+                                    Description
+                                </Label>
+                                <Input id="desc" class="col-span-3" />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                <Label for="diameter" class="text-right">
+                                    Diameter (mm)
+                                </Label>
+                                <Input id="diameter" class="col-span-3" />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                <Label for="height" class="text-right">
+                                    Height (mm)
+                                </Label>
+                                <Input id="height" class="col-span-3" />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                <Label for="water" class="text-right">
+                                    Water resistance (m)
+                                </Label>
+                                <Input id="water" class="col-span-3" />
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button type="submit">
+                                Save Watch
+                                </Button>
+                            </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 </div>
                 
@@ -36,13 +92,24 @@
 import Sidebar from '@/components/Sidebar.vue'
 import StorageCard from '@/components/StorageCard.vue'
 
+
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useRouter } from 'vue-router';
 
-import { apiServerAddress } from '@/main.ts'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 
+import { apiServerAddress } from '@/main.ts'
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
@@ -65,7 +132,11 @@ async function fetchStorage(userEmail) {
 }
 
 onMounted(async () => {
-    const userEmail = sessionStorage.getItem('email');
-    await fetchStorage(userEmail);
+    const token = localStorage.getItem('token');
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    const email = payload.sub;
+
+    await fetchStorage(email);
 });
 </script>

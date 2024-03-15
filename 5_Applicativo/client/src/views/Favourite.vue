@@ -65,7 +65,11 @@ async function toHome(){
 }
 
 onMounted(async () => {
-    const userEmail = sessionStorage.getItem('email');
-    await fetchFavourite(userEmail);
+    const token = localStorage.getItem('token');
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    const email = payload.sub;
+
+    await fetchFavourite(email);
 });
 </script>

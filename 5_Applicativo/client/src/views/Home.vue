@@ -136,7 +136,6 @@ async function fetchBrands(pageRequestValue) {
         });
 
         isLoading.value = false;
-        console.log(response.data);
 
         brands.value = response.data.content;
         totalPages.value = response.data.totalPages;

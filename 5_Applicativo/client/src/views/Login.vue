@@ -88,9 +88,9 @@ const email = ref('');
 const password = ref('');
 const router = useRouter();
 const loginFailed = ref(false);
+const role = ref('');
 
 async function login() {
-    console.log(email.value);
     try {
         const response = await axios.post(`${apiServerAddress}/auth/authenticate`, {
             email: email.value,
@@ -99,11 +99,32 @@ async function login() {
         
         const token = response.data.token;
         localStorage.setItem('token', token);
-        sessionStorage.setItem('email', email.value);
-        router.push('/');
+
+        await getRole(email.value);
+        if(role.value == "ADMIN"){
+            router.push('/admin');
+        }else{
+            router.push('/');
+        }
+
     } catch (error) {
         loginFailed.value = true;
         console.error("Login Failed")
     }
 }
+
+async function getRole(userEmail){
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/admin/getRole/${userEmail}`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+
+        role.value = response.data;        
+    } catch (error) {
+        console.error('Failed to fetch Role', error);
+    }
+}
+
 </script>

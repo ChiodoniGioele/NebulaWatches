@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class StorageRequest {
+    private long id;
     private String user_email;
     private String watch_reference;
     private String status;
-
+    private int quantity;
 }
