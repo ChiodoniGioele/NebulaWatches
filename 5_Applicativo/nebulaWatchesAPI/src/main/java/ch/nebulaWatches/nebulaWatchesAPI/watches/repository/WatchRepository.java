@@ -16,6 +16,9 @@ public interface WatchRepository extends JpaRepository<Watch, String> {
     @Query("SELECT w FROM Watch w WHERE w.family.brand.name = ?1")
     List<Watch> findByBrand(String brandName);
 
+    @Query("SELECT w FROM Watch w WHERE w.family.brand.name = ?1")
+    Page<Watch> findByBrand(String brandName, Pageable pageable);
+
     @Query("SELECT w FROM Watch w WHERE w.family.id = ?1")
     List<Watch> findByFamily(int familyId);
 
@@ -23,7 +26,7 @@ public interface WatchRepository extends JpaRepository<Watch, String> {
     @Query("SELECT w FROM Watch w WHERE w.family.id = ?1")
     Page<Watch> findByFamily(int familyId, Pageable pageable);
 
-    @Query("SELECT w FROM Watch w WHERE w.name LIKE CONCAT('%', :query, '%') OR " +
+    @Query("SELECT w.reference, w.name, w.isLimitedTo FROM Watch w WHERE w.name LIKE CONCAT('%', :query, '%') OR " +
             "w.description LIKE CONCAT('%', :query, '%') OR " +
             "w.family.name LIKE CONCAT('%', :query, '%') OR " +
             "w.family.brand.name LIKE CONCAT('%', :query, '%')")

@@ -14,4 +14,7 @@ import java.util.List;
 public interface FamilyRepository extends JpaRepository<Family, Integer> {
     @Query("SELECT f FROM Family f WHERE f.brand.name = ?1")
     Page<Family> findByBrand(String brandName, Pageable pageable);
+
+    @Query("SELECT f FROM Family f WHERE f.brand.name = ?1")
+    List<Family> findByBrand(String brandName);
 }

@@ -25,12 +25,9 @@ public class FamilyService {
         return familyRepository.findAll();
     }
 
-    /*
     public List<Family> getFamiliesByBrand(String brandName){
         return familyRepository.findByBrand(brandName);
     }
-    */
-
 
     public Page<Family> getFamiliesByBrandPage(String brandName, int page, int pageLength, String sortBy) {
         if (page < 0 || pageLength <= 0) {

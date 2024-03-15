@@ -35,12 +35,12 @@ public class BrandController {
         rand = new Random();
     }
 
-    /*
-    @GetMapping
+
+    @GetMapping(path = "all")
     public List<Brand> getBrands(){
         return brandService.getBrands();
     }
-     */
+
 
     @GetMapping
     public ResponseEntity<Page<Brand>> getBrandsPage(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
@@ -69,13 +69,14 @@ public class BrandController {
         }
     }
 
-    /*
-    @GetMapping(path = "{brandName}/families")
+
+
+
+    @GetMapping(path = "{brandName}/families/all")
     public List<Family> getFamilies(@PathVariable("brandName") String brandName){
         List<Family> families = familyService.getFamiliesByBrand(brandName);
         return families;
     }
-    */
 
 
     @GetMapping(path = "{brandName}/families")
@@ -84,6 +85,20 @@ public class BrandController {
                                                          @RequestParam Optional<String> sortBy) {
         try{
             Page<Family> familyPage = familyService.getFamiliesByBrandPage(brandName, page.orElse(0), 20, sortBy.orElse("id"));
+            return ResponseEntity.ok(familyPage);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping(path = "{brandName}/watches")
+    public ResponseEntity<Page<Watch>> getWatchesPages(@PathVariable("brandName") String brandName,
+                                                        @RequestParam Optional<Integer> page,
+                                                        @RequestParam Optional<String> sortBy) {
+        try{
+            Page<Watch> familyPage = watchService.getWatchesByBrandPages(brandName, page.orElse(0), 20, sortBy.orElse("name"));
             return ResponseEntity.ok(familyPage);
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

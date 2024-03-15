@@ -93,5 +93,14 @@ public class WatchService {
     }
 
 
+    public Page<Watch> getWatchesByBrandPages(String brandName, int page, int pageLength, String sortBy) {
+        if (page < 0 || pageLength <= 0) {
+            throw new IllegalArgumentException("Invalid page or length parameters");
+        }
+        Sort.Direction sortDirection = Sort.Direction.ASC;
 
+        Pageable paging = PageRequest.of(page, pageLength, sortDirection, sortBy);
+
+        return watchRepository.findByBrand(brandName, paging);
+    }
 }
