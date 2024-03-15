@@ -42,7 +42,6 @@ public class ClientBuyWatchController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
     }
 
     @GetMapping("/{idClient}")
@@ -55,5 +54,36 @@ public class ClientBuyWatchController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    @PutMapping("/update/{id}")
+    ResponseEntity<ClientBuyWatch> replaceClientBuyWatch(@RequestBody ClientBuyWatch newclientBuyWatch, @PathVariable Long id) {
+
+        try{
+            return ResponseEntity.ok(
+                    repository.findById(id)
+                            .map(client -> {
+                                client.setClient(newclientBuyWatch.getClient());
+                                client.setStorage(newclientBuyWatch.getStorage());
+                                client.setPrice(newclientBuyWatch.getPrice());
+                                return repository.save(client);
+                            })
+                            .orElseGet(() -> {
+                                newclientBuyWatch.setId(id);
+                                return repository.save(newclientBuyWatch);
+                            })
+            );
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    void deleteClient(@PathVariable Long id) {
+        repository.deleteById(id);
+    }
+
 
 }
