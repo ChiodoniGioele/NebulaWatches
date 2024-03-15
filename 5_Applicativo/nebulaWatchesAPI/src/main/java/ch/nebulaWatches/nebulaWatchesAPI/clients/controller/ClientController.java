@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/v1/client")
+@RequestMapping("/v1/clients")
 public class ClientController {
 
     private final ClientRepository repository;

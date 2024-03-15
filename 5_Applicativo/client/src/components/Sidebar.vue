@@ -21,7 +21,7 @@
           </div>
 
           <div class="w-[60%]">
-            <Button variant="ghost" class="w-full justify-start">
+            <Button variant="ghost" class="w-full justify-start" @click="router.push('/clients');">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Customer.png" />
               <span class="text-inherit text-base font-semibold">Clients</span>
             </Button>
