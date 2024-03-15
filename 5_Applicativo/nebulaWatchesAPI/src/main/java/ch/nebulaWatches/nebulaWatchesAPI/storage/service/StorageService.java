@@ -3,12 +3,9 @@ package ch.nebulaWatches.nebulaWatchesAPI.storage.service;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.FavouriteRequest;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StorageRequest;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.*;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.repository.StorageRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StatusStorage;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.repository.WatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,5 +48,6 @@ public class StorageService {
     public void removeFromStorage(StorageRequest request) {
         storageRepository.deleteById(request.getId());
     }
+
 
 }

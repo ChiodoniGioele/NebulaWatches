@@ -9,72 +9,15 @@
                     <Button type="submit" class="bg-blue-600"> Search </Button>
                 </div>
 
-                <div class="mt-12 px-1 flex gap-7 items-center">
+                <div class="mt-12 px-1 flex gap-3 items-center">
                     <div class="flex gap-2">
                         <h1 class="font-semibold "> Storage </h1>
                     </div>
                     <div class="w-full flex gap-7 items-center"></div>
-                    <div class="flex gap-2 w-auto">
-                        <Dialog>
-                            <DialogTrigger as-child>
-                            <Button variant="outline" class="h-12">
-                                <!--<img class="w-5 h-5 m-1" src="@/assets/icons/plus.png" alt="+">--> 
-                                <p >Add Custom Watch</p>
-                            </Button>
-                            </DialogTrigger>
-                            <DialogContent class="sm:max-w-[425px]">
-                            <DialogHeader>
-                                <DialogTitle>Add a custom watch</DialogTitle>
-                                <DialogDescription>
-                                If your watch is not listed in our watches you can add it by yourself.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="reference" class="text-right">
-                                    Reference
-                                </Label>
-                                <Input id="reference" class="col-span-3" />
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="name" class="text-right">
-                                    Name
-                                </Label>
-                                <Input id="name"class="col-span-3" />
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="desc" class="text-right">
-                                    Description
-                                </Label>
-                                <Input id="desc" class="col-span-3" />
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="diameter" class="text-right">
-                                    Diameter (mm)
-                                </Label>
-                                <Input id="diameter" class="col-span-3" />
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="height" class="text-right">
-                                    Height (mm)
-                                </Label>
-                                <Input id="height" class="col-span-3" />
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="water" class="text-right">
-                                    Water resistance (m)
-                                </Label>
-                                <Input id="water" class="col-span-3" />
-                                </div>
-                            </div>
-                            <DialogFooter>
-                                <Button type="submit">
-                                Save Watch
-                                </Button>
-                            </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                    </div>
+                    <Button variant="outline" class="h-12" @click="toCustom">
+                        <p >Custom Watches</p>
+                    </Button>
+                    
                 </div>
                 
                 <div class="mt-5 flex flex-wrap gap-5">
@@ -115,6 +58,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 const storedWatches = ref([]);
 
 async function fetchStorage(userEmail) {
@@ -129,6 +73,10 @@ async function fetchStorage(userEmail) {
     } catch (error) {
         console.error('Failed to fetch watches by storage and user:', error);
     }
+}
+
+async function toCustom(){
+    router.push("/storageCustom");
 }
 
 onMounted(async () => {
