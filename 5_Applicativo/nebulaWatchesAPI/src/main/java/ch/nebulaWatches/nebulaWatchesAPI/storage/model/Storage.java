@@ -1,7 +1,9 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.model;
 
+import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 
+import ch.nebulaWatches.nebulaWatchesAPI.team.model.Team;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,4 +37,18 @@ public class Storage {
     @ManyToOne
     @JoinColumn(name = "custom_watch_reference")
     private CustomWatch customWatch;
+
+    @JoinColumn(name = "buy_price")
+    private float buyPrice;
+
+    @JoinColumn(name = "sell_price", nullable = true)
+    private float sellPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 }

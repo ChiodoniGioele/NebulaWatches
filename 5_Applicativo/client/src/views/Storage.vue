@@ -87,9 +87,7 @@ async function fetchStorage(userEmail) {
 
 async function distributeWatches(){
     for(let i = 0; i < storedWatches.value.length; i++){
-        console.log(storedWatches.value[i]);
         if(storedWatches.value[i].status.name == "Sold"){
-            
             storedWatchesSold.value.push(storedWatches.value[i]);
         }else{
             storedWatchesNotSold.value.push(storedWatches.value[i]);

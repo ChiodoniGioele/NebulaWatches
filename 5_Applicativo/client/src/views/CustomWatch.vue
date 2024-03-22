@@ -7,9 +7,10 @@
             <div class="px-4 py-6 lg:px-8">
 
                 <div class="flex w-full items-center gap-1.5">
-                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch ..." />
+                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text"
+                        placeholder="Search a watch ..." />
                     <Button @click="router.push('/search')" type="submit" class="bg-blue-600"> Search </Button>
-                    
+
                 </div>
 
                 <div class="mt-5 flex items-center">
@@ -20,7 +21,7 @@
                                 <!-- Go back -->
                             </Button>
                         </div>
-                        
+
                     </div>
                     <div class="flex gap-2 w-auto" v-if="!selector">
                         <Popover ref="popover">
@@ -29,47 +30,53 @@
                             </PopoverTrigger>
                             <PopoverContent class="w-80">
                                 <div class="grid gap-4">
-                                <div class="space-y-2">
-                                    <h4 class="font-medium leading-none">Status</h4>
-                                    <p class="text-sm text-muted-foreground">
-                                    What is the status of the watch?
-                                    </p>
-                                </div>
-                                <div class="grid gap-2">
-                                    <div class="grid grid-cols-3 items-center gap-4">
-                                    <Select v-model="selectedStatus">
-                                        <SelectTrigger class="w-[180px]">
-                                            <SelectValue placeholder="Select status" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                        <SelectGroup>
-                                            <SelectLabel>Status</SelectLabel>
-                                            <SelectItem value="Owned">Owned</SelectItem>
-                                            <SelectItem value="Sold">Sold</SelectItem>
-                                            <SelectItem value="Shipped">Shipped</SelectItem>
-                                        </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    <div class="space-y-2">
+                                        <h4 class="font-medium leading-none">Status</h4>
+                                        <p class="text-sm text-muted-foreground">
+                                            What is the status of the watch?
+                                        </p>
                                     </div>
-                                </div>
-                                <div class="w-3/4">
-                                    <Input v-model="selectedQuantity" type="number" placeholder="Quantity"/>
-                                </div>
-                                
-                                <Alert variant="success" v-if="storageSuccesfull">
-                                    <CheckCircle class="w-4 h-4" />
-                                    <AlertTitle>Success</AlertTitle>
-                                    <AlertDescription>
-                                        Watch added to storage!
-                                    </AlertDescription>
-                                </Alert>
-                                <Button variant="outline" @click="addToStorage">Add to storage</Button>
+                                    <div class="grid gap-2">
+                                        <div class="grid grid-cols-3 items-center gap-4">
+                                            <Select v-model="selectedStatus" @change="testing">
+                                                <SelectTrigger class="w-[180px]">
+                                                    <SelectValue placeholder="Select status" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        <SelectLabel>Status</SelectLabel>
+                                                        <SelectItem value="Owned">Owned</SelectItem>
+                                                        <SelectItem value="Sold">Sold</SelectItem>
+                                                        <SelectItem value="Shipped">Shipped</SelectItem>
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <div class="w-3/4">
+                                        <Input v-model="selectedQuantity" type="number" placeholder="Quantity" />
+                                    </div>
+                                    <div class="w-3/4">
+                                        <Input v-model="buyPrice" type="number" placeholder="Bought for" />
+                                    </div>
+                                    <div class="w-3/4" v-if="selectedStatus.value == 'Sold'">
+                                        <Input v-model="sellPrice" type="number" placeholder="Sold for" />
+                                    </div>
+
+                                    <Alert variant="success" v-if="storageSuccesfull">
+                                        <CheckCircle class="w-4 h-4" />
+                                        <AlertTitle>Success</AlertTitle>
+                                        <AlertDescription>
+                                            Watch added to storage!
+                                        </AlertDescription>
+                                    </Alert>
+                                    <Button variant="outline" @click="addToStorage">Add to storage</Button>
                                 </div>
                             </PopoverContent>
                         </Popover>
                     </div>
                 </div>
-                
+
 
                 <div class="mt-12 flex flex-wrap gap-5">
                     <div class="flex gap-20">
@@ -77,32 +84,27 @@
                         <div class="pt-2">
                             <ScrollArea class="h-[70vh] p-7">
                                 <div class="pb-4">
-                                <h1 class="font-semibold text-sm text-gray-400">Reference</h1>
-                                {{ watch.reference }}
-                            </div>
-                            <div class="pb-4">
-                                <h1 class="font-semibold text-sm text-gray-400">Name</h1>
-                                {{ watch.name }}
-                            </div>
-                            <div class="pb-4">
-                                <h1 class="font-semibold text-sm text-gray-400">Description</h1>
-                                {{ watch.description }}
-                            </div>
-                            <div class="pb-4">
-                                <h1 class="font-semibold text-sm text-gray-400">Price</h1>
-                                {{ watch.retailPrice }} Fr.
-                            </div>
+                                    <h1 class="font-semibold text-sm text-gray-400">Reference</h1>
+                                    {{ watch.reference }}
+                                </div>
+                                <div class="pb-4">
+                                    <h1 class="font-semibold text-sm text-gray-400">Name</h1>
+                                    {{ watch.name }}
+                                </div>
+                                <div class="pb-4">
+                                    <h1 class="font-semibold text-sm text-gray-400">Description</h1>
+                                    {{ watch.description }}
+                                </div>
+                                <div class="pb-4">
+                                    <h1 class="font-semibold text-sm text-gray-400">Price</h1>
+                                    {{ watch.retailPrice }} Fr.
+                                </div>
                             </ScrollArea>
-                           
+
                         </div>
                     </div>
-                    
-                    
                 </div>
-
             </div>
-
-
         </div>
     </div>
 </template>
@@ -117,23 +119,24 @@ import { apiServerAddress } from '@/main.ts'
 import { CheckCircle } from 'lucide-vue-next';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from '@/components/ui/popover'
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
 } from '@/components/ui/select'
 
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import test from 'node:test'
 
 const router = useRouter();
 const route = useRoute();
@@ -142,23 +145,25 @@ const watch = ref({});
 const watchImage = ref();
 const selectedStatus = ref('Owned');
 const selectedQuantity = ref();
+const buyPrice = ref();
+const sellPrice = ref();
 const storageSuccesfull = ref(false);
 const email = ref('');
-const selector =  route.params.sel;
+const selector = route.params.sel;
 
 async function fetchWatch() {
     try {
-        const response = await axios.get(`${apiServerAddress}/v1/storage/getCustomInfo/${reference}`, 
-        {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-        });
+        const response = await axios.get(`${apiServerAddress}/v1/storage/getCustomInfo/${reference}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            });
 
         watch.value = response.data;
-  } catch (error) {
+    } catch (error) {
         console.error('Failed to fetch custom watch:', error);
-  }
+    }
 }
 
 async function fetchWatchImage() {
@@ -173,9 +178,9 @@ async function fetchWatchImage() {
 
         const imageBase64 = btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
         watchImage.value = `data:${response.headers['content-type']};base64,${imageBase64}`;
-  } catch (error) {
-    watchImage.value = "@assets/no_image.png"
-  }
+    } catch (error) {
+        watchImage.value = "@assets/no_image.png"
+    }
 }
 
 
@@ -183,14 +188,19 @@ async function addToStorage() {
     const newStorage = {
         user_email: email.value,
         watch_reference: "",
-        status: "",
-        quantity: 1,
+        status: selectedStatus.value,
+        quantity: selectedQuantity.value,
         custom_watch_reference: reference,
+        buy_price: buyPrice.value,
+        sell_price: 0
     };
+    if (sellPrice.value == undefined) {
+        newStorage.sell_price = 0;
+    } else {
+        newStorage.sell_price = sellPrice.value;
+    }
 
     try {
-        newStorage.status = selectedStatus.value;
-        newStorage.quantity = selectedQuantity.value;
         const response = await axios.post(`${apiServerAddress}/v1/storage/addWatchToStorage`, newStorage, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -210,10 +220,13 @@ onMounted(async () => {
     const payload = JSON.parse(atob(parts[1]));
     const mail = payload.sub;
     email.value = mail;
-    
+
     fetchWatch();
     fetchWatchImage();
 });
 
-</script>
+const testing = () => {
+    console.log('Selected status changed to:', selectedStatus.value);
+};
 
+</script>

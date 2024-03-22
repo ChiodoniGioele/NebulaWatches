@@ -52,6 +52,20 @@ public class StorageService {
             storage.setQuantity(request.getQuantity());
         }
         storage.setStatus(new StatusStorage(request.getStatus()));
+        if(request.getBuy_price() < 0 ){
+            storage.setBuyPrice(0);
+        }else {
+            storage.setBuyPrice(request.getBuy_price());
+        }
+        if(storage.getStatus().getName().equals("Sold")){
+            if(request.getSell_price() < 0 ){
+                storage.setSellPrice(0);
+            }else {
+                storage.setSellPrice(request.getSell_price());
+            }
+        }else{
+            storage.setSellPrice(0);
+        }
 
         storageRepository.save(storage);
     }
