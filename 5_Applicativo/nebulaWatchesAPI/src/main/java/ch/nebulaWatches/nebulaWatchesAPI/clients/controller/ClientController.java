@@ -39,11 +39,6 @@ public class ClientController {
 
 
 
-/*    @GetMapping("/{id}")
-    Client getById(@PathVariable Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException(id));
-    }*/
     @GetMapping("/{id}")
     ResponseEntity<Optional<Client>> getById(@PathVariable Long id) {
         try{
