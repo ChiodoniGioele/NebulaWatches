@@ -27,6 +27,10 @@ public class Client {
 
     private String notes;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Override
     public String toString() {
         return "Client{" +

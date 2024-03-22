@@ -26,9 +26,9 @@ public class StorageService {
         return storageRepository.findAll();
     }
     public int getQuantityStorage(Long id){ return storageRepository.findQuantityById(id);}
-    public Optional<Storage> getStorage(int id){ return storageRepository.findById(id);}
+    public Optional<Storage> getStorage(Long id){ return storageRepository.findById(id);}
 
-    public List<Storage> getWatchesByUserId(int userId) {
+    public List<Storage> getWatchesByUserId(Long userId) {
         return storageRepository.findByUser(userId);
     }
     public void addWatchToStorage(StorageRequest request) {
@@ -75,7 +75,7 @@ public class StorageService {
     }
 
     public void editStorage(StorageRequest request) throws IllegalArgumentException {
-        Optional<Storage> storage = getStorage((int)request.getId());
+        Optional<Storage> storage = getStorage(request.getId());
         Storage newStorage = new Storage();
         if (storage.isPresent()) {
             Storage storage1 = storage.get();

@@ -36,7 +36,7 @@ public class StorageController {
 
     @GetMapping("/{userEmail}")
     public ResponseEntity<List<Storage>> getWatchesByStorageAndUser(@PathVariable String userEmail) {
-        int userId = userService.getId(userEmail);
+        Long userId = (long)userService.getId(userEmail);
         List<Storage> storages = storageService.getWatchesByUserId(userId);
         return ResponseEntity.ok(storages);
     }
@@ -132,6 +132,11 @@ public class StorageController {
     @GetMapping("/getCustomInfo/{watchReference}")
     public Optional<CustomWatch> getCustomWatch(@PathVariable String watchReference){
         return customWatchService.getWatch(watchReference);
+    }
+
+    @GetMapping("/getStorageByClient/{id}")
+    public List<Storage> getStorageByClient(@PathVariable Long id){
+        return storageService.getWatchesByUserId(id);
     }
 
 }

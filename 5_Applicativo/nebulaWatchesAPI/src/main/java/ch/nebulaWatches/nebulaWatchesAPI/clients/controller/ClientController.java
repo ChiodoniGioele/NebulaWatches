@@ -26,10 +26,11 @@ public class ClientController {
         this.repository = repository;
     }
 
-    @GetMapping("/")
-    ResponseEntity<List<Client>> all() {
+    @GetMapping("/all/{email}")
+    ResponseEntity<List<Client>> all(@PathVariable String email) {
         try{
-            return ResponseEntity.ok(repository.findAll());
+            System.out.println(repository.findAllByUserId(email));
+            return ResponseEntity.ok(repository.findAllByUserId(email));
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
@@ -37,10 +38,8 @@ public class ClientController {
         }
     }
 
-
-
-    @GetMapping("/{id}")
-    ResponseEntity<Optional<Client>> getById(@PathVariable Long id) {
+    @GetMapping("{email}/{id}")
+    ResponseEntity<Optional<Client>> getById(@PathVariable String email, @PathVariable Long id) {
         try{
             return ResponseEntity.ok(repository.findById(id));
         } catch (IllegalArgumentException e){

@@ -247,11 +247,10 @@ const router = useRouter();
 const clients = ref([]);
 
 
-async function fetchClients() {
-  try {
+async function fetchClients(email) {
 
-    const response = await axios.get(`${apiServerAddress}/v1/clients/`,
-        //const response = await axios.get(`${apiServerAddress}/v1/brands/${brandName}/families`,
+  try {
+    const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
         {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -307,7 +306,11 @@ async function saveClient() {
 
 
 onMounted(async () => {
-  await fetchClients();
+  const token = localStorage.getItem('token');
+  const parts = token.split('.');
+  const payload = JSON.parse(atob(parts[1]));
+  const email = payload.sub;
+  await fetchClients(email);
 });
 
 

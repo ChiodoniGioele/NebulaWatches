@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface StorageRepository extends JpaRepository<Storage, Integer> {
+public interface StorageRepository extends JpaRepository<Storage, Long> {
     @Query("SELECT s FROM Storage s LEFT JOIN Watch w ON s.watch.reference = w.reference " +
             "LEFT JOIN CustomWatch cw ON s.customWatch.reference = cw.reference " +
             "WHERE s.user.id = ?1")
-    List<Storage> findByUser(int userId);
+    List<Storage> findByUser(Long userId);
 
     @Transactional
     void deleteById(Long id);
