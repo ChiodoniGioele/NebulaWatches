@@ -3,6 +3,7 @@ package ch.nebulaWatches.nebulaWatchesAPI.watches.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -18,4 +19,5 @@ public class Material {
     public void setName(String name) {
         this.name = name;
     }
+
 }
