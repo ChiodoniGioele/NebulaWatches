@@ -29,7 +29,7 @@ public class FamilyService {
         return familyRepository.findByBrand(brandName);
     }
 
-    public Page<Family> getFamiliesByBrandPage(String brandName, int page, int pageLength, String sortBy) {
+    public Page<Family> getFamiliesByBrandPage(String brandName, int page, int pageLength, String sortBy) throws IllegalArgumentException {
         if (page < 0 || pageLength <= 0) {
             throw new IllegalArgumentException("Invalid page or length parameters");
         }

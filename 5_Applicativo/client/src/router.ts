@@ -12,6 +12,7 @@ import Search from './views/Search.vue';
 import Admin from './views/Admin.vue';
 import StorageCustom from './views/StorageCustom.vue';
 import CustomWatch from './views/CustomWatch.vue';
+import Clients from './views/Clients.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -28,6 +29,7 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/admin', component: Admin },
     { path: '/storageCustom', component: StorageCustom },
     { path: '/customWatch/:reference/:sel?', component: CustomWatch },
+    {path: '/clients', component: Clients}
 ];
 
 const router = createRouter({
