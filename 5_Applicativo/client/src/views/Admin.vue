@@ -50,20 +50,20 @@
                                         <Label for="email" class="text-right">
                                             Email
                                         </Label>
-                                        <Input id="email" class="col-span-3" v-model="newUser.email" />
+                                        <Input id="email" class="col-span-3" v-model="newUser.email" required/>
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="username" class="text-right">
                                             Username
                                         </Label>
-                                        <Input id="username" class="col-span-3" v-model="newUser.username" />
+                                        <Input id="username" class="col-span-3" v-model="newUser.username" required/>
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="password" class="text-right">
                                             Password
                                         </Label>
                                         <Input id="password" class="col-span-3" type="password"
-                                            v-model="newUser.password" />
+                                            v-model="newUser.password" required/>
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label class="text-right">
