@@ -3,7 +3,11 @@
         <div class="h-[50px]">
             <div class="pt-1 pr-1 pl-1 flex justify-between">
                 <div class="self-center align-middle text-gray-400 text-sm">
-                    <Dialog>
+                    <div class="self-center align-middle text-gray-400 text-sm invisible"
+                        v-if="storage.status.name == 'Sold'">
+                        aaaaaa
+                    </div>
+                    <Dialog v-if="storage.status.name != 'Sold'">
                         <DialogTrigger as-child>
                             <Button variant="ghost">
                                 <Pencil class="size-4" />
@@ -18,30 +22,57 @@
                                     • Current amount: {{ storage.quantity }}
                                     <br>
                                     • Current status: {{ storage.status.name }}
+                                    <br>
+                                    • Bought for: {{ storage.buyPrice }}
                                 </AlertDialogDescription>
                             </DialogHeader>
 
                             <div class="grid gap-4 py-4">
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label for="qty" class="text-right">
-                                        Change Amount
+                                        Amount
                                     </Label>
-                                    <Input v-model="editStrg.quantity" id="qty" class="col-span-3" type="number" max="{{ storage.quantity  }}" />
+                                    <Input v-model="editStrg.quantity" id="qty" class="col-span-3" type="number"
+                                        max="{{ storage.quantity  }}" />
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4">
+                                    <Label for="price" class="text-right">
+                                        Price
+                                    </Label>
+                                    <Input v-model="editStrg.sellPrice" id="price" class="col-span-3" type="number" min="0" />
                                 </div>
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label class="text-right">
-                                        New Status
+                                        Client
                                     </Label>
                                     <div class="col-span-3">
-                                        <Select v-model="editStrg.status">
+                                        <Select v-model="editStrg.clientId">
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select status" />
+                                                <SelectValue placeholder="Select client" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
-                                                    <SelectLabel>Status</SelectLabel>
-                                                    <SelectItem value="Sold">Sold</SelectItem>
-                                                    <SelectItem value="Shipped">Shipped</SelectItem>
+                                                    <SelectLabel>Clients</SelectLabel>
+                                                    <SelectItem v-for="client in clients" :key="client.id"
+                                                        :value="client.id">{{ client.name }}</SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-4 items-center gap-4" v-if="editStrg.status == 'Sold'">
+                                    <Label class="text-right">
+                                        Team
+                                    </Label>
+                                    <div class="col-span-3">
+                                        <Select>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select team member" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Members</SelectLabel>
+                                                    <SelectItem>t1</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -188,11 +219,14 @@ import {
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { getJSDocImplementsTags } from "typescript"
 
 const router = useRouter();
 const props = defineProps(['storage'])
 const image = ref('')
 const isLoading = ref(true);
+const clients = ref([]);
+const emailUser = ref('');
 
 const oldStorage = {
     id: props.storage.id,
@@ -200,7 +234,11 @@ const oldStorage = {
 const editStrg = {
     id: props.storage.id,
     quantity: 1,
-    status: ""
+    status: "Sold",
+    buyPrice: props.storage.buyPrice,
+    sellPrice: 0,
+    clientId: 0,
+    teamId: 0
 };
 
 async function getImage() {
@@ -251,7 +289,24 @@ async function editStorage() {
         console.log('Watch editet in storage. ', response.data);
         window.location.reload();
     } catch (error) {
+        console.log(editStrg)
         console.error('Failed to edit watch in storage:', error);
+    }
+}
+
+
+async function getClients(email) {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            });
+
+        clients.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch clients:', error);
     }
 }
 
@@ -261,6 +316,11 @@ onMounted(async () => {
     } finally {
         isLoading.value = false;
     }
+    const token = localStorage.getItem('token');
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    emailUser.value = payload.sub;
+    await getClients(emailUser.value);
 });
 
 </script>

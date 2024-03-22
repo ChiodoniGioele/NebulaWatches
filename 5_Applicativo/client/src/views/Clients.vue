@@ -1,6 +1,6 @@
 <template>
   <div class="grid lg:grid-cols-5 min-h-screen">
-    <Sidebar class="hidden lg:block"/>
+    <Sidebar class="hidden lg:block" />
 
     <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col">
 
@@ -10,7 +10,7 @@
         <div class="mt-5 flex gap-7 items-center">
           <div>
             <Button @click="$router.back()" variant="secondary">
-              <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png"/>
+              <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
               <!-- Go back -->
             </Button>
           </div>
@@ -32,7 +32,7 @@
                   <Label for="name" class="text-right">
                     Name
                   </Label>
-                  <Input id="name" v-model="name" class="col-span-3"/>
+                  <Input id="name" v-model="name" class="col-span-3" />
 
                 </div>
                 <div class="grid grid-cols-4 items-center gap-4">
@@ -40,7 +40,7 @@
                   <Label for="surname" class="text-right">
                     Surname
                   </Label>
-                  <Input id="surname" v-model="surname" class="col-span-3"/>
+                  <Input id="surname" v-model="surname" class="col-span-3" />
 
                 </div>
 
@@ -48,7 +48,7 @@
                   <Label for="email" class="text-right">
                     Email
                   </Label>
-                  <Input id="email" v-model="email" class="col-span-3"/>
+                  <Input id="email" v-model="email" class="col-span-3" />
 
                 </div>
 
@@ -56,15 +56,15 @@
                   <Label for="phone" class="text-right">
                     Phone
                   </Label>
-                  <Input id="phone" v-model="phone" class="col-span-3"/>
+                  <Input id="phone" v-model="phone" class="col-span-3" />
                 </div>
 
               </div>
               <DialogFooter>
                 <DialogClose as-child>
-                <Button @click="saveClient">
-                  Save
-                </Button>
+                  <Button @click="saveClient">
+                    Save
+                  </Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
@@ -87,7 +87,7 @@
                 </div> -->
 
 
-      <div class="mt-12 px-1 w-full gap-7 flex items-center justify-center px-10 ">
+      <div class="mt-12 w-full gap-7 flex items-center justify-center px-10 ">
 
         <Table>
           <TableHeader>
@@ -98,7 +98,7 @@
               <TableHead>Surname</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
-              <TableHead >Acquisti</TableHead>
+              <TableHead>Acquisti</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -130,27 +130,27 @@
                         <Label for="nameMod" class="text-right">
                           Name
                         </Label>
-                        <Input id="nameMod" v-model="client.name" class="col-span-3"/>
+                        <Input id="nameMod" v-model="client.name" class="col-span-3" />
                       </div>
                       <div class="grid grid-cols-4 items-center gap-4">
 
                         <Label for="surnameMod" class="text-right">
                           Surname
                         </Label>
-                        <Input id="surnameMod" v-model="client.surname"  class="col-span-3"/>
+                        <Input id="surnameMod" v-model="client.surname" class="col-span-3" />
                       </div>
                       <div class="grid grid-cols-4 items-center gap-4">
                         <Label for="emailMod" class="text-right">
                           Email
                         </Label>
-                        <Input id="emailMod" v-model="client.email"  type="email" class="col-span-3"/>
+                        <Input id="emailMod" v-model="client.email" type="email" class="col-span-3" />
                       </div>
 
                       <div class="grid grid-cols-4 items-center gap-4">
                         <Label for="phoneMod" class="text-right">
                           Phone
                         </Label>
-                        <Input id="phoneMod" v-model="client.phone"  class="col-span-3"/>
+                        <Input id="phoneMod" v-model="client.phone" class="col-span-3" />
                       </div>
                     </div>
                     <DialogFooter>
@@ -162,26 +162,26 @@
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-                  <AlertDialog>
-                    <AlertDialogTrigger as-child>
-                      <Button variant="destructive">
-                        DELETE
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete your
-                          account and remove your data from our servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Delete</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                <AlertDialog>
+                  <AlertDialogTrigger as-child>
+                    <Button variant="destructive">
+                      DELETE
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete your
+                        account and remove your data from our servers.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction>Delete</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -223,11 +223,11 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 
-import {Label} from '@/components/ui/label'
+import { Label } from '@/components/ui/label'
 import Sidebar from '@/components/Sidebar.vue'
-import {Input} from '@/components/ui/input'
-import {Button} from '@/components//ui/button'
-import {apiServerAddress} from '@/main.ts'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components//ui/button'
+import { apiServerAddress } from '@/main.ts'
 import {
   Table,
   TableBody,
@@ -239,30 +239,26 @@ import {
 } from '@/components/ui/table'
 
 import axios from 'axios';
-import {ref, onMounted} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 const clients = ref([]);
+const emailUser = ref('');
 
 
-async function fetchClients() {
+async function fetchClients(email) {
+
   try {
-
-    const response = await axios.get(`${apiServerAddress}/v1/clients/`,
-        //const response = await axios.get(`${apiServerAddress}/v1/brands/${brandName}/families`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-          },
-        });
+    const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      });
 
     clients.value = response.data;
-
-    console.log(clients.value);
-
-
   } catch (error) {
     console.error('Failed to fetch clients:', error);
   }
@@ -275,6 +271,7 @@ const surname = ref('');
 const email = ref('');
 const phone = ref('');
 const saveFailed = ref(false);
+
 async function saveClient() {
 
   const user = {
@@ -287,12 +284,12 @@ async function saveClient() {
 
   try {
     const response = await axios.post(`${apiServerAddress}/v1/clients/add`, user,
-        {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-          },
-        });
-    fetchClients();
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      });
+      fetchClients(emailUser.value);
 
   } catch (error) {
     console.log(`${apiServerAddress}/v1/clients/add`);
@@ -307,12 +304,16 @@ async function saveClient() {
 
 
 onMounted(async () => {
-  await fetchClients();
+  const token = localStorage.getItem('token');
+  const parts = token.split('.');
+  const payload = JSON.parse(atob(parts[1]));
+  emailUser.value = payload.sub;
+  await fetchClients(emailUser.value);
 });
 
 
 
-async function mod(id){
+async function mod(id) {
 
   const userMod = {
     name: nameMod.value,
@@ -321,16 +322,15 @@ async function mod(id){
     phone: phoneMod.value,
     notesMod: ""
   }
-  console.log(id);
   try {
     const response = await axios.put(`${apiServerAddress}/v1/clients/update/${id}`, userMod,
-        {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-          },
-        });
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      });
 
-    fetchClients();
+      fetchClients(emailUser.value);
 
   } catch (error) {
     console.error('Registration failed:', error);
@@ -338,16 +338,16 @@ async function mod(id){
   }
 }
 
-async function del(id){
+async function del(id) {
 
   try {
     const response = await axios.delete(`${apiServerAddress}/v1/clients/delete/${id}`,
-        {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-          },
-        });
-    fetchClients();
+      {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token'),
+        },
+      });
+      fetchClients(emailUser.value);
 
   } catch (error) {
 

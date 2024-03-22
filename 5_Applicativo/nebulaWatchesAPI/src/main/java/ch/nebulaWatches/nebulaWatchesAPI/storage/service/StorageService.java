@@ -1,5 +1,7 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.service;
 
+import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
+import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
@@ -20,6 +22,7 @@ public class StorageService {
     private final UserRepository userRepository;
     private final WatchRepository watchRepository;
     private final CustomWatchRepository customWatchRepository;
+    private final ClientRepository clientRepository;
     private final UserService userService;
 
     public List<Storage> getAllStorage() {
@@ -52,16 +55,16 @@ public class StorageService {
             storage.setQuantity(request.getQuantity());
         }
         storage.setStatus(new StatusStorage(request.getStatus()));
-        if(request.getBuy_price() < 0 ){
+        if(request.getBuyPrice() < 0 ){
             storage.setBuyPrice(0);
         }else {
-            storage.setBuyPrice(request.getBuy_price());
+            storage.setBuyPrice(request.getBuyPrice());
         }
         if(storage.getStatus().getName().equals("Sold")){
-            if(request.getSell_price() < 0 ){
+            if(request.getSellPrice() < 0 ){
                 storage.setSellPrice(0);
             }else {
-                storage.setSellPrice(request.getSell_price());
+                storage.setSellPrice(request.getSellPrice());
             }
         }else{
             storage.setSellPrice(0);
@@ -88,6 +91,12 @@ public class StorageService {
                 }else if(storage1.getCustomWatch() != null){
                     newStorage.setCustomWatch(storage1.getCustomWatch());
                 }
+                newStorage.setSellPrice(request.getSellPrice());
+                newStorage.setBuyPrice(request.getBuyPrice());
+                Client client = clientRepository.findById(request.getClientId())
+                        .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+                newStorage.setClient(client);
+
                 storageRepository.save(newStorage);
 
                 if(storage1.getQuantity() == request.getQuantity()){

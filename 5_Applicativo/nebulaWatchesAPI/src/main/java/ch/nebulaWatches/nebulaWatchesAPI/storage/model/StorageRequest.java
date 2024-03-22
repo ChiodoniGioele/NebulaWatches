@@ -10,6 +10,9 @@ public class StorageRequest {
     private String status;
     private int quantity;
     private String custom_watch_reference;
-    private float buy_price;
-    private float sell_price;
+    private float buyPrice;
+    private float sellPrice;
+    private Long clientId;
+    private Long teamId;
+
 }

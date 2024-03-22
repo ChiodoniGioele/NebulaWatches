@@ -5,6 +5,8 @@ import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Family;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.NotFound;
 import org.springframework.data.domain.Page;
@@ -18,26 +20,21 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 @RequestMapping("/v1/clients")
+@RequiredArgsConstructor
 public class ClientController {
 
     private final ClientRepository repository;
 
-    ClientController(ClientRepository repository) {
-        this.repository = repository;
-    }
-
-    @GetMapping("/")
-    ResponseEntity<List<Client>> all() {
+    @GetMapping("/all/{email}")
+    ResponseEntity<List<Client>> all(@PathVariable String email) {
         try{
-            return ResponseEntity.ok(repository.findAll());
+            return ResponseEntity.ok(repository.findAllByUserEmail(email));
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
 
     @GetMapping("/{id}")
     ResponseEntity<Optional<Client>> getById(@PathVariable Long id) {

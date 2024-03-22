@@ -59,9 +59,10 @@
                                     <div class="w-3/4">
                                         <Input v-model="buyPrice" type="number" placeholder="Bought for" />
                                     </div>
-                                    <div class="w-3/4" v-if="selectedStatus.value == 'Sold'">
+                                    <div class="w-3/4" v-if="selectedStatus == 'Sold'">
                                         <Input v-model="sellPrice" type="number" placeholder="Sold for" />
                                     </div>
+                                    <div>Selected: {{ selectedStatus }}</div>
 
                                     <Alert variant="success" v-if="storageSuccesfull">
                                         <CheckCircle class="w-4 h-4" />

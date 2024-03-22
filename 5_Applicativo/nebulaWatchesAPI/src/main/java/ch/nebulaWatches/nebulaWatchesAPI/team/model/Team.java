@@ -1,5 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.team.model;
 
+import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,4 +21,8 @@ public class Team {
     private String email;
     private String phone;
     private String role;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
