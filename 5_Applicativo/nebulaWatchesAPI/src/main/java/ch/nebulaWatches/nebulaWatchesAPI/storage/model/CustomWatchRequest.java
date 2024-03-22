@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Blob;
 
@@ -13,6 +14,8 @@ public class CustomWatchRequest {
     private String name;
     private String description;
     private Float retailPrice;
-    private Blob image;
-    private int id;
+    private String email;
+    private byte[] image;
+    //private Blob image;
+    //private MultipartFile image;
 }

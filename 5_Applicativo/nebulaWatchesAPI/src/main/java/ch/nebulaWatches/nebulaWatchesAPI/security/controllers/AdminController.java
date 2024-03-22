@@ -2,6 +2,7 @@ package ch.nebulaWatches.nebulaWatchesAPI.security.controllers;
 
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.AdminRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.Role;
+import ch.nebulaWatches.nebulaWatchesAPI.security.models.SearchRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.AdminService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.FavouriteRequest;
@@ -61,13 +62,21 @@ public class AdminController {
                     .body("Failed to updated user: " + e.getMessage());
         }
     }
-    @PostMapping("/searchUser/{searchContent}")
+    /*@PostMapping("/searchUser/{searchContent}")
     public ResponseEntity<List<User>> searchUser(@PathVariable String searchContent) {
         try {
             List<User> users = adminService.searchUsers(searchContent);
             return ResponseEntity.ok(users);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }*/
+    @PostMapping("/searchUser")
+    public List<User> searchUser(@RequestBody SearchRequest searchRequest) {
+        try {
+            return adminService.searchUsers(searchRequest.getSearchContent());
+        } catch (Exception e) {
+            return null;
         }
     }
 

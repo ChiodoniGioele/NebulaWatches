@@ -31,4 +31,8 @@ public class Storage {
     @ManyToOne
     @JoinColumn(name = "status_name")
     private StatusStorage status;
+
+    @ManyToOne
+    @JoinColumn(name = "custom_watch_reference")
+    private CustomWatch customWatch;
 }

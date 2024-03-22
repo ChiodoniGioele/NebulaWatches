@@ -9,4 +9,5 @@ public class StorageRequest {
     private String watch_reference;
     private String status;
     private int quantity;
+    private String custom_watch_reference;
 }

@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="flex gap-2 w-auto">
-                        <Popover ref="popover">
+                        <Popover ref="popover" v-if="!selector">
                             <PopoverTrigger as-child>
                                 <Button variant="outline">Add to storage</Button>
                             </PopoverTrigger>
@@ -236,6 +236,7 @@ import { useRoute, useRouter } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 const reference = route.params.reference;
+const selector =  route.params.sel;
 const watch = ref({});
 const watchImage = ref();
 const selectedStatus = ref('Owned');
@@ -290,6 +291,7 @@ async function addToStorage() {
         watch_reference: reference,
         status: "",
         quantity: 1,
+        custom_watch_reference: "",
     };
 
     try {

@@ -25,8 +25,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Transactional
     void deleteByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.username LIKE CONCAT('%', :search, '%') OR " +
-            "u.email LIKE CONCAT('%', :search, '%')")
+    @Query("SELECT u FROM User u WHERE u.role = 'USER' AND (u.username LIKE CONCAT('%', :search, '%') OR " +
+            "u.email LIKE CONCAT('%', :search, '%'))")
     List<User> findUsersBySearch(String search);
 
 }

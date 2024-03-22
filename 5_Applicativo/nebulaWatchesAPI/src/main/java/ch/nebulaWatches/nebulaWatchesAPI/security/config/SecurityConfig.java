@@ -38,8 +38,8 @@ public class SecurityConfig {
               .authenticationProvider(authenticationProvider)
               .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 
-                .oauth2Login(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+                //.oauth2Login(Customizer.withDefaults())
+                //.formLogin(Customizer.withDefaults())
                 .build();
     }
 }

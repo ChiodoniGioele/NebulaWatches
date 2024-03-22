@@ -1,8 +1,8 @@
 <template>
-    <div class="grid lg:grid-cols-5 min-h-screen"> 
+    <div class="grid lg:grid-cols-5 min-h-screen">
         <Sidebar class="hidden lg:block" />
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col" > 
-            <div class="px-4 py-6 lg:px-8"> 
+        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col">
+            <div class="px-4 py-6 lg:px-8">
 
                 <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch in your storage..." />
@@ -15,42 +15,49 @@
                     </div>
                     <div class="w-full flex gap-7 items-center"></div>
                     <Button variant="outline" class="h-12" @click="toCustom">
-                        <p >Custom Watches</p>
+                        <p>Custom Watches</p>
                     </Button>
-                    
+
                 </div>
-                
-                <div class="mt-5 flex flex-wrap gap-5">
-                    <StorageCard v-for="watch in storedWatches" :key="watch.id" :storage="watch" />
-                </div>
+                <Tabs default-value="owned">
+                    <TabsList>
+                        <TabsTrigger value="owned">
+                            Owned
+                        </TabsTrigger>
+                        <TabsTrigger value="sold">
+                            Sold
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="owned">
+                        <div class="mt-5 flex flex-wrap gap-5">
+                            <StorageCard v-for="watch in storedWatchesNotSold" :key="watch.id" :storage="watch" />
+                        </div>
+                    </TabsContent>
+                    <TabsContent value="sold">
+                        <div class="mt-5 flex flex-wrap gap-5">
+                            <StorageCard v-for="watch in storedWatchesSold" :key="watch.id" :storage="watch" />
+                        </div>
+                    </TabsContent>
+                </Tabs>
+
+
 
             </div>
         </div>
     </div>
-    
- 
+
+
 </template>
-  
+
 <script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import StorageCard from '@/components/StorageCard.vue'
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useRouter } from 'vue-router';
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
 
 import { apiServerAddress } from '@/main.ts'
 import axios from 'axios';
@@ -60,6 +67,8 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 const storedWatches = ref([]);
+const storedWatchesNotSold = ref([]);
+const storedWatchesSold = ref([]);
 
 async function fetchStorage(userEmail) {
     try {
@@ -70,12 +79,25 @@ async function fetchStorage(userEmail) {
         });
 
         storedWatches.value = response.data;
+        distributeWatches();
     } catch (error) {
         console.error('Failed to fetch watches by storage and user:', error);
     }
 }
 
-async function toCustom(){
+async function distributeWatches(){
+    for(let i = 0; i < storedWatches.value.length; i++){
+        console.log(storedWatches.value[i]);
+        if(storedWatches.value[i].status.name == "Sold"){
+            
+            storedWatchesSold.value.push(storedWatches.value[i]);
+        }else{
+            storedWatchesNotSold.value.push(storedWatches.value[i]);
+        }
+    }
+}
+
+async function toCustom() {
     router.push("/storageCustom");
 }
 

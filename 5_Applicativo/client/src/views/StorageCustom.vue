@@ -5,11 +5,19 @@
             <div class="px-4 py-6 lg:px-8"> 
 
                 <div class="flex w-full items-center gap-2.5">
-                    <Input id="email" type="text" placeholder="Search a watch in your storage..." />
+                    <Input id="email" type="text" placeholder="Search a watch in your custom watches..." />
                     <Button type="submit" class="bg-blue-600"> Search </Button>
                 </div>
+                <div class="mt-5 flex gap-7 items-center">
+                    <div>
+                        <Button @click="$router.back()" variant="secondary">
+                            <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+                        </Button>
+                    </div>
+                </div>
+                <div class="mt-5 px-1 flex gap-3 items-center">
+                   
 
-                <div class="mt-12 px-1 flex gap-3 items-center">
                     <div class="flex gap-2">
                         <h1 class="font-semibold"> CustomWatches </h1>
                     </div>
@@ -59,7 +67,7 @@
                                 <Label for="image" class="text-right">
                                     Image
                                 </Label>
-                                <Input type="file" id="image" class="col-span-3" ref="imageInput" @change="handleImageChange" />
+                                <Input type="file" id="image" class="col-span-3" accept="image/*" @change="handleImageChange" />
                                 </div>
                             </div>
                             <DialogFooter>
@@ -112,13 +120,15 @@ import FormData from 'form-data';
 
 const route = useRoute();
 const storedWatches = ref([]);
+const emailUs = ref("");
 
 const customWatch = {
   reference: '',
   name: '',
   description: '',
   retailPrice: 0,
-  image: null,
+  email: '',
+  image: null
 };
 
 async function fetchCustomStorage(userEmail) {
@@ -136,22 +146,24 @@ async function fetchCustomStorage(userEmail) {
 }
 
 async function saveWatch() {
+    customWatch.email = emailUs.value;
+    const formData = new FormData();
+    formData.append('reference', customWatch.reference);
+    formData.append('name', customWatch.name);
+    formData.append('description', customWatch.description);
+    formData.append('retailPrice', customWatch.retailPrice);
+    formData.append('email', customWatch.email);
+    formData.append('file', customWatch.image);
+    console.log(formData.get('file'))
     try {
-        const formData = new FormData();
-        formData.append('image', customWatch.image);
-        formData.append('reference', customWatch.reference);
-        formData.append('name', customWatch.name);
-        formData.append('description', customWatch.description);
-        formData.append('retailPrice', customWatch.retailPrice);
-
         const response = await axios.post(`${apiServerAddress}/v1/storage/saveCustom`, formData, {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-            'Content-Type': 'multipart/form-data'
-          },
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            },
         });
-
+        window.location.reload();
         console.log('Custom watch saved ', response.data);
+        
     } catch (error) {
         console.error('Failed to save Custom Watch:', error);
     }
@@ -166,6 +178,7 @@ onMounted(async () => {
     const parts = token.split('.');
     const payload = JSON.parse(atob(parts[1]));
     const email = payload.sub;
+    emailUs.value = email;
 
     await fetchCustomStorage(email);
 });

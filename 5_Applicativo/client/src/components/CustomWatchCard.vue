@@ -1,12 +1,36 @@
 <template>
     <div class="text-center border border-gray-200 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
-        <div class="h-[20px]">
+        <div class="h-[50px]">
+            <div class="pt-1 pr-1 pl-1 flex justify-end">
+                <div>
+                    <AlertDialog>
+                        <AlertDialogTrigger as-child>
+                            <Button variant="ghost">
+                                <Trash2 class="size-4" />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Confirm delete</AlertDialogTitle>
+                            <AlertDialogDescription>
+                            Are you sure that you want to delete this custom watch?
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction @click="deleteCustomWatch()">Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </div>
+                
+            </div>
         </div>
-        <router-link class="block p-5" :to="`/watch/${watch.reference}`" :brand="brand">
+        <router-link class="block p-5" :to="`/customWatch/${watch.reference}`">
             <div>
                 <div v-if="!isLoading">
                     <div class="flex items-center h-[140px] justify-center">
-                        <img class="max-w-full max-h-[140px]" :src="randomWatchFromBrandImage" alt="Watch Image" />
+                        <img class="max-w-full max-h-[140px]" :src="image" alt="Watch Image" />
                     </div>
                 </div>
                 <div v-else>
@@ -38,20 +62,32 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { apiServerAddress } from '@/main.ts'
-
+import { Button } from '@/components/ui/button'
+import { Trash2 } from 'lucide-vue-next'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 const props = defineProps(['watch'])
-const randomWatchFromBrandImage = ref('')
+const image = ref('')
 const isLoading = ref(true);
 
 const piecesProduced = ref('')
 
 
-async function fetchRandomWatchFromBrandImage() {
+async function getImage() {
     try {
-        const endpoint = `${apiServerAddress}/v1/admin/` + props.watch.reference + '/image'
+        const endpoint = `${apiServerAddress}/v1/storage/custom/` + props.watch.reference + '/image'
         const response = await axios.get(endpoint, {
             responseType: 'arraybuffer',
             headers: {
@@ -60,15 +96,34 @@ async function fetchRandomWatchFromBrandImage() {
         });
 
         const imageBase64 = btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
-        randomWatchFromBrandImage.value = `data:${response.headers['content-type']};base64,${imageBase64}`;
+        image.value = `data:${response.headers['content-type']};base64,${imageBase64}`;
   } catch (error) {
-    randomWatchFromBrandImage.value = "@assets/no_image.png"
+        image.value = "@assets/no_image.png"
   }
+}
+
+const oldCustom = {
+    reference: props.watch.reference,
+};
+
+async function deleteCustomWatch(){
+    try {
+        const response = await axios.post(`${apiServerAddress}/v1/storage/removeCustom`, oldCustom, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+        
+        console.log('Custom Watch removed. ', response.data); 
+        window.location.reload();
+    } catch (error) {
+        console.error('Failed to remove custom Watch.', error);
+    }
 }
 
 onMounted(async () => {
     try {
-        await fetchRandomWatchFromBrandImage();
+        await getImage();
     } finally {
         isLoading.value = false;
     }

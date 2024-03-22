@@ -11,6 +11,7 @@ import Favourite from './views/Favourite.vue';
 import Search from './views/Search.vue';
 import Admin from './views/Admin.vue';
 import StorageCustom from './views/StorageCustom.vue';
+import CustomWatch from './views/CustomWatch.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -19,13 +20,14 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/register', component: Register },
     { path: '/brand/:brandName', component: Brand },
     { path: '/brand/:brandName/family/:familyId/watches', component: Family},
-    { path: '/watch/:reference', component: Watch },
+    { path: '/watch/:reference/:sel?', component: Watch },
     { path: '/team', component: Team },
     { path: '/storage', component: Storage },
     { path: '/favourite', component: Favourite },
     { path: '/search', component: Search },
     { path: '/admin', component: Admin },
     { path: '/storageCustom', component: StorageCustom },
+    { path: '/customWatch/:reference/:sel?', component: CustomWatch },
 ];
 
 const router = createRouter({

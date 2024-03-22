@@ -1,12 +1,14 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.model;
 
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Blob;
+import java.sql.SQLException;
 
 @Data
 @Entity
@@ -21,8 +23,12 @@ public class CustomWatch {
     private String description;
     private Float retailPrice;
     @Lob
-    private Blob image;
+    @Column(name = "image", columnDefinition="LONGBLOB")
+    private byte[] image;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
 }

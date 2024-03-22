@@ -2,7 +2,13 @@
     <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased h-screen">
 
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
-            <h2 class="text-3xl font-bold tracking-tight mb-10 mt-1">User Dashboard </h2>
+            <div class="flex space-x-3 justify-between">
+                <h2 class="text-3xl font-bold tracking-tight mb-10 mt-1">User Dashboard </h2>
+                <Button variant="outline" class="h-12 flex-">
+                    <img class="w-5 h-5" src="@/assets/icons/Exit.png" alt="Logout image" @click="logout">
+                </Button>
+            </div>
+
             <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                 <div
                     class="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -17,18 +23,10 @@
                 <div
                     class="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 py-4 border-t dark:border-gray-700">
                     <div class="w-full md:w-1/2">
-                        <form class="flex items-center">
+                        <form class="flex items-center" @submit.prevent>
                             <label for="simple-search" class="sr-only">Search</label>
                             <div class="relative w-full">
-                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                        fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
-                                    </svg>
-                                </div>
-                                <input @change="searchUser()" v-model="searchContent" type="text" id="simple-search" placeholder="Search for users" required=""
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                <Input @keyup="searchUser()" v-model="searchContent" type="text" placeholder="Search for users" />
                             </div>
                         </form>
                     </div>
@@ -52,35 +50,36 @@
                                         <Label for="email" class="text-right">
                                             Email
                                         </Label>
-                                        <Input id="email" class="col-span-3" v-model="newUser.email"/>
+                                        <Input id="email" class="col-span-3" v-model="newUser.email" />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="username" class="text-right">
                                             Username
                                         </Label>
-                                        <Input id="username" class="col-span-3" v-model="newUser.username"/>
+                                        <Input id="username" class="col-span-3" v-model="newUser.username" />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="password" class="text-right">
                                             Password
                                         </Label>
-                                        <Input id="password" class="col-span-3" type="password" v-model="newUser.password"/>
+                                        <Input id="password" class="col-span-3" type="password"
+                                            v-model="newUser.password" />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label class="text-right">
                                             Mode
                                         </Label>
                                         <div class="col-span-3">
-                                            <Select>
+                                            <Select v-model="newUser.loginMode">
                                                 <SelectTrigger>
-                                                    <SelectValue v-model="newUser.loginMode" />
+                                                    <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        <SelectItem value="0">
+                                                        <SelectItem value=false>
                                                             Account
                                                         </SelectItem>
-                                                        <SelectItem value="1">
+                                                        <SelectItem value=true>
                                                             Google
                                                         </SelectItem>
                                                     </SelectGroup>
@@ -93,16 +92,16 @@
                                             Verified
                                         </Label>
                                         <div class="col-span-3">
-                                            <Select>
+                                            <Select v-model="newUser.verified">
                                                 <SelectTrigger>
-                                                    <SelectValue v-model="newUser.password" />
+                                                    <SelectValue />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        <SelectItem value="true">
+                                                        <SelectItem value=true>
                                                             True
                                                         </SelectItem>
-                                                        <SelectItem value="false">
+                                                        <SelectItem value=false>
                                                             False
                                                         </SelectItem>
                                                     </SelectGroup>
@@ -112,9 +111,11 @@
                                     </div>
                                 </div>
                                 <DialogFooter>
-                                    <Button type="submit" @click="saveUser">
-                                        Save User
-                                    </Button>
+                                    <DialogClose as-child>
+                                        <Button type="submit" @click="saveUser">
+                                            Save User
+                                        </Button>
+                                    </DialogClose>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
@@ -168,35 +169,39 @@
                                                             <Label for="email" class="text-right">
                                                                 Email
                                                             </Label>
-                                                            <Input id="email" class="col-span-3" v-model="selectedUser.email"/>
+                                                            <Input id="email" class="col-span-3"
+                                                                v-model="selectedUser.email" />
                                                         </div>
                                                         <div class="grid grid-cols-4 items-center gap-4">
                                                             <Label for="username" class="text-right">
                                                                 Username
                                                             </Label>
-                                                            <Input id="username" class="col-span-3" v-model="selectedUser.name"/>
+                                                            <Input id="username" class="col-span-3"
+                                                                v-model="selectedUser.name" />
                                                         </div>
                                                         <div class="grid grid-cols-4 items-center gap-4">
                                                             <Label for="password" class="text-right">
                                                                 Password
                                                             </Label>
-                                                            <Input id="password" class="col-span-3" type="password" v-model="editUser.password" />
+                                                            <Input id="password" class="col-span-3" type="password"
+                                                                v-model="editUser.password" />
                                                         </div>
                                                         <div class="grid grid-cols-4 items-center gap-4">
                                                             <Label class="text-right">
                                                                 Mode
                                                             </Label>
                                                             <div class="col-span-3">
-                                                                <Select default-value="0">
+                                                                <Select default-value="{{ selectedUser.loginMode }}"
+                                                                    v-model="selectedUser.loginMode">
                                                                     <SelectTrigger>
-                                                                        <SelectValue v-model="selectedUser.loginMode"/>
+                                                                        <SelectValue />
                                                                     </SelectTrigger>
                                                                     <SelectContent>
                                                                         <SelectGroup>
-                                                                            <SelectItem value=0>
+                                                                            <SelectItem value=false>
                                                                                 Account
                                                                             </SelectItem>
-                                                                            <SelectItem value=1>
+                                                                            <SelectItem value=true>
                                                                                 Google
                                                                             </SelectItem>
                                                                         </SelectGroup>
@@ -209,9 +214,10 @@
                                                                 Verified
                                                             </Label>
                                                             <div class="col-span-3">
-                                                                <Select default-value=false>
+                                                                <Select default-value="{{ selectedUser.verified }}"
+                                                                    v-model="selectedUser.verified">
                                                                     <SelectTrigger>
-                                                                        <SelectValue v-model="selectedUser.verified"/>
+                                                                        <SelectValue />
                                                                     </SelectTrigger>
                                                                     <SelectContent>
                                                                         <SelectGroup>
@@ -228,9 +234,11 @@
                                                         </div>
                                                     </div>
                                                     <DialogFooter>
-                                                        <Button type="submit" @click="updateUser">
-                                                            Save User
-                                                        </Button>
+                                                        <DialogClose as-child>
+                                                            <Button type="submit" @click="updateUser">
+                                                                Save
+                                                            </Button>
+                                                        </DialogClose>
                                                     </DialogFooter>
                                                 </DialogContent>
                                             </Dialog>
@@ -238,7 +246,7 @@
 
                                         <AlertDialog>
                                             <AlertDialogTrigger as-child>
-                                                <Button variant="destructive" >
+                                                <Button variant="destructive">
                                                     <!--<Trash2 class="size-4" />--> Delete
                                                 </Button>
                                             </AlertDialogTrigger>
@@ -312,6 +320,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogClose,
 } from '@/components/ui/dialog'
 import {
     AlertDialog,
@@ -373,14 +382,14 @@ async function fetchUsers() {
     }
 }
 const getNumberOfUsers = () => {
-      return users.value.length;
-    };
+    return users.value.length;
+};
 
 async function toHome() {
     router.push('/');
 }
 
-async function getRole(userEmail){
+async function getRole(userEmail) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/admin/getRole/${userEmail}`, {
             headers: {
@@ -388,22 +397,22 @@ async function getRole(userEmail){
             },
         });
 
-        role.value = response.data;        
+        role.value = response.data;
     } catch (error) {
         console.error('Failed to fetch Role', error);
     }
 }
 
-async function deleteUser(userEmail){
+async function deleteUser(userEmail) {
     try {
-        const response = await axios.post(`${apiServerAddress}/v1/admin/deleteUser`, {"email": userEmail}, {
+        const response = await axios.post(`${apiServerAddress}/v1/admin/deleteUser`, { "email": userEmail }, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
             },
         });
-        
-        console.log('Watch removed from storage. ', response.data); 
-        window.location.reload();
+
+        console.log('Watch removed from storage. ', response.data);
+        await fetchUsers();
     } catch (error) {
         console.error('Failed to remove watch from storage:', error);
     }
@@ -426,7 +435,7 @@ async function saveUser() {
             },
         });
         console.log('User saved. ', response.data);
-        window.location.reload();
+        await fetchUsers();
     } catch (error) {
         console.error('Failed to save user:', error);
     }
@@ -445,7 +454,7 @@ const editUser = {
 async function updateUser() {
     try {
         await setValues();
-        
+
         const response = await axios.post(`${apiServerAddress}/v1/admin/updateUser`, editUser, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -453,13 +462,13 @@ async function updateUser() {
         });
         console.log('User updated. ', response.data);
         await delValues();
-        window.location.reload();
+        await fetchUsers();
     } catch (error) {
         console.error('Failed to update user:', error);
     }
 }
 
-async function setValues(){
+async function setValues() {
     editUser.id = selectedUser.value.id;
     editUser.email = selectedUser.value.email;
     editUser.loginMode = selectedUser.value.loginMode;
@@ -467,7 +476,7 @@ async function setValues(){
     editUser.verified = selectedUser.value.verified;
 }
 
-async function delValues(){
+async function delValues() {
     editUser.id = 0;
     editUser.email = "";
     editUser.loginMode = "";
@@ -475,20 +484,36 @@ async function delValues(){
     editUser.verified = "";
 }
 
-async function searchUser(){
+const searchCt = {
+    searchContent: ""
+};
+
+async function searchUser() {
+    searchCt.searchContent = searchContent.value;
     try {
-        const response = await axios.post(`${apiServerAddress}/v1/admin/searchUser/${searchContent.value}`, {
+        const response = await axios.post(`${apiServerAddress}/v1/admin/searchUser`, searchCt, {
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
+                Authorization: 'Bearer ' + localStorage.getItem('token')
             },
         });
+
+        console.log('Searched for ' + searchCt.searchContent);
         users.value = response.data;
     } catch (error) {
         console.error('Failed to search user:', error);
     }
 }
 
-onMounted(async () => {   
+async function logout() {
+    try {
+        localStorage.removeItem('token');
+        router.push('/login');
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+onMounted(async () => {
     await fetchUsers();
 });
 
@@ -499,10 +524,10 @@ onBeforeMount(async () => {
     const email = payload.sub;
 
     await getRole(email);
-    if(role.value != "ADMIN"){
+    if (role.value != "ADMIN") {
         router.push('/');
     }
-    
+
 });
 
 </script>
