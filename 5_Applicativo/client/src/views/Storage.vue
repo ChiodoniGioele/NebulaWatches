@@ -9,16 +9,15 @@
                     <Button type="submit" class="bg-blue-600"> Search </Button>
                 </div>
 
-                <div class="mt-12 px-1 flex gap-7 items-center">
+                <div class="mt-12 px-1 flex gap-3 items-center">
                     <div class="flex gap-2">
                         <h1 class="font-semibold "> Storage </h1>
                     </div>
                     <div class="w-full flex gap-7 items-center"></div>
-                    <div class="flex gap-2 w-auto">
-                        <Button variant="outline" @click="">
-                            Add Custom Watch
-                        </Button>
-                    </div>
+                    <Button variant="outline" class="h-12" @click="toCustom">
+                        <p >Custom Watches</p>
+                    </Button>
+                    
                 </div>
                 
                 <div class="mt-5 flex flex-wrap gap-5">
@@ -36,18 +35,30 @@
 import Sidebar from '@/components/Sidebar.vue'
 import StorageCard from '@/components/StorageCard.vue'
 
+
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useRouter } from 'vue-router';
 
-import { apiServerAddress } from '@/main.ts'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 
+import { apiServerAddress } from '@/main.ts'
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 const storedWatches = ref([]);
 
 async function fetchStorage(userEmail) {
@@ -64,8 +75,16 @@ async function fetchStorage(userEmail) {
     }
 }
 
+async function toCustom(){
+    router.push("/storageCustom");
+}
+
 onMounted(async () => {
-    const userEmail = sessionStorage.getItem('email');
-    await fetchStorage(userEmail);
+    const token = localStorage.getItem('token');
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    const email = payload.sub;
+
+    await fetchStorage(email);
 });
 </script>

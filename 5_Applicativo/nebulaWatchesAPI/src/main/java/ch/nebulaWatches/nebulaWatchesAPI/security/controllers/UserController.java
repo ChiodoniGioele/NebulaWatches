@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/getName")
-    public String getUser(@RequestParam String email) {
-        return userService.getUsername(email);
+    @GetMapping("/getName/{userEmail}")
+    public String getUser(@PathVariable String userEmail) {
+        return userService.getUsername(userEmail);
     }
 }

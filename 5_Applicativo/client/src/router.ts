@@ -9,6 +9,8 @@ import Team from './views/Team.vue';
 import Storage from './views/Storage.vue';
 import Favourite from './views/Favourite.vue';
 import Search from './views/Search.vue';
+import Admin from './views/Admin.vue';
+import StorageCustom from './views/StorageCustom.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -22,6 +24,8 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/storage', component: Storage },
     { path: '/favourite', component: Favourite },
     { path: '/search', component: Search },
+    { path: '/admin', component: Admin },
+    { path: '/storageCustom', component: StorageCustom },
 ];
 
 const router = createRouter({

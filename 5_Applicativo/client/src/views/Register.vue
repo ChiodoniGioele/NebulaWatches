@@ -78,7 +78,6 @@ async function register() {
         });
         const token = response.data.token;
         localStorage.setItem('token', token);
-        sessionStorage.setItem('email', email.value);
         router.push('/');
     } catch (error) {
         console.error('Registration failed:', error);

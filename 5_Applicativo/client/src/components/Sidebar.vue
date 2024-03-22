@@ -89,7 +89,6 @@ const email = ref('');
 async function logout() {
     try {        
         localStorage.removeItem('token');
-        sessionStorage.removeItem('email')
         router.push('/login');
     } catch (error) {
         console.error(error)
@@ -97,9 +96,13 @@ async function logout() {
 }
 async function fetchUserName() {
     try {
-        email.value = sessionStorage.getItem('email');
-        const response = await axios.get(`${apiServerAddress}/v1/user/getName`, {
-            params: { email: email.value },
+        const token = localStorage.getItem('token');
+        const parts = token.split('.');
+        const payload = JSON.parse(atob(parts[1]));
+        const mail = payload.sub;
+        email.value = mail;
+        const response = await axios.get(`${apiServerAddress}/v1/user/getName/${ email.value}`, {
+            
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
             },

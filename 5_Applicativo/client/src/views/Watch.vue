@@ -40,37 +40,41 @@
                             </PopoverTrigger>
                             <PopoverContent class="w-80">
                                 <div class="grid gap-4">
-                                    <div class="space-y-2">
-                                        <h4 class="font-medium leading-none">Status</h4>
-                                        <p class="text-sm text-muted-foreground">
-                                            What is the status of the watch?
-                                        </p>
+                                <div class="space-y-2">
+                                    <h4 class="font-medium leading-none">Status</h4>
+                                    <p class="text-sm text-muted-foreground">
+                                    What is the status of the watch?
+                                    </p>
+                                </div>
+                                <div class="grid gap-2">
+                                    <div class="grid grid-cols-3 items-center gap-4">
+                                    <Select v-model="selectedStatus">
+                                        <SelectTrigger class="w-[180px]">
+                                            <SelectValue placeholder="Select status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Status</SelectLabel>
+                                            <SelectItem value="Owned">Owned</SelectItem>
+                                            <SelectItem value="Sold">Sold</SelectItem>
+                                            <SelectItem value="Shipped">Shipped</SelectItem>
+                                        </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
                                     </div>
-                                    <div class="grid gap-2">
-                                        <div class="grid grid-cols-3 items-center gap-4">
-                                            <Select v-model="selectedStatus">
-                                                <SelectTrigger class="w-[180px]">
-                                                    <SelectValue placeholder="Select status" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <SelectLabel>Status</SelectLabel>
-                                                        <SelectItem value="Owned">Owned</SelectItem>
-                                                        <SelectItem value="Sold">Sold</SelectItem>
-                                                        <SelectItem value="Shipped">Shipped</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                    </div>
-                                    <Alert variant="success" v-if="storageSuccesfull">
-                                        <CheckCircle class="w-4 h-4" />
-                                        <AlertTitle>Success</AlertTitle>
-                                        <AlertDescription>
-                                            Watch added to storage!
-                                        </AlertDescription>
-                                    </Alert>
-                                    <Button variant="outline" @click="addToStorage">Add to storage</Button>
+                                </div>
+                                <div class="w-3/4">
+                                    <Input v-model="selectedQuantity" type="number" placeholder="Quantity"/>
+                                </div>
+                                
+                                <Alert variant="success" v-if="storageSuccesfull">
+                                    <CheckCircle class="w-4 h-4" />
+                                    <AlertTitle>Success</AlertTitle>
+                                    <AlertDescription>
+                                        Watch added to storage!
+                                    </AlertDescription>
+                                </Alert>
+                                <Button variant="outline" @click="addToStorage">Add to storage</Button>
                                 </div>
                             </PopoverContent>
                         </Popover>
@@ -234,9 +238,11 @@ const route = useRoute();
 const reference = route.params.reference;
 const watch = ref({});
 const watchImage = ref();
-const selectedStatus = ref("Owned");
+const selectedStatus = ref('Owned');
+const selectedQuantity = ref();
 const isStarClicked = ref(false);
 const storageSuccesfull = ref(false);
+const email = ref('');
 
 async function fetchWatch() {
     try {
@@ -277,24 +283,23 @@ async function fetchWatchImage() {
     }
 }
 
-const newStorage = {
-    user_email: sessionStorage.getItem("email"),
-    watch_reference: reference,
-    status: "",
-};
 
 async function addToStorage() {
+    const newStorage = {
+        user_email: email.value,
+        watch_reference: reference,
+        status: "",
+        quantity: 1,
+    };
+
     try {
         newStorage.status = selectedStatus.value;
-        const response = await axios.post(
-            `${apiServerAddress}/v1/storage/addWatchToStorage`,
-            newStorage,
-            {
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token"),
-                },
-            }
-        );
+        newStorage.quantity = selectedQuantity.value;
+        const response = await axios.post(`${apiServerAddress}/v1/storage/addWatchToStorage`, newStorage, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
         storageSuccesfull.value = true;
         console.log("Watch added to storage. ", response.data);
     } catch (error) {
@@ -302,13 +307,13 @@ async function addToStorage() {
     }
 }
 
-const newFavourite = {
-    user_email: sessionStorage.getItem("email"),
-    watch_reference: reference,
-};
 
-async function addOrRemoveFavourite() {
-    if (isStarClicked.value == false) {
+async function addOrRemoveFavourite(){
+    const newFavourite = {
+        user_email: email.value,
+        watch_reference: reference,
+    };
+    if(isStarClicked.value == false){
         try {
             isStarClicked.value = !isStarClicked.value;
 
@@ -345,15 +350,12 @@ async function addOrRemoveFavourite() {
             console.error("Failed to remove watch from favourites:", error);
         }
     }
+    
 }
 
 async function setIconStar() {
     try {
-        const response = await axios.get(
-            `${apiServerAddress}/v1/favourite/checkFavourite/${reference}/${sessionStorage.getItem(
-                "email"
-            )}`,
-            {
+        const response = await axios.get(`${apiServerAddress}/v1/favourite/checkFavourite/${reference}/${email.value}`, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token"),
                 },
@@ -365,11 +367,19 @@ async function setIconStar() {
     }
 }
 
-async function toFavourite() {
-    router.push("/favourite");
+
+
+async function toFavourite(){
+  router.push('/favourite');
 }
 
 onMounted(async () => {
+    const token = localStorage.getItem('token');
+    const parts = token.split('.');
+    const payload = JSON.parse(atob(parts[1]));
+    const mail = payload.sub;
+    email.value = mail;
+    
     fetchWatch();
     fetchWatchImage();
     setIconStar();

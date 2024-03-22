@@ -1,8 +1,35 @@
 <template>
     <div class="text-center border border-gray-200 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
-        <div class="h-[20px]">
-            <div class="pt-1 text-gray-400 text-sm">
-                {{ storage.status.name }}
+        <div class="h-[50px]">
+            <div class="pt-1 pr-1 pl-1 flex justify-between">
+                <div class="self-center align-middle text-gray-400 text-sm invisible">
+                    {{ storage.status.name }}
+                </div>
+                <div class="self-center align-middle text-gray-400 text-sm">
+                    {{ storage.status.name }}, {{ storage.quantity }} pcs.
+                </div>
+                <div>
+                    <AlertDialog>
+                        <AlertDialogTrigger as-child>
+                            <Button variant="ghost">
+                                <Trash2 class="size-4" />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Confirm delete</AlertDialogTitle>
+                            <AlertDialogDescription>
+                            Are you sure that you want to delete this watch from your storage?
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction @click="deleteFromStorage()">Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </div>
+                
             </div>
         </div>
         <router-link class="block p-5" :to="`/watch/${storage.watch.reference}`">
@@ -40,14 +67,33 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { apiServerAddress } from '@/main.ts'
+import { Button } from '@/components/ui/button'
+import { Trash2 } from 'lucide-vue-next'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
 
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
+const router = useRouter();
 const props = defineProps(['storage'])
 const randomWatchFromBrandImage = ref('')
 const isLoading = ref(true);
 
+const oldStorage = {
+    id: props.storage.id,
+};
 
 async function fetchRandomWatchFromBrandImage() {
     try {
@@ -61,10 +107,26 @@ async function fetchRandomWatchFromBrandImage() {
 
         const imageBase64 = btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
         randomWatchFromBrandImage.value = `data:${response.headers['content-type']};base64,${imageBase64}`;
-  } catch (error) {
-    randomWatchFromBrandImage.value = "@assets/no_image.png"
-  }
+    } catch (error) {
+        randomWatchFromBrandImage.value = "@assets/no_image.png"
+    }
 }
+
+async function deleteFromStorage(){
+    try {
+        const response = await axios.post(`${apiServerAddress}/v1/storage/removeStorageWatch`, oldStorage, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+        
+        console.log('Watch removed from storage. ', response.data); 
+        window.location.reload();
+    } catch (error) {
+        console.error('Failed to remove watch from storage:', error);
+    }
+}
+
 
 onMounted(async () => {
     try {

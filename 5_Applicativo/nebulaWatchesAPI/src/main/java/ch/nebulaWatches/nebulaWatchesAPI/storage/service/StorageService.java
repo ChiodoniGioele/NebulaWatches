@@ -3,11 +3,9 @@ package ch.nebulaWatches.nebulaWatchesAPI.storage.service;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StorageRequest;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.*;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.repository.StorageRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StatusStorage;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.repository.WatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,9 +35,19 @@ public class StorageService {
                 .orElseThrow(() -> new IllegalArgumentException("Watch not found"));
 
         storage.setWatch(watch);
+        if(request.getQuantity() <= 0 || request.getQuantity() > 100){
+            storage.setQuantity(1);
+        }else {
+            storage.setQuantity(request.getQuantity());
+        }
         storage.setStatus(new StatusStorage(request.getStatus()));
 
         storageRepository.save(storage);
     }
+
+    public void removeFromStorage(StorageRequest request) {
+        storageRepository.deleteById(request.getId());
+    }
+
 
 }

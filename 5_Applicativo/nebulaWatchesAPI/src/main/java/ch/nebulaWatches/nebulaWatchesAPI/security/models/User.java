@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private Role role;
 
     private boolean loginMode;
+    private boolean verified;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
