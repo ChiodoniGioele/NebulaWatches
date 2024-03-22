@@ -194,7 +194,9 @@
                                 </div>
                                 <div class="pb-4">
                                     <h1 class="font-semibold text-sm text-gray-400">Materials</h1>
-                                    {{ watch.materialsUsed }}
+                                    <ul>
+                                        <li v-for="(material, index) in watch.materialsUsedNames" :key="index">{{ material }}</li>
+                                    </ul>
                                 </div>
                             </ScrollArea>
                         </div>

@@ -1,5 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.watches.controller;
 
+import ch.nebulaWatches.nebulaWatchesAPI.watches.dto.WatchDTO;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundException;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Brand;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Family;
@@ -42,8 +43,8 @@ public class FamilyController {
     @GetMapping(path = "{familyId}/rndimage")
     public ResponseEntity<byte[]> getFamilyRandomImage(@PathVariable("familyId") int familyId) {
         try {
-            List<Watch> watches = watchService.getWatchesByFamily(familyId);
-            Watch randomChoice = watches.get(rand.nextInt(0, watches.size()));
+            List<WatchDTO> watches = watchService.getWatchesByFamily(familyId);
+            WatchDTO randomChoice = watches.get(rand.nextInt(0, watches.size()));
             String randomWatchReference = randomChoice.getReference();
             byte[] imageBytes = watchService.getWatchImageBytes(randomWatchReference);
             return ResponseEntity.ok(imageBytes);
@@ -62,11 +63,11 @@ public class FamilyController {
     */
 
     @GetMapping(path = "{familyId}/watches")
-    public ResponseEntity<Page<Watch>> getWatchesByFamilyPage(@PathVariable("familyId") int familyId,
+    public ResponseEntity<Page<WatchDTO>> getWatchesByFamilyPage(@PathVariable("familyId") int familyId,
                                                          @RequestParam Optional<Integer> page,
                                                          @RequestParam Optional<String> sortBy) {
         try{
-            Page<Watch> watchPage = watchService.getWatchesByFamilyPage(familyId, page.orElse(0), 20, sortBy.orElse("name"));
+            Page<WatchDTO> watchPage = watchService.getWatchesByFamilyPage(familyId, page.orElse(0), 20, sortBy.orElse("name"));
             return ResponseEntity.ok(watchPage);
         } catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

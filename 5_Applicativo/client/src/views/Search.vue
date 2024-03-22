@@ -19,7 +19,7 @@
                     
                 </div>
 
-                <div class="mt-3 flex gap-2">
+                <div class="mt-3 flex gap-2 flex-wrap">
                     <Popover>
                         <PopoverTrigger>
                             <Button variant="outline"> <span class="font-normal">Brands ({{ brands.length }})</span> </Button>
@@ -28,8 +28,8 @@
                             <ScrollArea class="h-[40vh] p-2">
                                 <div v-for="brand in brands" :key="brand.name"  class="flex items-center space-x-2 mb-3">
                                     
-                                    <Checkbox v-if="brandsSelected.includes(brand.name)" :id="`${brand.name}-checkbox`" @click="handleBrandSelection(brand.name)" checked/>
-                                    <Checkbox v-else :id="`${brand.name}-checkbox`" @click="handleBrandSelection(brand.name)"/>
+                                    <Checkbox v-if="brandsSelected.includes(brand)" :id="`${brand.name}-checkbox`" @click="handleBrandSelection(brand)" checked/>
+                                    <Checkbox v-else :id="`${brand.name}-checkbox`" @click="handleBrandSelection(brand)"/>
                                     
                                     <label
                                         :for="`${brand.name}-checkbox`"
@@ -50,7 +50,10 @@
                             <PopoverContent class="w-auto">
                                 <ScrollArea class="h-[40vh] p-2">
                                     <div v-for="family in families" :key="family.id" class="flex items-center space-x-2 mb-3">
-                                        <Checkbox :id="`${family.name}-checkbox`"  />
+                                       
+                                        <Checkbox v-if="familiesSelected.includes(family)" :id="`${family.id}-checkbox`" @click="handleBrandSelection(brand)" checked/>
+                                        <Checkbox v-else :id="`${family.name}-checkbox`" @click="handleFamilySelection(family)"/>
+                                        
                                         <label
                                         :for="`${family.name}-checkbox`"
                                         class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -72,7 +75,9 @@
                         <PopoverContent class="w-auto">
                             <ScrollArea class="h-[40vh] p-2">
                                 <div v-for="material in materials" :key="material.name" class="flex items-center space-x-2 mb-3">
-                                    <Checkbox :id="`${material.name}-checkbox`"  />
+                                    <Checkbox v-if="materialsSelected.includes(material)" :id="`${material.name}-checkbox`" @click="handleWatchMaterialsSelection(material)" checked/>
+                                    <Checkbox v-else :id="`${material.name}-checkbox`" @click="handleWatchMaterialsSelection(material)"/>
+                                    
                                     <label
                                     :for="`${material.name}-checkbox`"
                                     class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -85,6 +90,153 @@
                         </PopoverContent>
                     </Popover>
 
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline"> <span class="font-normal">Case shapes ({{ shapes.length }})</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <ScrollArea class="h-[40vh] p-2">
+                                <div v-for="shape in shapes" :key="shape.name" class="flex items-center space-x-2 mb-3">
+                                    <Checkbox v-if="shapesSelected.includes(shape)" :id="`${shape.name}-checkbox`" @click="handleShapesSelection(shape)" checked/>
+                                    <Checkbox v-else :id="`${shape.name}-checkbox`" @click="handleShapesSelection(shape)"/>
+                                    
+                                    
+                                    <label
+                                    :for="`${shape.name}-checkbox`"
+                                    class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                    {{ shape.name }}
+                                    </label>
+                                    
+                                </div>
+                            </ScrollArea>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline"> <span class="font-normal">Indexes ({{ indexes.length }})</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <ScrollArea class="h-[40vh] p-2">
+                                <div v-for="indexes_name in indexes" :key="indexes_name.name" class="flex items-center space-x-2 mb-3">
+                                    <Checkbox v-if="indexesSelected.includes(indexes_name)" :id="`${indexes_name.name}-checkbox`" @click="handleIndexesSelection(indexes_name)" checked/>
+                                    <Checkbox v-else :id="`${indexes_name.name}-checkbox`" @click="handleIndexesSelection(indexes_name)"/>
+                                    
+
+                                    <label
+                                    :for="`${indexes_name.name}-checkbox`"
+                                    class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                    {{ indexes_name.name }}
+                                    </label>
+                                    
+                                </div>
+                            </ScrollArea>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline"> <span class="font-normal">Dial colors ({{ dialColors.length }})</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <ScrollArea class="h-[40vh] p-2">
+                                <div v-for="dialColor in dialColors" :key="dialColor.name" class="flex items-center space-x-2 mb-3">
+                                    <Checkbox v-if="dialColorselected.includes(dialColor)" :id="`${dialColor.name}-checkbox`" @click="handleDialColorsSelection(dialColor)" checked/>
+                                    <Checkbox v-else :id="`${dialColor.name}-checkbox`" @click="handleDialColorsSelection(dialColor)"/>
+                                    
+                                    <label
+                                    :for="`${dialColor.name}-checkbox`"
+                                    class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                    {{ dialColor.name }}
+                                    </label>
+                                    
+                                </div>
+                            </ScrollArea>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline"> <span class="font-normal">Dial finishes ({{ dialFinishes.length }})</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <ScrollArea class="h-[40vh] p-2">
+                                <div v-for="dialFinish in dialFinishes" :key="dialFinish.name" class="flex items-center space-x-2 mb-3">
+                                    <Checkbox v-if="dialFinishesSelected.includes(dialFinish)" :id="`${dialFinish.name}-checkbox`" @click="handleDialFinishesSelection(dialFinish)" checked/>
+                                    <Checkbox v-else :id="`${dialFinish.name}-checkbox`" @click="handleDialFinishesSelection(dialFinish)"/>
+                                    
+                                    <label
+                                    :for="`${dialFinish.name}-checkbox`"
+                                    class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                    >
+                                    {{ dialFinish.name }}
+                                    </label>
+                                    
+                                </div>
+                            </ScrollArea>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline"> <span class="font-normal">Diameter mm</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <div class="flex gap-4 p-3 text-sm">
+                                <div>
+                                    <Label for="min_diameter">Min.</Label>
+                                    <Input class="mt-4" id="min_diameter" type="number" min="0" placeholder="Any" />
+                                </div>
+                                <div>
+                                    <Label for="max_diameter">Max.</Label>
+                                    <Input class="mt-4" id="max_diameter" type="number" min="0" placeholder="Any" />
+                                </div>
+                            </div>
+                            
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline"> <span class="font-normal">Water resistance m</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <div class="flex gap-4 p-3 text-sm">
+                                <div>
+                                    <Label for="min_diameter">Min.</Label>
+                                    <Input class="mt-4" id="min_diameter" type="number" min="0" placeholder="Any" />
+                                </div>
+                                <div>
+                                    <Label for="max_diameter">Max.</Label>
+                                    <Input class="mt-4" id="max_diameter" type="number" min="0" placeholder="Any" />
+                                </div>
+                            </div>
+                            
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button variant="outline"> <span class="font-normal">Production time</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <div class="flex gap-4 p-3 text-sm">
+                                <div>
+                                    <Label for="min_diameter">From year</Label>
+                                    <Input class="mt-4" id="min_diameter" type="number" min="0" placeholder="Any" />
+                                </div>
+                                <div>
+                                    <Label for="max_diameter">Until year</Label>
+                                    <Input class="mt-4" id="max_diameter" type="number" min="0" placeholder="Any" />
+                                </div>
+                            </div>
+                            
+                        </PopoverContent>
+                    </Popover>
+                    
                 </div>
 
                
@@ -155,6 +307,18 @@ const familiesSelected = ref([])
 const materials = ref([])
 const materialsSelected = ref([])
 
+const shapes = ref([])
+const shapesSelected = ref([])
+
+const indexes = ref([])
+const indexesSelected = ref([])
+
+const dialColors = ref([])
+const dialColorselected = ref([])
+
+const dialFinishes = ref([])
+const dialFinishesSelected = ref([])
+
 async function fetchSearchedWatches(pageRequestValue) {
     watchesObjects.value = []
     try {
@@ -184,6 +348,63 @@ async function fetchSearchedWatches(pageRequestValue) {
         console.error('Failed to fetch watches:', error);
     }
 }
+async function fetchFilteredWatches(pageRequestValue) {
+    watchesObjects.value = [];
+    try {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        isLoading.value = true;
+
+        // Serialize materials array into comma-separated values
+        const serializedMaterials = materialsSelected.value.map(material => material.name).join(',');
+
+        // Prepare the parameters object
+        const params = {
+            query: query.value,
+            brands: brandsSelected.value.map(brand => brand.name).join(','), // Serialize brands array
+            families: familiesSelected.value.map(family => family.id).join(','), // Assuming family IDs are used
+            
+            watchShapes: shapesSelected.value.map(shape => shape.name).join(','),
+            watchIndexes: indexesSelected.value.map(indexess => indexess.name).join(','),
+            dialFinishes: dialFinishesSelected.value.map(dialFinish => dialFinish.name).join(','),
+            dialColors: dialColorselected.value.map(dialColor => dialColor.name).join(','),
+
+            materials: serializedMaterials, // Serialized materials string
+            page: pageRequestValue - 1, // Adjust page value for zero-based indexing
+            sortBy: 'name' // Example sort criteria
+        };
+
+        const response = await axios.get(`${apiServerAddress}/v1/watches/filter`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+            params: params // Pass the parameters object
+        });
+
+        isLoading.value = false;
+        watches.value = response.data.content;
+
+        console.log("GIOOOO")
+        console.log(response.data.content);
+
+
+        totalPages.value = response.data.totalPages;
+        totalWatchesCount.value = response.data.totalElements;
+        actualPage.value = pageRequestValue;
+
+
+        for(let watch of watches.value){
+            watchesObjects.value.push({
+                "reference": watch[0],
+                "name": watch[1],
+                "isLimitedTo": watch[2]
+            });
+        }
+    } catch (error) {
+        console.error('Failed to fetch watches:', error);
+    }
+}
+
+
 
 async function fetchBrandsNames() {
     try {
@@ -203,7 +424,7 @@ async function fetchSelectedBrandsFamilies() {
     families.value = []
     for (let brand of brandsSelected.value) {
         try {
-            const response = await axios.get(`${apiServerAddress}/v1/brands/${brand}/families/all`, {
+            const response = await axios.get(`${apiServerAddress}/v1/brands/${brand.name}/families/all`, {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.getItem('token'),
                 },
@@ -231,27 +452,144 @@ async function fetchWatchMaterials() {
     }
 }
 
+async function fetchWatchShapes() {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/watch_shapes`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+
+        shapes.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch materials:', error);
+    }
+}
+
+async function fetchWatchIndexes() {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/watch_indexes`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+
+        indexes.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch materials:', error);
+    }
+}
+
+async function fetchDialColors() {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/dial_colors`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+
+        dialColors.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch materials:', error);
+    }
+}
+
+async function fetchDialFinishes() {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/dial_finishes`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+
+        dialFinishes.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch materials:', error);
+    }
+}
+
+
 function removeArrayItem(array, element) {
     return array.filter(item => item !== element);
 }
 
-function handleBrandSelection(brandName) {
-    if (!brandsSelected.value.includes(brandName)) {
-        brandsSelected.value.push(brandName);
+function handleBrandSelection(brand) {
+    if (!brandsSelected.value.includes(brand)) {
+        brandsSelected.value.push(brand);
 
-        // if(!query.value){
-        //     fetchSearchedWatchesByBrand();
-        // }
     } else {
-        brandsSelected.value = removeArrayItem(brandsSelected.value, brandName);
+        brandsSelected.value = removeArrayItem(brandsSelected.value, brand);
         fetchSelectedBrandsFamilies()
     }
     fetchSelectedBrandsFamilies();
+    fetchFilteredWatches(1);
 }
 
+function handleFamilySelection(family) {
+    if (!familiesSelected.value.includes(family)) {
+        familiesSelected.value.push(family);
+    } else {
+        familiesSelected.value = removeArrayItem(familiesSelected.value, family);
+    }
+    fetchFilteredWatches(1);
+}
+
+function handleWatchMaterialsSelection(material) {
+    if (!materialsSelected.value.includes(material)) {
+        materialsSelected.value.push(material);
+    } else {
+        materialsSelected.value = removeArrayItem(materialsSelected.value, material);
+    }
+    fetchFilteredWatches(1);
+}
+
+function handleShapesSelection(shape) {
+    if (!shapesSelected.value.includes(shape)) {
+        shapesSelected.value.push(shape);
+    } else {
+        shapesSelected.value = removeArrayItem(shapesSelected.value, shape);
+    }
+    fetchFilteredWatches(1);
+}
+
+function handleIndexesSelection(indexes) {
+    if (!indexesSelected.value.includes(indexes)) {
+        indexesSelected.value.push(indexes);
+    } else {
+        indexesSelected.value = removeArrayItem(indexesSelected.value, indexes);
+    }
+    fetchFilteredWatches(1);
+}
+
+function handleDialColorsSelection(dialColor) {
+    if (!dialColorselected.value.includes(dialColor)) {
+        dialColorselected.value.push(dialColor);
+    } else {
+        dialColorselected.value = removeArrayItem(dialColorselected.value, dialColor);
+    }
+    fetchFilteredWatches(1);
+}
+
+function handleDialFinishesSelection(dialFinish) {
+    if (!dialFinishesSelected.value.includes(dialFinish)) {
+        dialFinishesSelected.value.push(dialFinish);
+    } else {
+        dialFinishesSelected.value = removeArrayItem(dialFinishesSelected.value, dialFinish);
+    }
+    fetchFilteredWatches(1);
+}
+
+
+
 onMounted(async () => {
+    document.getElementById('email').focus();
     fetchSearchedWatches(1);
     fetchBrandsNames();
     fetchWatchMaterials();
+    fetchWatchShapes();
+    fetchWatchIndexes();
+    fetchDialColors();
+    fetchDialFinishes();
+    
 });
 </script>

@@ -17,4 +17,6 @@ public interface FamilyRepository extends JpaRepository<Family, Integer> {
 
     @Query("SELECT f FROM Family f WHERE f.brand.name = ?1")
     List<Family> findByBrand(String brandName);
+
+    List<Family> findAllByIdIn(List<Integer> familyIds);
 }

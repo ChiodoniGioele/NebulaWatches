@@ -75,6 +75,7 @@ onMounted(async () => {
     } finally {
         isLoading.value = false;
     }
+    console.log(props.watch);
 });
 
 </script>
