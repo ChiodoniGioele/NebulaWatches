@@ -100,7 +100,6 @@
               <TableHead>Phone</TableHead>
               <TableHead >Acquisti</TableHead>
               <TableHead></TableHead>
-              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -115,7 +114,7 @@
 
 
 
-              <TableCell>
+              <TableCell class="flex space-x-4">
                 <Dialog>
                   <DialogTrigger as-child>
                     <Button variant="outline">
@@ -163,8 +162,6 @@
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-              </TableCell>
-              <TableCell>
                   <AlertDialog>
                     <AlertDialogTrigger as-child>
                       <Button variant="destructive">
