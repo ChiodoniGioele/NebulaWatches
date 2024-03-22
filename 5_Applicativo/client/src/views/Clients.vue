@@ -178,7 +178,7 @@
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Delete</AlertDialogAction>
+                        <AlertDialogAction @click="del(client.id)">Delete</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -246,22 +246,37 @@ const route = useRoute();
 const router = useRouter();
 const clients = ref([]);
 
+let emailUser = null;
+onMounted(async () => {
+  const token = localStorage.getItem('token');
+  const parts = token.split('.');
+  const payload = JSON.parse(atob(parts[1]));
+  emailUser = payload.sub;
+  await fetchClients();
+});
 
-async function fetchClients(email) {
+
+
+async function fetchClients() {
+
+  const data = {
+    user_email: emailUser,
+    client : {
+      name: "",
+      surname: "",
+      email: "",
+      phone: ""
+    }
+  };
 
   try {
-    const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
+    const response = await axios.get(`${apiServerAddress}/v1/clients/all`, data,
         {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           },
         });
-
     clients.value = response.data;
-
-    console.log(clients.value);
-
-
   } catch (error) {
     console.error('Failed to fetch clients:', error);
   }
@@ -276,25 +291,28 @@ const phone = ref('');
 const saveFailed = ref(false);
 async function saveClient() {
 
-  const user = {
+  const client = {
     name: name.value,
     surname: surname.value,
     email: email.value,
     phone: phone.value,
-    notes: ""
+    notes: "",
+    user: {
+      id: "",
+    }
   }
 
   try {
-    const response = await axios.post(`${apiServerAddress}/v1/clients/add`, user,
+    const response = await axios.post(`${apiServerAddress}/v1/clients/add/${emailUser}`, client,
         {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           },
         });
-    fetchClients();
+
+    await fetchClients();
 
   } catch (error) {
-    console.log(`${apiServerAddress}/v1/clients/add`);
     console.error('Registration failed:', error);
     saveFailed.value = true;
   }
@@ -304,14 +322,6 @@ async function saveClient() {
   phone.value = null;
 }
 
-
-onMounted(async () => {
-  const token = localStorage.getItem('token');
-  const parts = token.split('.');
-  const payload = JSON.parse(atob(parts[1]));
-  const email = payload.sub;
-  await fetchClients(email);
-});
 
 
 
@@ -326,7 +336,7 @@ async function mod(id){
   }
   console.log(id);
   try {
-    const response = await axios.put(`${apiServerAddress}/v1/clients/update/${id}`, userMod,
+    const response = await axios.get(`${apiServerAddress}/v1/clients/update/${emailUser}/${id}`, userMod,
         {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
@@ -342,15 +352,18 @@ async function mod(id){
 }
 
 async function del(id){
+  console.log(`${apiServerAddress}/v1/clients/delete/${emailUser}/${id}`);
 
   try {
-    const response = await axios.delete(`${apiServerAddress}/v1/clients/delete/${id}`,
+    const response = await axios.post(`${apiServerAddress}/v1/clients/delete/${emailUser}/${id}`,
         {
           headers: {
             Authorization: 'Bearer ' + localStorage.getItem('token'),
           },
         });
-    fetchClients();
+
+
+    await fetchClients();
 
   } catch (error) {
 
