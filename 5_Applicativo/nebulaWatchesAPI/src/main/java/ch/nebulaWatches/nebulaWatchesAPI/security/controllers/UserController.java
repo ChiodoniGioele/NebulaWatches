@@ -6,6 +6,9 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/v1/user")
@@ -17,4 +20,5 @@ public class UserController {
     public String getUser(@PathVariable String userEmail) {
         return userService.getUsername(userEmail);
     }
+
 }

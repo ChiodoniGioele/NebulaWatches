@@ -246,6 +246,7 @@ const route = useRoute();
 const router = useRouter();
 const clients = ref([]);
 const emailUser = ref('');
+const user = ref();
 
 
 async function fetchClients(email) {
@@ -273,26 +274,25 @@ const phone = ref('');
 const saveFailed = ref(false);
 
 async function saveClient() {
-
-  const user = {
+  const newClient = {
     name: name.value,
     surname: surname.value,
     email: email.value,
     phone: phone.value,
-    notes: ""
+    notes: "",
+    userEmail: emailUser.value
   }
-
   try {
-    const response = await axios.post(`${apiServerAddress}/v1/clients/add`, user,
+    const response = await axios.post(`${apiServerAddress}/v1/clients/add`, newClient,
       {
         headers: {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       });
       fetchClients(emailUser.value);
+      console.log("Client saved!", response.data)
 
   } catch (error) {
-    console.log(`${apiServerAddress}/v1/clients/add`);
     console.error('Registration failed:', error);
     saveFailed.value = true;
   }
@@ -355,6 +355,7 @@ async function del(id) {
     saveFailed.value = true;
   }
 }
+
 
 
 

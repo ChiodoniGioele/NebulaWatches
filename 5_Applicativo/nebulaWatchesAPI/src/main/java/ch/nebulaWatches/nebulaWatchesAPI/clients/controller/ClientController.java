@@ -2,7 +2,9 @@ package ch.nebulaWatches.nebulaWatchesAPI.clients.controller;
 
 import ch.nebulaWatches.nebulaWatchesAPI.clients.error.ClientNotFoundException;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
+import ch.nebulaWatches.nebulaWatchesAPI.clients.model.ClientRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;
+import ch.nebulaWatches.nebulaWatchesAPI.clients.service.ClientService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Family;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,7 @@ import java.util.Optional;
 public class ClientController {
 
     private final ClientRepository repository;
+    private final ClientService clientService;
 
     @GetMapping("/all/{email}")
     ResponseEntity<List<Client>> all(@PathVariable String email) {
@@ -48,13 +51,13 @@ public class ClientController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Client> newClient(@RequestBody Client newClient) {
-        try{
-            return ResponseEntity.ok(repository.save(newClient));
-        } catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<String> newClient(@RequestBody ClientRequest newClient) {
+        try {
+            clientService.saveClient(newClient);
+            return ResponseEntity.ok("Client saved successfully.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to add client: " + e.getMessage());
         }
     }
 
