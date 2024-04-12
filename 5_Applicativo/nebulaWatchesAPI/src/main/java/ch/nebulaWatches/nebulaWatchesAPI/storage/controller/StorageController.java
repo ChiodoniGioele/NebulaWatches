@@ -134,11 +134,17 @@ public class StorageController {
     }
 
     @GetMapping("/getWatchSoldByClient")
-    public ResponseEntity<List<Storage>> getSoldWatchesByClient(@RequestBody BuysClientRequest request){
+    public ResponseEntity<List<Storage>> getSoldWatchesByClient(@RequestParam String userEmail, @RequestParam Long clientId) {
         try {
-            return ResponseEntity.ok(storageService.getWatchesOwnedByClientAndUser(request));
+            BuysClientRequest request = new BuysClientRequest();
+            request.setUserEmail(userEmail);
+            request.setClientId(clientId);
+
+            List<Storage> watches = storageService.getWatchesOwnedByClientAndUser(request);
+            return ResponseEntity.ok(watches);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
+
 }

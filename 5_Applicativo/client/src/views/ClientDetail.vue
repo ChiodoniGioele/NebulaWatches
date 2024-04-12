@@ -27,22 +27,20 @@ const route = useRoute();
 
 async function fetchSold() {
 
-  const dati = {
-    userEmail: "lele@gmail.com",
-    clientId: 1
-  }
+  const userEmail = "lele@gmail.com";
+  const clientId = 1;
+
   try {
-    console.log(dati);
-    const response = await axios.get(`${apiServerAddress}/v1/storage/getWatchSoldByClient`, dati,
-        {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('token'),
-          },
-        });
-    console.log(response);
+    const response = await axios.get(`${apiServerAddress}/v1/storage/getWatchSoldByClient?userEmail=${userEmail}&clientId=${clientId}`, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    });
+    console.log(response.data);
   } catch (error) {
-    console.error('Registration failed:', error);
+    console.error('Fetch failed:', error);
   }
+
 }
 
 onMounted(async () => {
