@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @Entity
 @Table(name = "storage")
@@ -34,7 +36,7 @@ public class Storage {
     @JoinColumn(name = "status_name")
     private StatusStorage status;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "custom_watch_reference")
     private CustomWatch customWatch;
 
@@ -44,11 +46,17 @@ public class Storage {
     @JoinColumn(name = "sell_price", nullable = true)
     private float sellPrice;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @JoinColumn(name = "purchase_date")
+    private Date purchaseDate;
+
+    @JoinColumn(name = "sell_date")
+    private Date sellDate;
 }

@@ -1,7 +1,9 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.service;
 
+import ch.nebulaWatches.nebulaWatchesAPI.Utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.exceptions.DuplicateReferenceException;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatch;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatchRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Favourite;
@@ -11,6 +13,7 @@ import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundExcepti
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
@@ -24,18 +27,27 @@ import java.util.Optional;
 public class CustomWatchService {
     private final UserRepository userRepository;
     private final CustomWatchRepository customWatchRepository;
-    public void addCustomWatch(CustomWatchRequest request) {
+    public void addCustomWatch(CustomWatchRequest request) throws IOException {
         CustomWatch customWatch = new CustomWatch();
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
         customWatch.setUser(user);
-        customWatch.setDescription(request.getDescription());
-        customWatch.setReference(request.getReference());
-        customWatch.setName(request.getName());
-        customWatch.setRetailPrice(request.getRetailPrice());
-        customWatch.setImage(request.getImage());
+        customWatch.setDescription(InputUtils.testInput(request.getDescription()));
+        customWatch.setReference(InputUtils.testInput(request.getReference()));
+        customWatch.setName(InputUtils.testInput(request.getName()));
+        if(request.getRetailPrice() >= 0){
+            customWatch.setRetailPrice(request.getRetailPrice());
+        }else{
+            customWatch.setRetailPrice(0f);
+        }
 
-        customWatchRepository.save(customWatch);
+        customWatch.setImage(setImage(request.getImage()));
+        if(canUseRef(request.getReference())){
+            customWatchRepository.save(customWatch);
+        }else{
+            throw new DuplicateReferenceException("Reference already exists. Please use another");
+        }
+
     }
 
     public List<CustomWatch> getWatchesByUserId(int id) {
@@ -55,7 +67,22 @@ public class CustomWatchService {
         customWatchRepository.deleteByReference(request.getReference());
     }
     public Optional<CustomWatch> getWatch(String reference) {
-        Optional<CustomWatch> watch = customWatchRepository.findByReference(reference);
-        return watch;
+        return customWatchRepository.findByReference(reference);
+    }
+
+    public byte[] setImage(MultipartFile imageFile) throws IOException {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            if (!InputUtils.isValidImageType(imageFile)) {
+                throw new IllegalArgumentException("Invalid file type. Please upload an image file.");
+            }
+            return imageFile.getBytes();
+        } else {
+            throw new IllegalArgumentException("Image file is required.");
+        }
+    }
+    public boolean canUseRef(String ref){
+        Optional<CustomWatch> customWatch= customWatchRepository.findByReference(ref);
+
+        return customWatch.isEmpty();
     }
 }

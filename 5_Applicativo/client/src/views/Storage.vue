@@ -39,9 +39,6 @@
                         </div>
                     </TabsContent>
                 </Tabs>
-
-
-
             </div>
         </div>
     </div>
@@ -107,4 +104,6 @@ onMounted(async () => {
 
     await fetchStorage(email);
 });
+
+
 </script>

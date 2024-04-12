@@ -26,13 +26,14 @@
                         <form class="flex items-center" @submit.prevent>
                             <label for="simple-search" class="sr-only">Search</label>
                             <div class="relative w-full">
-                                <Input @keyup="searchUser()" v-model="searchContent" type="text" placeholder="Search for users" />
+                                <Input @keyup="searchUser()" v-model="searchContent" type="text"
+                                    placeholder="Search for users" />
                             </div>
                         </form>
                     </div>
 
                     <div class="flex gap-2 w-auto">
-                        <Dialog>
+                        <Dialog :open="restOpen" @update:open="setNotVisible">
                             <DialogTrigger as-child>
                                 <Button variant="outline" class="h-12">
                                     <p>Add User</p>
@@ -50,20 +51,20 @@
                                         <Label for="email" class="text-right">
                                             Email
                                         </Label>
-                                        <Input id="email" class="col-span-3" v-model="newUser.email" required/>
+                                        <Input id="email" class="col-span-3" v-model="newUser.email" required />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="username" class="text-right">
                                             Username
                                         </Label>
-                                        <Input id="username" class="col-span-3" v-model="newUser.username" required/>
+                                        <Input id="username" class="col-span-3" v-model="newUser.username" required />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="password" class="text-right">
                                             Password
                                         </Label>
                                         <Input id="password" class="col-span-3" type="password"
-                                            v-model="newUser.password" required/>
+                                            v-model="newUser.password" required />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label class="text-right">
@@ -110,12 +111,31 @@
                                         </div>
                                     </div>
                                 </div>
+                                <Alert variant="destructive" v-if="emptyFields">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Failed, please fill email, username and password
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="emailNotValid">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Failed, please provide a valid email!
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="passwordShort">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Failed, password too short or too simple!
+                                    </AlertDescription>
+                                </Alert>
                                 <DialogFooter>
-                                    <DialogClose as-child>
-                                        <Button type="submit" @click="saveUser">
-                                            Save User
-                                        </Button>
-                                    </DialogClose>
+                                    <Button type="submit" @click="saveUser">
+                                        Save User
+                                    </Button>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
@@ -247,14 +267,15 @@
                                         <AlertDialog>
                                             <AlertDialogTrigger as-child>
                                                 <Button variant="destructive">
-                                                    <!--<Trash2 class="size-4" />--> Delete
+                                                    Delete
                                                 </Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>
                                                     <AlertDialogTitle>Confirm delete</AlertDialogTitle>
                                                     <AlertDialogDescription>
-                                                        Are you sure that you want to delete this user?
+                                                        Are you sure that you want to delete this user? All his related
+                                                        data willl be deleted!
                                                     </AlertDialogDescription>
                                                 </AlertDialogHeader>
                                                 <AlertDialogFooter>
@@ -307,6 +328,8 @@
 
 <script setup>
 import Sidebar from '@/components/Sidebar.vue'
+import { AlertCircle } from 'lucide-vue-next'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
@@ -367,20 +390,24 @@ const role = ref("");
 const selectedUser = ref({});
 const sel = ref(0);
 const searchContent = ref();
+const emailNotValid = ref(false);
+const emptyFields = ref(false);
+const restOpen = ref(false);
+const passwordShort = ref(false);
 
-async function fetchUsers() {
-    try {
-        const response = await axios.get(`${apiServerAddress}/v1/admin/getUsers`, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-        });
+    async function fetchUsers() {
+        try {
+            const response = await axios.get(`${apiServerAddress}/v1/admin/getUsers`, {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            });
 
-        users.value = response.data;
-    } catch (error) {
-        console.error('Failed to fetch users', error);
+            users.value = response.data;
+        } catch (error) {
+            console.error('Failed to fetch users', error);
+        }
     }
-}
 const getNumberOfUsers = () => {
     return users.value.length;
 };
@@ -428,16 +455,33 @@ const newUser = {
 };
 
 async function saveUser() {
-    try {
-        const response = await axios.post(`${apiServerAddress}/v1/admin/saveUser`, newUser, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-        });
-        console.log('User saved. ', response.data);
-        await fetchUsers();
-    } catch (error) {
-        console.error('Failed to save user:', error);
+    emailNotValid.value = false;
+    emptyFields.value = false;
+    passwordShort.value = false;
+
+    if (!isNullOrEmpty(newUser.email) && !isNullOrEmpty(newUser.username) && !isNullOrEmpty(newUser.password)) {
+        if (isEmailValid(newUser.email)) {
+            if(isPasswordValid(newUser.password)) {
+                try {
+                const response = await axios.post(`${apiServerAddress}/v1/admin/saveUser`, newUser, {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token'),
+                    },
+                });
+                console.log('User saved. ', response.data);
+                setNotVisible();
+                await fetchUsers();
+            } catch (error) {
+                console.error('Failed to save user:', error);
+            }
+            }else{
+                passwordShort.value = true;
+            }
+        } else {
+            emailNotValid.value = true;
+        }
+    } else {
+        emptyFields.value = true;
     }
 }
 
@@ -530,4 +574,26 @@ onBeforeMount(async () => {
 
 });
 
+//Utils
+function isNullOrEmpty(str) {
+    return !str || str.trim() === '';
+}
+function isEmailValid(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+function setNotVisible() {
+    restOpen.value = !restOpen.value;
+}
+function isPasswordValid(password) {
+    if (password.length < 5) {
+        return false;
+    }
+
+    const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    if (!complexityRegex.test(password)) {
+        return false;
+    }
+    return true;
+}
 </script>

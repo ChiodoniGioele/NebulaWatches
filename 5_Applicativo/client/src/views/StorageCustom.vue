@@ -1,8 +1,8 @@
 <template>
-    <div class="grid lg:grid-cols-5 min-h-screen"> 
+    <div class="grid lg:grid-cols-5 min-h-screen">
         <Sidebar class="hidden lg:block" />
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col" > 
-            <div class="px-4 py-6 lg:px-8"> 
+        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col">
+            <div class="px-4 py-6 lg:px-8">
 
                 <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch in your custom watches..." />
@@ -16,70 +16,107 @@
                     </div>
                 </div>
                 <div class="mt-5 px-1 flex gap-3 items-center">
-                   
+
 
                     <div class="flex gap-2">
                         <h1 class="font-semibold"> CustomWatches </h1>
                     </div>
                     <div class="w-full flex gap-7 items-center"></div>
-                                        
+
                     <div class="flex gap-2 w-auto">
-                        <Dialog>
+                        <Dialog :open="restOpen" @update:open="setNotVisible">
                             <DialogTrigger as-child>
-                            <Button variant="outline" class="h-12">
-                                <!--<img class="w-5 h-5 m-1" src="@/assets/icons/plus.png" alt="+">--> 
-                                <p >Add Custom Watch</p>
-                            </Button>
+                                <Button variant="outline" class="h-12">
+                                    <!--<img class="w-5 h-5 m-1" src="@/assets/icons/plus.png" alt="+">-->
+                                    <p>Add Custom Watch</p>
+                                </Button>
                             </DialogTrigger>
                             <DialogContent class="sm:max-w-[425px]">
-                            <DialogHeader>
-                                <DialogTitle>Add a custom watch</DialogTitle>
-                                <DialogDescription>
-                                If your watch is not listed in our watches you can add it by yourself.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <div class="grid gap-4 py-4">
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="reference" class="text-right">
-                                    Reference
-                                </Label>
-                                <Input id="reference" class="col-span-3" v-model="customWatch.reference"/>
+                                <DialogHeader>
+                                    <DialogTitle>Add a custom watch</DialogTitle>
+                                    <DialogDescription>
+                                        If your watch is not listed in our watches you can add it by yourself.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div class="grid gap-4 py-4">
+                                    <div class="grid grid-cols-4 items-center gap-4">
+                                        <Label for="reference" class="text-right">
+                                            Reference
+                                        </Label>
+                                        <Input id="reference" class="col-span-3" v-model="customWatch.reference" />
+                                    </div>
+                                    <div class="grid grid-cols-4 items-center gap-4">
+                                        <Label for="name" class="text-right">
+                                            Name
+                                        </Label>
+                                        <Input id="name" class="col-span-3" v-model="customWatch.name" />
+                                    </div>
+                                    <div class="grid grid-cols-4 items-center gap-4">
+                                        <Label for="desc" class="text-right">
+                                            Description
+                                        </Label>
+                                        <Input id="desc" class="col-span-3" v-model="customWatch.description" />
+                                    </div>
+                                    <div class="grid grid-cols-4 items-center gap-4">
+                                        <Label for="retailPrice" class="text-right">
+                                            Price
+                                        </Label>
+                                        <Input type="number" id="retailPrice" class="col-span-3"
+                                            v-model="customWatch.retailPrice" />
+                                    </div>
+                                    <div class="grid grid-cols-4 items-center gap-4">
+                                        <Label for="image" class="text-right">
+                                            Image
+                                        </Label>
+                                        <Input type="file" id="image" class="col-span-3" accept="image/*"
+                                            @change="handleImageChange" />
+                                    </div>
                                 </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="name" class="text-right">
-                                    Name
-                                </Label>
-                                <Input id="name"class="col-span-3" v-model="customWatch.name"/>
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="desc" class="text-right">
-                                    Description
-                                </Label>
-                                <Input id="desc" class="col-span-3" v-model="customWatch.description"/>
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="retailPrice" class="text-right">
-                                    Price
-                                </Label>
-                                <Input type="number" id="retailPrice" class="col-span-3" v-model="customWatch.retailPrice"/>
-                                </div>
-                                <div class="grid grid-cols-4 items-center gap-4">
-                                <Label for="image" class="text-right">
-                                    Image
-                                </Label>
-                                <Input type="file" id="image" class="col-span-3" accept="image/*" @change="handleImageChange" />
-                                </div>
-                            </div>
-                            <DialogFooter>
-                                <Button type="submit" @click="saveWatch">
-                                Save Watch
-                                </Button>
-                            </DialogFooter>
+                                <Alert variant="destructive" v-if="invalidData">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Please insert valid data!
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="invalidRef">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Please insert a reference!
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="invalidFile">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Please insert an image as file!
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="fileToBig">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Please insert an image smaller than 1MB!
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="refExists">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        This reference is already used!
+                                    </AlertDescription>
+                                </Alert>
+                                <DialogFooter>
+                                    <Button type="submit" @click="saveWatch">
+                                        Save Watch
+                                    </Button>
+                                </DialogFooter>
                             </DialogContent>
                         </Dialog>
                     </div>
                 </div>
-                
+
                 <div class="mt-5 flex flex-wrap gap-5">
                     <CustomWatchCard v-for="watch in storedWatches" :key="watch.id" :watch="watch" />
                 </div>
@@ -87,10 +124,10 @@
             </div>
         </div>
     </div>
-    
- 
+
+
 </template>
-  
+
 <script setup>
 import Sidebar from '@/components/Sidebar.vue'
 import CustomWatchCard from '@/components/CustomWatchCard.vue'
@@ -100,15 +137,17 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useRouter } from 'vue-router';
+import { AlertCircle } from 'lucide-vue-next'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 
@@ -121,14 +160,20 @@ import FormData from 'form-data';
 const route = useRoute();
 const storedWatches = ref([]);
 const emailUs = ref("");
+const invalidData = ref(false);
+const invalidRef = ref(false);
+const invalidFile = ref(false);
+const restOpen = ref(false);
+const fileToBig = ref(false);
+const refExists = ref(false);
 
 const customWatch = {
-  reference: '',
-  name: '',
-  description: '',
-  retailPrice: 0,
-  email: '',
-  image: null
+    reference: '',
+    name: '',
+    description: '',
+    retailPrice: 0,
+    email: '',
+    image: null
 };
 
 async function fetchCustomStorage(userEmail) {
@@ -146,26 +191,56 @@ async function fetchCustomStorage(userEmail) {
 }
 
 async function saveWatch() {
+    invalidFile.value = false;
     customWatch.email = emailUs.value;
+    fileToBig.value = false;
+    refExists.value = false;
     const formData = new FormData();
-    formData.append('reference', customWatch.reference);
-    formData.append('name', customWatch.name);
-    formData.append('description', customWatch.description);
-    formData.append('retailPrice', customWatch.retailPrice);
-    formData.append('email', customWatch.email);
-    formData.append('file', customWatch.image);
-    console.log(formData.get('file'))
-    try {
-        const response = await axios.post(`${apiServerAddress}/v1/storage/saveCustom`, formData, {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('token'),
-            },
-        });
-        window.location.reload();
-        console.log('Custom watch saved ', response.data);
-        
-    } catch (error) {
-        console.error('Failed to save Custom Watch:', error);
+    if (!isNullOrEmpty(customWatch.reference)) {
+        if (isValidPrice(customWatch.retailPrice)) {
+            invalidData.value = false;
+            invalidRef.value = false;
+            formData.append('reference', customWatch.reference);
+            formData.append('name', customWatch.name);
+            formData.append('description', customWatch.description);
+            formData.append('retailPrice', customWatch.retailPrice);
+            formData.append('email', customWatch.email);
+
+            if (customWatch.image && customWatch.image.type.startsWith('image/')) {
+                formData.append('file', customWatch.image);
+                try {
+                    const response = await axios.post(`${apiServerAddress}/v1/storage/saveCustom`, formData, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                        },
+                    });
+                    if (response.data == "Maximum upload size exceeded. Please upload a smaller file.") {
+                        fileToBig.value = true;
+                    } else {
+                        window.location.reload();
+                        console.log('Custom watch saved ', response.data);
+                    }
+
+                } catch (error) {
+                    if (error.response) {
+                        if (error.response.data == "Reference already exists. Please use another") {
+                            refExists.value = true;
+                        }
+
+                    }
+                    if (refExists.value != true) {
+                        console.error('Failed to save Custom Watch:', error);
+                    }
+                }
+            } else {
+                invalidFile.value = true;
+            }
+        } else {
+            invalidData.value = true;
+        }
+
+    } else {
+        invalidRef.value = true;
     }
 }
 
@@ -182,4 +257,17 @@ onMounted(async () => {
 
     await fetchCustomStorage(email);
 });
+
+
+//Utils
+function isValidPrice(price) {
+    return !isNaN(price) && price >= 0 && price != '';
+
+}
+function isNullOrEmpty(str) {
+    return !str || str.trim() === '';
+}
+function setNotVisible() {
+    restOpen.value = !restOpen.value;
+}
 </script>

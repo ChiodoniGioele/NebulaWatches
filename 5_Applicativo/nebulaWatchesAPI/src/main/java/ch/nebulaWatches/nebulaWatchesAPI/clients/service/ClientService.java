@@ -1,5 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.clients.service;
 
+import ch.nebulaWatches.nebulaWatchesAPI.Utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.model.ClientRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;
@@ -16,14 +17,19 @@ public class ClientService {
 
     public void saveClient(ClientRequest request){
         Client client = new Client();
-        client.setEmail(request.getEmail());
-        client.setName(request.getName());
-        client.setSurname(request.getSurname());
-        client.setPhone(request.getPhone());
+        client.setEmail(InputUtils.testInput(request.getEmail()));
+        client.setName(InputUtils.testInput(request.getName()));
+        client.setSurname(InputUtils.testInput(request.getSurname()));
+        client.setPhone(InputUtils.testInput(request.getPhone()));
 
-        User user = userRepository.findByEmail(request.getUserEmail())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        client.setUser(user);
+        if(InputUtils.isEmailValid(request.getUserEmail())){
+            User user = userRepository.findByEmail(InputUtils.testInput(request.getUserEmail()))
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            client.setUser(user);
+        }else{
+            throw new IllegalArgumentException("Email not valid");
+        }
+
 
         repository.save(client);
     }

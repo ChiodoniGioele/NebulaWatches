@@ -1,5 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.controller;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.exceptions.DuplicateReferenceException;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatch;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatchRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
@@ -91,11 +93,15 @@ public class StorageController {
             watchRequest.setName(name);
             watchRequest.setDescription(description);
             watchRequest.setRetailPrice(retailPrice);
-            watchRequest.setImage(file.getBytes());
+            watchRequest.setImage(file);
 
             customWatchService.addCustomWatch(watchRequest);
             return ResponseEntity.ok("Watch added to storage successfully.");
-        } catch (Exception e) {
+        } catch (IOException io){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Invalid file passed: " + io.getMessage());
+        }catch (DuplicateReferenceException De){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(De.getMessage());
+        }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add watch to storage: " + e.getMessage());
         }
     }

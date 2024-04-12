@@ -8,6 +8,8 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.*;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.repository.CustomWatchRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.repository.StorageRepository;
+import ch.nebulaWatches.nebulaWatchesAPI.team.model.Team;
+import ch.nebulaWatches.nebulaWatchesAPI.team.repository.TeamRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.repository.WatchRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class StorageService {
     private final WatchRepository watchRepository;
     private final CustomWatchRepository customWatchRepository;
     private final ClientRepository clientRepository;
+    private final TeamRepository teamRepository;
     private final UserService userService;
 
     public List<Storage> getAllStorage() {
@@ -60,12 +63,20 @@ public class StorageService {
         }else {
             storage.setBuyPrice(request.getBuyPrice());
         }
+        storage.setPurchaseDate(request.getPurchaseDate());
         if(storage.getStatus().getName().equals("Sold")){
             if(request.getSellPrice() < 0 ){
                 storage.setSellPrice(0);
             }else {
                 storage.setSellPrice(request.getSellPrice());
             }
+            Client client = clientRepository.findById(request.getClientId())
+                    .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+            storage.setClient(client);
+            Team team = teamRepository.findById(request.getTeamId())
+                    .orElseThrow(() -> new IllegalArgumentException("Team not found"));
+            storage.setTeam(team);
+            storage.setSellDate(request.getSellDate());
         }else{
             storage.setSellPrice(0);
         }
@@ -96,6 +107,12 @@ public class StorageService {
                 Client client = clientRepository.findById(request.getClientId())
                         .orElseThrow(() -> new IllegalArgumentException("Client not found"));
                 newStorage.setClient(client);
+                Team team = teamRepository.findById(request.getTeamId())
+                        .orElseThrow(() -> new IllegalArgumentException("Team not found"));
+                newStorage.setTeam(team);
+
+                newStorage.setPurchaseDate(request.getPurchaseDate());
+                newStorage.setSellDate(request.getSellDate());
 
                 storageRepository.save(newStorage);
 

@@ -15,11 +15,13 @@
 
                 <div class="grid gap-2">
                     <Label for="email">Email</Label>
-                    <Input id="email" v-model="email" type="email" placeholder="example@gmail.com" class="bg-gray-50" required />
+                    <Input id="email" v-model="email" type="email" placeholder="example@gmail.com" class="bg-gray-50"
+                        required />
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" v-model="password" type="password" placeholder="••••••••" class="bg-gray-50" required />
+                    <Input id="password" v-model="password" type="password" placeholder="••••••••" class="bg-gray-50"
+                        required />
                 </div>
                 <Button class="w-full" @click="login">
                     Login
@@ -32,7 +34,20 @@
                         Email or Password Incorrect. Please try again
                     </AlertDescription>
                 </Alert>
-
+                <Alert variant="destructive" v-if="emptyFields">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Login failed, please fill all fields!
+                    </AlertDescription>
+                </Alert>
+                <Alert variant="destructive" v-if="emailNotValid">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Login failed, please provide a valid email!
+                    </AlertDescription>
+                </Alert>
                 <div class="relative">
                     <div class="absolute inset-0 flex items-center">
                         <span class="w-full border-t" />
@@ -63,7 +78,7 @@
 </template>
 
 <script setup>
-import { Separator } from 'radix-vue';
+import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -89,31 +104,49 @@ const password = ref('');
 const router = useRouter();
 const loginFailed = ref(false);
 const role = ref('');
+const emailNotValid = ref(false);
+const emptyFields = ref(false);
 
 async function login() {
-    try {
-        const response = await axios.post(`${apiServerAddress}/auth/authenticate`, {
-            email: email.value,
-            password: password.value
-        });
-        
-        const token = response.data.token;
-        localStorage.setItem('token', token);
+    if (!isNullOrEmpty(email.value) && !isNullOrEmpty(password.value)) {
+        emptyFields.value = false;
+        if (isEmailValid(email.value)) {
+            emailNotValid.value = false;
+            try {
+                const response = await axios.post(`${apiServerAddress}/auth/authenticate`, {
+                    email: email.value,
+                    password: password.value
+                });
 
-        await getRole(email.value);
-        if(role.value == "ADMIN"){
-            router.push('/admin');
-        }else{
-            router.push('/');
+                const token = response.data.token;
+                if (!isNullOrEmpty(token)) {
+                    localStorage.setItem('token', token);
+
+                    await getRole(email.value);
+                    if (role.value == "ADMIN") {
+                        router.push('/admin');
+                    } else {
+                        router.push('/');
+                    }
+
+                }else{
+                    loginFailed.value = true;
+                }
+            } catch (error) {
+                loginFailed.value = true;
+                console.error("Login Failed")
+            }
+        } else {
+            emailNotValid.value = true;
         }
 
-    } catch (error) {
-        loginFailed.value = true;
-        console.error("Login Failed")
+    } else {
+        emptyFields.value = true;
     }
+
 }
 
-async function getRole(userEmail){
+async function getRole(userEmail) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/admin/getRole/${userEmail}`, {
             headers: {
@@ -121,10 +154,18 @@ async function getRole(userEmail){
             },
         });
 
-        role.value = response.data;        
+        role.value = response.data;
     } catch (error) {
         console.error('Failed to fetch Role', error);
     }
 }
 
+//Utils
+function isNullOrEmpty(str) {
+    return !str || str.trim() === '';
+}
+function isEmailValid(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 </script>
