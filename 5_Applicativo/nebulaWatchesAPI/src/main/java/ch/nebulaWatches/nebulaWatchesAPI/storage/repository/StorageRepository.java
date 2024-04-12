@@ -34,4 +34,6 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     @Query(value = "SELECT SUM(s.quantity) FROM storage s WHERE s.team_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3", nativeQuery = true)
     int sumQuantityByTeamMonth(Long teamId, LocalDate begin, LocalDate end);
 
+    List<Storage> getByTeamId(Long id);
+
 }

@@ -130,5 +130,9 @@ public class StorageService {
         }
     }
 
+    public List<Storage> getStorageByTeamId(Long id){
+        return storageRepository.getByTeamId(id);
+    }
+
 
 }

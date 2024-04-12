@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -25,6 +26,11 @@ public class TeamController {
     @GetMapping("/getTeam/{email}")
     public List<Team> getTeamMembers(@PathVariable String email) {
         return teamService.getTeamByEmail(email);
+    }
+
+    @GetMapping("/getTeamMember/{id}")
+    public Optional<Team> getTeamMember(@PathVariable Long id) {
+        return teamService.getTeamMember(id);
     }
 
     @PostMapping("/add")
@@ -76,5 +82,6 @@ public class TeamController {
             return 0;
         }
     }
+
 
 }

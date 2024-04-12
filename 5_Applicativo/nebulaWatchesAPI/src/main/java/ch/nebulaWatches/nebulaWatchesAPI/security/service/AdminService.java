@@ -1,6 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.security.service;
 
-import ch.nebulaWatches.nebulaWatchesAPI.Utils.InputUtils;
+import ch.nebulaWatches.nebulaWatchesAPI.utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.AdminRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.Role;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;

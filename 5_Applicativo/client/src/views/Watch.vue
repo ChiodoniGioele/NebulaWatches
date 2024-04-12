@@ -186,9 +186,6 @@
                                                             </TooltipContent>
                                                         </Tooltip>
                                                     </TooltipProvider>
-
-
-
                                                 </DialogContent>
                                             </Dialog>
                                         </TooltipTrigger>
@@ -612,7 +609,6 @@ async function addToStorage() {
                     storageSuccesfull.value = true;
                     console.log('Watch added to storage. ', response.data);
                 } catch (error) {
-                    console.log(newStorage)
                     console.error('Failed to add watch to storage:', error);
                 }
             } else {

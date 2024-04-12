@@ -1,6 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.clients.service;
 
-import ch.nebulaWatches.nebulaWatchesAPI.Utils.InputUtils;
+import ch.nebulaWatches.nebulaWatchesAPI.utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.model.ClientRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;

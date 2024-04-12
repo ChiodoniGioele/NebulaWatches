@@ -139,5 +139,9 @@ public class StorageController {
     public Optional<CustomWatch> getCustomWatch(@PathVariable String watchReference){
         return customWatchService.getWatch(watchReference);
     }
+    @GetMapping("/getStorageByTeam/{teamId}")
+    public List<Storage> getStorageByTeam(@PathVariable Long teamId){
+        return storageService.getStorageByTeamId(teamId);
+    }
 
 }

@@ -1,23 +1,18 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.service;
 
-import ch.nebulaWatches.nebulaWatchesAPI.Utils.InputUtils;
+import ch.nebulaWatches.nebulaWatchesAPI.utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.exceptions.DuplicateReferenceException;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatch;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatchRequest;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Favourite;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StorageRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.repository.CustomWatchRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundException;
-import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;

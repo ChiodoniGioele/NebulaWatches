@@ -1,4 +1,4 @@
-package ch.nebulaWatches.nebulaWatchesAPI.Utils;
+package ch.nebulaWatches.nebulaWatchesAPI.utils;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,7 +1,7 @@
 <template>
-    <div class="flex h-screen"> 
+    <div class="flex h-screen">
         <Sidebar />
-        <div class="flex flex-col w-full" > 
+        <div class="flex flex-col w-full">
             <div class="px-8 py-6">
 
                 <div class="mt-5 flex gap-7 items-center">
@@ -134,13 +134,13 @@
                             <TableHead>Phone</TableHead>
                             <TableHead>Role</TableHead>
                             <TableHead></TableHead>
+                            <TableHead></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="team in teams" :key="team.id">
-                            <TableCell class="font-medium">
-                                {{ team.name }}
-                            </TableCell>
+                            
+                            <TableCell>{{ team.name }}</TableCell>
                             <TableCell>{{ team.surname }}</TableCell>
                             <TableCell>{{ team.email }}</TableCell>
                             <TableCell>{{ team.phone }}</TableCell>
@@ -212,7 +212,8 @@
                                         <AlertDialogHeader>
                                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                             <AlertDialogDescription>
-                                                This action cannot be undone. This will permanently delete this team member
+                                                This action cannot be undone. This will permanently delete this team
+                                                member
                                                 and all his related storage.
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
@@ -222,6 +223,26 @@
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
+                            </TableCell>
+                            <TableCell>
+                                <Dialog>
+                                <DialogTrigger>
+                                    <Button variant="outline">Details</Button>
+                                </DialogTrigger>
+                                <DialogOverlay>
+                                    <DialogContent class="max-h-[80vh] max-w-[70vw]">
+                                        <DialogHeader>
+                                            <DialogTitle>Informations of {{ team.name }} {{ team.surname }}
+                                            </DialogTitle>
+                                            <DialogDescription><b>Email:</b> {{ team.email }} <b>Phone:</b> {{
+                        team.phone }} <b>Role:</b> {{ team.role }}</DialogDescription>
+                                        </DialogHeader>
+
+                                        <TeamExpansion :key="team.id" :team="team"></TeamExpansion>
+                                    </DialogContent>
+
+                                </DialogOverlay>
+                            </Dialog>
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -238,15 +259,15 @@ import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogClose
 } from '@/components/ui/dialog'
-
+import { DialogOverlay } from 'radix-vue'
 import {
     AlertDialog,
     AlertDialogAction,
@@ -278,6 +299,7 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+import TeamExpansion from '@/components/TeamExpansion.vue'
 import TeamChartGeneral from '@/components/TeamChartGeneral.vue';
 import TeamChartSpecific from '@/components/TeamChartSpecific.vue';
 
@@ -422,5 +444,4 @@ function isEmailValid(email) {
 function setNotVisible() {
     restOpen.value = !restOpen.value;
 }
-
 </script>

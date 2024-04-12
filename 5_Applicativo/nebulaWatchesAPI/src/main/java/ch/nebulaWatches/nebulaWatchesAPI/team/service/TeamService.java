@@ -1,11 +1,6 @@
 package ch.nebulaWatches.nebulaWatchesAPI.team.service;
 
-import ch.nebulaWatches.nebulaWatchesAPI.Utils.InputUtils;
-import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
-import ch.nebulaWatches.nebulaWatchesAPI.clients.model.ClientRequest;
-import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;
-import ch.nebulaWatches.nebulaWatchesAPI.security.models.AdminRequest;
-import ch.nebulaWatches.nebulaWatchesAPI.security.models.Role;
+import ch.nebulaWatches.nebulaWatchesAPI.utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.repository.StorageRepository;
@@ -31,6 +26,8 @@ public class TeamService {
     public List<Team> getTeamByEmail(String email){
         return teamRepository.findAllByUserEmail(email);
     }
+
+    public Optional<Team> getTeamMember(Long id){ return teamRepository.findById(id);}
 
     public void saveTeamMember(TeamRequest request){
         Team team = new Team();
