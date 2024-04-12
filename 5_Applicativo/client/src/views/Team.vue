@@ -3,15 +3,17 @@
         <Sidebar />
         <div class="flex flex-col w-full" > 
             <div class="px-8 py-6">
-                    <div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
-                        <div class="mx-auto mb-8 max-w-screen-sm lg:mb-16">
-                            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Team</h2>
-                        </div> 
-                    </div>
-                    <div class="mt-12 flex flex-wrap gap-7 justify-center">
-                        <div class="border-2 border-gray-200 rounded-md flex flex-col justify-center items-center text-center" style="height: 250px; width: 250px;">
-                            <h3 class="mb-10 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Alex Ciobanu</h3>
-                            <p class="mb-4">Employee</p>
+
+                <div class="mt-5 flex gap-7 items-center">
+                    <!--<div>
+              <Button @click="$router.back()" variant="secondary">
+                <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+              </Button>
+            </div>-->
+
+                    <div class="w-full flex gap-7 items-center"></div>
+                    <Dialog :open="restOpen" @update:open="setNotVisible">
+                        <DialogTrigger as-child>
                             <Button variant="outline">
                                 New Team Member
                             </Button>
