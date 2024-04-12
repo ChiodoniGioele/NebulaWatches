@@ -531,7 +531,7 @@ async function fetchWatchImage() {
                 ""
             )
         );
-        watchImage.value = `data:${response.headers["content-type"]};base64,${imageBase64}`;
+        watchImage.value = `data:image/png;base64,${imageBase64}`;
     } catch (error) {
         watchImage.value = "@assets/no_image.png";
     }

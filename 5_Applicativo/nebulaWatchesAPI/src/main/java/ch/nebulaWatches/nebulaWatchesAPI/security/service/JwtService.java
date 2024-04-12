@@ -42,6 +42,11 @@ public class JwtService {
                 .compact();
     }
 
+    public String isTokenValid(String token){
+        String username = extractUsername(token);
+        return (!username.isEmpty() && !isTokenExpired(token)) ? username : null;
+    }
+
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
