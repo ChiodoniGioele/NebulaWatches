@@ -28,4 +28,17 @@ public class UserService {
             return 0;
         }
     }
+    public User getUser(int id) {
+        Optional<User> user = repository.findById(id);
+        if (user.isPresent()) {
+            User user1 = user.get();
+            user1.setUsername(user1.getName());
+            return user1;
+        }
+        return null;
+    }
+    public User getUserByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
 }

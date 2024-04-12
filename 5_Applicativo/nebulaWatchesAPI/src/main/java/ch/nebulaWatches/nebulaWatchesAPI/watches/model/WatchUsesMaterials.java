@@ -12,11 +12,11 @@ public class WatchUsesMaterials {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "watch_reference", referencedColumnName = "reference")
+    @JoinColumn(name = "watch_reference", referencedColumnName = "reference", nullable = false)
     private Watch watch;
 
     @ManyToOne
-    @JoinColumn(name = "material_name", referencedColumnName = "name")
+    @JoinColumn(name = "material_name", referencedColumnName = "name", nullable = false)
     private Material material;
 
     public Long getId() {

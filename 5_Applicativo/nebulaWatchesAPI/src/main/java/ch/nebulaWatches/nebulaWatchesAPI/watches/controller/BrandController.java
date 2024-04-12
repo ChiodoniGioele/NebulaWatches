@@ -57,10 +57,9 @@ public class BrandController {
     @GetMapping(path = "{brandName}/rndimage")
     public ResponseEntity<byte[]> getBrandRandomImage(@PathVariable("brandName") String brandName) {
         try {
-            List<Watch> watches = watchService.getWatchesByBrand(brandName);
-            Watch randomChoice = watches.get(rand.nextInt(0, watches.size()));
-            String randomWatchReference = randomChoice.getReference();
-            byte[] imageBytes = watchService.getWatchImageBytes(randomWatchReference);
+            List<String> watchesRefs = watchService.getWatchesByBrandOptimized(brandName);
+            String randomRefChoice = watchesRefs.get(rand.nextInt(0, watchesRefs.size()));
+            byte[] imageBytes = watchService.getWatchImageBytes(randomRefChoice);
             return ResponseEntity.ok(imageBytes);
         } catch (WatchNotFoundException e) {
             return ResponseEntity.notFound().build();

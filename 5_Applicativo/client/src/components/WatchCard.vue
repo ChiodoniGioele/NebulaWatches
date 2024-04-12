@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center border border-gray-200 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
+    <div class="text-center border-stone-500 border-2 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] pt-2">
         <div class="h-[20px]">
             <div v-if="watch.isLimitedTo != 'No'" class="pt-1 text-gray-400 text-sm">
                 {{ watch.isLimitedTo.replace('Yes,', 'Limited to') }}
@@ -75,7 +75,6 @@ onMounted(async () => {
     } finally {
         isLoading.value = false;
     }
-    console.log(props.watch);
 });
 
 </script>

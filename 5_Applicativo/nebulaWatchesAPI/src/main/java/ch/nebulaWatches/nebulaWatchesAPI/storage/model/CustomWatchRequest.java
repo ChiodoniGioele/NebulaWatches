@@ -15,7 +15,6 @@ public class CustomWatchRequest {
     private String description;
     private Float retailPrice;
     private String email;
-    private byte[] image;
-    //private Blob image;
-    //private MultipartFile image;
+    //private byte[] image;
+    private MultipartFile image;
 }

@@ -1,6 +1,9 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.model;
 
+import jakarta.persistence.JoinColumn;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class StorageRequest {
@@ -14,5 +17,8 @@ public class StorageRequest {
     private float sellPrice;
     private Long clientId;
     private Long teamId;
+    private Date purchaseDate;
+    private Date sellDate;
+
 
 }

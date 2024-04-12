@@ -14,15 +14,18 @@
             <CardContent class="grid gap-4">
                 <div class="grid gap-2">
                     <Label for="username">Username</Label>
-                    <Input id="username" type="text" v-model="username" placeholder="ExampleUser" class="bg-gray-50" required />
+                    <Input id="username" type="text" v-model="username" placeholder="ExampleUser" class="bg-gray-50"
+                        required />
                 </div>
                 <div class="grid gap-2">
                     <Label for="email">Email</Label>
-                    <Input id="email" type="email" v-model="email" placeholder="example@gmail.com" class="bg-gray-50" required />
+                    <Input id="email" type="email" v-model="email" placeholder="example@gmail.com" class="bg-gray-50"
+                        required />
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" type="password" v-model="password" placeholder="••••••••" class="bg-gray-50" required />
+                    <Input id="password" type="password" v-model="password" placeholder="••••••••" class="bg-gray-50"
+                        required />
                 </div>
                 <Button class="w-full" @click="register">
                     Register
@@ -32,6 +35,27 @@
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
                         Registration failed, email alredy used!
+                    </AlertDescription>
+                </Alert>
+                <Alert variant="destructive" v-if="passwordShort">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Registration failed, password too short or too simple!
+                    </AlertDescription>
+                </Alert>
+                <Alert variant="destructive" v-if="emptyFields">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Registration failed, please fill all fields!
+                    </AlertDescription>
+                </Alert>
+                <Alert variant="destructive" v-if="emailNotValid">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Registration failed, please provide an correct email!
                     </AlertDescription>
                 </Alert>
             </CardContent>
@@ -56,6 +80,8 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertCircle } from 'lucide-vue-next'
 
 import axios from 'axios';
 import { ref } from 'vue';
@@ -68,20 +94,64 @@ const email = ref('');
 const password = ref('');
 const router = useRouter();
 const registerFailed = ref(false);
+const passwordShort = ref(false);
+const emailNotValid = ref(false);
+const emptyFields = ref(false);
 
 async function register() {
-    try {
-        const response = await axios.post(`${apiServerAddress}/auth/register`, {
-            username: username.value,
-            email: email.value,
-            password: password.value
-        });
-        const token = response.data.token;
-        localStorage.setItem('token', token);
-        router.push('/');
-    } catch (error) {
-        console.error('Registration failed:', error);
-        registerFailed.value = true;
+    if (!isNullOrEmpty(username.value) && !isNullOrEmpty(email.value) && !isNullOrEmpty(password.value)) {
+        emptyFields.value = false;
+        if (isPasswordValid(password.value)) {
+            passwordShort.value = false;
+            if (isEmailValid(email.value)) {
+                emailNotValid.value = false;
+                try {
+                    const response = await axios.post(`${apiServerAddress}/auth/register`, {
+                        username: username.value,
+                        email: email.value,
+                        password: password.value
+                    });
+                    const token = response.data.token;
+                    if (!isNullOrEmpty(token)) {
+                        localStorage.setItem('token', token);
+                        router.push('/');
+                    } else {
+                        registerFailed.value = true;
+                    }
+                } catch (error) {
+                    registerFailed.value = true;
+                }
+            } else {
+                emailNotValid.value = true;
+            }
+        } else {
+            passwordShort.value = true;
+        }
+
+    } else {
+        emptyFields.value = true;
     }
 }
+
+
+//Utils
+function isNullOrEmpty(str) {
+    return !str || str.trim() === '';
+}
+function isPasswordValid(password) {
+    if (password.length < 5) {
+        return false;
+    }
+
+    const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+    if (!complexityRegex.test(password)) {
+        return false;
+    }
+    return true;
+}
+function isEmailValid(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 </script>

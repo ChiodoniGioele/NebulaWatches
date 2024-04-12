@@ -22,7 +22,8 @@ public class BrandService {
     }
 
     public List<Brand> getBrands(){
-        return brandRepository.findAll();
+        //return brandRepository.findAll();
+        return brandRepository.findAllNotWatchEmptyBrands();
     }
 
     public Page<Brand> getBrandsPage(int page, int pageLength, String sortBy) {
@@ -30,6 +31,7 @@ public class BrandService {
             throw new IllegalArgumentException("Invalid page or length parameters");
         }
         Sort.Direction sortDirection = Sort.Direction.ASC;
-        return brandRepository.findAll(PageRequest.of(page, pageLength, sortDirection, sortBy));
+        //return brandRepository.findAll(PageRequest.of(page, pageLength, sortDirection, sortBy));
+        return brandRepository.findAllNotWatchEmptyBrands(PageRequest.of(page, pageLength, sortDirection, sortBy));
     }
 }

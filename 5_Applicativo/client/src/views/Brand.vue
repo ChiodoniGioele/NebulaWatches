@@ -1,14 +1,12 @@
 <template>
-    <div class="grid lg:grid-cols-5 min-h-screen">
-        <Sidebar class="hidden lg:block" />
-
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col">
-
-            <div class="px-4 py-6 lg:px-8">
+    <div class="flex h-screen"> 
+        <Sidebar />
+        <div class="flex flex-col w-full" > 
+            <div class="px-8 py-6">
 
                 <div class="flex w-full items-center gap-1.5">
-                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch ..." />
-                    <Button @click="router.push('/search')" type="submit" class="bg-blue-600"> Search </Button>
+                    <Input class="border-stone-900" @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch ..." />
+                    <Button @click="router.push('/search')" type="submit"> Search </Button>
                     <Button variant="outline" @click="toFavourite">
                         <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
                         <p class="m-2">Favourites</p>
@@ -39,7 +37,7 @@
                 </div>
                 
 
-                <div class="mt-12 px-1 w-full gap-7 flex items-center justify-center">
+                <div class="mt-12 px-1 w-full gap-7 flex items-center justify-center max-w-full">
                     <Pagination v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
                         <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
                         <PaginationFirst @click="fetchFamiliesOfBrand(1)" />

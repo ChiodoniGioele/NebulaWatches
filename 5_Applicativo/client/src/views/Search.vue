@@ -1,12 +1,12 @@
 <template>
-    <div class="grid lg:grid-cols-5 min-h-screen"> 
-        <Sidebar class="hidden lg:block" />
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col"> 
-            <div class="px-4 py-6 lg:px-8"> 
+    <div class="flex h-screen"> 
+        <Sidebar />
+        <div class="flex flex-col w-full" > 
+            <div class="px-8 py-6">
 
                 <div class="flex w-full items-center gap-1.5">
-                    <Input @change="fetchSearchedWatches(1)" v-model="query" id="email" type="text" placeholder="Search a watch ..." />
-                    <Button @click="fetchSearchedWatches(1)" type="submit" class="bg-blue-600"> Search </Button>
+                    <Input class="border-stone-900" @change="fetchFilteredWatches(1)" v-model="query" id="email" type="text" placeholder="Search a watch ..." />
+                    <Button @click="fetchFilteredWatches(1)" type="submit"> Search </Button>
                 </div>
                 
                 <div class="mt-5 flex gap-7 items-center">
@@ -22,7 +22,7 @@
                 <div class="mt-3 flex gap-2 flex-wrap">
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Brands ({{ brands.length }})</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Brands ({{ brands.length }})</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
                             <ScrollArea class="h-[40vh] p-2">
@@ -45,7 +45,7 @@
                     <div v-if="families.length > 0">
                         <Popover>
                             <PopoverTrigger>
-                                <Button variant="outline"> <span class="font-normal">Families ({{ families.length }})</span> </Button>
+                                <Button class="border-stone-900" variant="outline"> <span class="font-normal">Families ({{ families.length }})</span> </Button>
                             </PopoverTrigger>
                             <PopoverContent class="w-auto">
                                 <ScrollArea class="h-[40vh] p-2">
@@ -70,7 +70,7 @@
 
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Materials ({{ materials.length }})</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Materials ({{ materials.length }})</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
                             <ScrollArea class="h-[40vh] p-2">
@@ -92,10 +92,10 @@
 
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Case shapes ({{ shapes.length }})</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Case shapes ({{ shapes.length }})</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
-                            <ScrollArea class="h-[40vh] p-2">
+                            <ScrollArea class="max-h-[40vh] p-2"> <!-- Set max-height instead of fixed height -->
                                 <div v-for="shape in shapes" :key="shape.name" class="flex items-center space-x-2 mb-3">
                                     <Checkbox v-if="shapesSelected.includes(shape)" :id="`${shape.name}-checkbox`" @click="handleShapesSelection(shape)" checked/>
                                     <Checkbox v-else :id="`${shape.name}-checkbox`" @click="handleShapesSelection(shape)"/>
@@ -113,16 +113,16 @@
                         </PopoverContent>
                     </Popover>
 
+
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Indexes ({{ indexes.length }})</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Indexes ({{ indexes.length }})</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
-                            <ScrollArea class="h-[40vh] p-2">
+                            <ScrollArea class="max-h-[40vh] p-2"> <!-- Set max-height instead of fixed height -->
                                 <div v-for="indexes_name in indexes" :key="indexes_name.name" class="flex items-center space-x-2 mb-3">
                                     <Checkbox v-if="indexesSelected.includes(indexes_name)" :id="`${indexes_name.name}-checkbox`" @click="handleIndexesSelection(indexes_name)" checked/>
                                     <Checkbox v-else :id="`${indexes_name.name}-checkbox`" @click="handleIndexesSelection(indexes_name)"/>
-                                    
 
                                     <label
                                     :for="`${indexes_name.name}-checkbox`"
@@ -130,15 +130,15 @@
                                     >
                                     {{ indexes_name.name }}
                                     </label>
-                                    
                                 </div>
                             </ScrollArea>
                         </PopoverContent>
                     </Popover>
 
+
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Dial colors ({{ dialColors.length }})</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Dial colors ({{ dialColors.length }})</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
                             <ScrollArea class="h-[40vh] p-2">
@@ -160,10 +160,10 @@
 
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Dial finishes ({{ dialFinishes.length }})</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Dial finishes ({{ dialFinishes.length }})</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
-                            <ScrollArea class="h-[40vh] p-2">
+                            <ScrollArea class="max-h-[40vh] p-2"> <!-- Set max-height instead of fixed height -->
                                 <div v-for="dialFinish in dialFinishes" :key="dialFinish.name" class="flex items-center space-x-2 mb-3">
                                     <Checkbox v-if="dialFinishesSelected.includes(dialFinish)" :id="`${dialFinish.name}-checkbox`" @click="handleDialFinishesSelection(dialFinish)" checked/>
                                     <Checkbox v-else :id="`${dialFinish.name}-checkbox`" @click="handleDialFinishesSelection(dialFinish)"/>
@@ -180,19 +180,20 @@
                         </PopoverContent>
                     </Popover>
 
+
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Diameter mm</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Diameter mm</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
                             <div class="flex gap-4 p-3 text-sm">
                                 <div>
                                     <Label for="min_diameter">Min.</Label>
-                                    <Input class="mt-4" id="min_diameter" type="number" min="0" placeholder="Any" />
+                                    <Input class="mt-4" id="min_diameter" type="number" min="0" v-model="minDiameter" @change="fetchFilteredWatches(1);" placeholder="Any" />
                                 </div>
                                 <div>
                                     <Label for="max_diameter">Max.</Label>
-                                    <Input class="mt-4" id="max_diameter" type="number" min="0" placeholder="Any" />
+                                    <Input class="mt-4" id="max_diameter" type="number" min="0" v-model="maxDiameter" @change="fetchFilteredWatches(1);" placeholder="Any" />
                                 </div>
                             </div>
                             
@@ -201,42 +202,60 @@
 
                     <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Water resistance m</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Water resistance m</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
                             <div class="flex gap-4 p-3 text-sm">
                                 <div>
-                                    <Label for="min_diameter">Min.</Label>
-                                    <Input class="mt-4" id="min_diameter" type="number" min="0" placeholder="Any" />
+                                    <Label for="min_water_resistance">Min.</Label>
+                                    <Input class="mt-4" id="min_water_resistance" type="number" min="0" v-model="minWaterResistance" @change="fetchFilteredWatches(1);" placeholder="Any" />
                                 </div>
                                 <div>
-                                    <Label for="max_diameter">Max.</Label>
-                                    <Input class="mt-4" id="max_diameter" type="number" min="0" placeholder="Any" />
+                                    <Label for="max_water_resistance">Max.</Label>
+                                    <Input class="mt-4" id="max_water_resistance" type="number" min="0" v-model="maxWaterResistance" @change="fetchFilteredWatches(1);" placeholder="Any" />
                                 </div>
                             </div>
                             
                         </PopoverContent>
                     </Popover>
 
-                    <Popover>
+                    <!-- <Popover>
                         <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Production time</span> </Button>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Production time</span> </Button>
                         </PopoverTrigger>
                         <PopoverContent class="w-auto">
                             <div class="flex gap-4 p-3 text-sm">
                                 <div>
-                                    <Label for="min_diameter">From year</Label>
-                                    <Input class="mt-4" id="min_diameter" type="number" min="0" placeholder="Any" />
+                                    <Label for="min_production_year">From year</Label>
+                                    <Input class="mt-4" id="min_production_year" type="number" min="0" v-model="minProductionTimeYear" placeholder="Any" />
                                 </div>
                                 <div>
-                                    <Label for="max_diameter">Until year</Label>
-                                    <Input class="mt-4" id="max_diameter" type="number" min="0" placeholder="Any" />
+                                    <Label for="max_production_year">Until year</Label>
+                                    <Input class="mt-4" id="max_production_year" type="number" min="0" v-model="maxProductionTimeYear" placeholder="Any" />
+                                </div>
+                            </div>
+                            
+                        </PopoverContent>
+                    </Popover> -->
+
+                    <Popover>
+                        <PopoverTrigger>
+                            <Button class="border-stone-900" variant="outline"> <span class="font-normal">Price</span> </Button>
+                        </PopoverTrigger>
+                        <PopoverContent class="w-auto">
+                            <div class="flex gap-4 p-3 text-sm">
+                                <div>
+                                    <Label for="min_price">Min.</Label>
+                                    <Input class="mt-4" id="min_price" type="number" min="0" v-model="minPrice" @change="fetchFilteredWatches(1);" placeholder="Any" />
+                                </div>
+                                <div>
+                                    <Label for="max_price">Max.</Label>
+                                    <Input class="mt-4" id="max_price" type="number" min="0" v-model="maxPrice" @change="fetchFilteredWatches(1);" placeholder="Any" />
                                 </div>
                             </div>
                             
                         </PopoverContent>
                     </Popover>
-                    
                 </div>
 
                
@@ -250,23 +269,23 @@
                     <WatchCard v-for="watch in watchesObjects" :key="watch.reference" :watch="watch" />
                 </div>
 
-                <div class="mt-12 px-1 w-full gap-7 flex items-center justify-center">
+                <div class="mt-12 px-1 w-full gap-7 flex items-center justify-center max-w-full">
                     <Pagination v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
                         <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full" >
-                            <PaginationFirst @click="fetchSearchedWatches(1)" />
-                            <PaginationPrev @click="fetchSearchedWatches(actualPage - 1)"/>
+                            <PaginationFirst @click="fetchFilteredWatches(1)" />
+                            <PaginationPrev @click="fetchFilteredWatches(actualPage - 1)"/>
 
                             <template v-for="(item, index) in items">
                                 <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
-                                    <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchSearchedWatches(item.value)">
+                                    <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'" @click="fetchFilteredWatches(item.value)">
                                         {{ item.value }}
                                     </Button>
                                 </PaginationListItem>
                                 <PaginationEllipsis v-else :key="item.type" :index="index" />
                             </template>
 
-                            <PaginationNext @click="fetchSearchedWatches(actualPage + 1)" />
-                            <PaginationLast  @click="fetchSearchedWatches(totalPages)" />
+                            <PaginationNext @click="fetchFilteredWatches(actualPage + 1)" />
+                            <PaginationLast  @click="fetchFilteredWatches(totalPages)" />
                         </PaginationList>
                     </Pagination>
                 </div>
@@ -319,6 +338,30 @@ const dialColorselected = ref([])
 const dialFinishes = ref([])
 const dialFinishesSelected = ref([])
 
+// const minDiameter = ref(0)
+// const maxDiameter = ref(1000)
+
+// const minWaterResistance = ref(0)
+// const maxWaterResistance = ref(30000)
+
+// const minProductionTimeYear = ref(0)
+// const maxProductionTimeYear = ref(2100)
+
+// const minPrice = ref(0)
+// const maxPrice = ref(100000000)
+
+const minDiameter = ref(null)
+const maxDiameter = ref(null)
+
+const minWaterResistance = ref(null)
+const maxWaterResistance = ref(null)
+
+const minProductionTimeYear = ref(null)
+const maxProductionTimeYear = ref(null)
+
+const minPrice = ref(null)
+const maxPrice = ref(null)
+
 async function fetchSearchedWatches(pageRequestValue) {
     watchesObjects.value = []
     try {
@@ -353,11 +396,7 @@ async function fetchFilteredWatches(pageRequestValue) {
     try {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         isLoading.value = true;
-
-        // Serialize materials array into comma-separated values
-        const serializedMaterials = materialsSelected.value.map(material => material.name).join(',');
-
-        // Prepare the parameters object
+ 
         const params = {
             query: query.value,
             brands: brandsSelected.value.map(brand => brand.name).join(','), // Serialize brands array
@@ -368,9 +407,22 @@ async function fetchFilteredWatches(pageRequestValue) {
             dialFinishes: dialFinishesSelected.value.map(dialFinish => dialFinish.name).join(','),
             dialColors: dialColorselected.value.map(dialColor => dialColor.name).join(','),
 
-            materials: serializedMaterials, // Serialized materials string
-            page: pageRequestValue - 1, // Adjust page value for zero-based indexing
-            sortBy: 'name' // Example sort criteria
+            materials: materialsSelected.value.map(material => material.name).join(','), 
+
+            minDiameter: minDiameter.value,
+            maxDiameter: maxDiameter.value,
+
+            minWaterResistance: minWaterResistance.value,
+            maxWaterResistance: maxWaterResistance.value,
+
+            minProductionTimeYear: minProductionTimeYear.value,
+            maxProductionTimeYear: maxProductionTimeYear.value,
+
+            minPrice: minPrice.value,
+            maxPrice: maxPrice.value,
+
+            page: pageRequestValue - 1, 
+            sortBy: 'name' 
         };
 
         const response = await axios.get(`${apiServerAddress}/v1/watches/filter`, {
@@ -516,7 +568,6 @@ function removeArrayItem(array, element) {
 function handleBrandSelection(brand) {
     if (!brandsSelected.value.includes(brand)) {
         brandsSelected.value.push(brand);
-
     } else {
         brandsSelected.value = removeArrayItem(brandsSelected.value, brand);
         fetchSelectedBrandsFamilies()
@@ -583,7 +634,7 @@ function handleDialFinishesSelection(dialFinish) {
 
 onMounted(async () => {
     document.getElementById('email').focus();
-    fetchSearchedWatches(1);
+    fetchFilteredWatches(1);
     fetchBrandsNames();
     fetchWatchMaterials();
     fetchWatchShapes();

@@ -43,10 +43,10 @@ public class FamilyController {
     @GetMapping(path = "{familyId}/rndimage")
     public ResponseEntity<byte[]> getFamilyRandomImage(@PathVariable("familyId") int familyId) {
         try {
-            List<WatchDTO> watches = watchService.getWatchesByFamily(familyId);
-            WatchDTO randomChoice = watches.get(rand.nextInt(0, watches.size()));
-            String randomWatchReference = randomChoice.getReference();
-            byte[] imageBytes = watchService.getWatchImageBytes(randomWatchReference);
+            List<String> watchesRefs = watchService.getWatchesByFamilyOptimized(familyId);
+            String randomRefChoice = watchesRefs.get(rand.nextInt(0, watchesRefs.size()));
+
+            byte[] imageBytes = watchService.getWatchImageBytes(randomRefChoice);
             return ResponseEntity.ok(imageBytes);
         } catch (WatchNotFoundException e) {
             return ResponseEntity.notFound().build();

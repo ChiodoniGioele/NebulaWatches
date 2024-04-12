@@ -1,12 +1,8 @@
 <template>
-  <div class="grid lg:grid-cols-5 min-h-screen">
-    <Sidebar class="hidden lg:block" />
-
-    <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col">
-
-      <div class="px-4 py-6 lg:px-8">
-
-
+  <div class="flex h-screen">
+    <Sidebar />
+    <div class="flex flex-col w-full">
+      <div class="py-6 px-8">
         <div class="mt-5 flex gap-7 items-center">
           <div>
             <Button @click="$router.back()" variant="secondary">
@@ -16,7 +12,7 @@
           </div>
 
           <div class="w-full flex gap-7 items-center"></div>
-          <Dialog>
+          <Dialog :open="restOpen" @update:open="setNotVisible">
             <DialogTrigger as-child>
               <Button variant="outline">
                 New Client
@@ -60,18 +56,28 @@
                 </div>
 
               </div>
+              <Alert variant="destructive" v-if="emptyFields">
+                <AlertCircle class="w-4 h-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed, please fill name, surname and email!
+                </AlertDescription>
+              </Alert>
+              <Alert variant="destructive" v-if="emailNotValid">
+                <AlertCircle class="w-4 h-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed, please provide a valid email!
+                </AlertDescription>
+              </Alert>
               <DialogFooter>
-                <DialogClose as-child>
-                  <Button @click="saveClient">
-                    Save
-                  </Button>
-                </DialogClose>
+                <Button @click="saveClient">
+                  Save
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
-
-
       </div>
 
 
@@ -80,12 +86,6 @@
           <h1>grafico</h1>
         </div>
       </div>
-
-      <!-- <div class="mt-5 flex flex-wrap gap-5">
-                    <WatchFamilyCard v-for="family in families" :key="family.id" :family="family"
-                        :brandName="brandName" />
-                </div> -->
-
 
       <div class="mt-12 w-full gap-7 flex items-center justify-center px-10 ">
 
@@ -172,8 +172,7 @@
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your
-                        account and remove your data from our servers.
+                        This action cannot be undone. This will delete the client and all of his storage data.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
@@ -195,10 +194,12 @@
   </div>
 
 
+
 </template>
 
 <script setup>
-
+import { AlertCircle } from 'lucide-vue-next'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 import {
   Dialog,
@@ -246,6 +247,10 @@ const route = useRoute();
 const router = useRouter();
 const clients = ref([]);
 const emailUser = ref('');
+const user = ref();
+const emailNotValid = ref(false);
+const emptyFields = ref(false);
+const restOpen = ref(false);
 
 
 async function fetchClients(email) {
@@ -273,33 +278,45 @@ const phone = ref('');
 const saveFailed = ref(false);
 
 async function saveClient() {
-
-  const user = {
+  const newClient = {
     name: name.value,
     surname: surname.value,
     email: email.value,
     phone: phone.value,
-    notes: ""
+    notes: "",
+    userEmail: emailUser.value
+  }
+  emptyFields.value = false;
+  emailNotValid.value = false;
+  if (isNullOrEmpty(newClient.name) || isNullOrEmpty(newClient.surname) || isNullOrEmpty(newClient.email)) {
+    emptyFields.value = true;
   }
 
-  try {
-    const response = await axios.post(`${apiServerAddress}/v1/clients/add`, user,
-      {
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('token'),
-        },
-      });
-      fetchClients(emailUser.value);
+  if (!emptyFields.value) {
+    if (isEmailValid(newClient.email)) {
+      try {
+        const response = await axios.post(`${apiServerAddress}/v1/clients/add`, newClient,
+          {
+            headers: {
+              Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+          });
+          setNotVisible();
+        fetchClients(emailUser.value);
+        console.log("Client saved!", response.data)
 
-  } catch (error) {
-    console.log(`${apiServerAddress}/v1/clients/add`);
-    console.error('Registration failed:', error);
-    saveFailed.value = true;
+      } catch (error) {
+        console.error('Registration failed:', error);
+        saveFailed.value = true;
+      }
+      name.value = null;
+      surname.value = null;
+      email.value = null;
+      phone.value = null;
+    } else {
+      emailNotValid.value = true;
+    }
   }
-  name.value = null;
-  surname.value = null;
-  email.value = null;
-  phone.value = null;
 }
 
 
@@ -330,7 +347,7 @@ async function mod(id) {
         },
       });
 
-      fetchClients(emailUser.value);
+    fetchClients(emailUser.value);
 
   } catch (error) {
     console.error('Registration failed:', error);
@@ -347,7 +364,7 @@ async function del(id) {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       });
-      fetchClients(emailUser.value);
+    fetchClients(emailUser.value);
 
   } catch (error) {
 
@@ -356,6 +373,17 @@ async function del(id) {
   }
 }
 
+//Utils
+function isNullOrEmpty(str) {
+  return !str || str.trim() === '';
+}
+function isEmailValid(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+function setNotVisible() {
+  restOpen.value = !restOpen.value;
+}
 
 
 </script>

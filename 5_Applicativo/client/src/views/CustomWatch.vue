@@ -1,10 +1,8 @@
 <template>
-    <div class="grid lg:grid-cols-5 min-h-screen">
-        <Sidebar class="hidden lg:block" />
-
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col">
-
-            <div class="px-4 py-6 lg:px-8">
+    <div class="flex h-screen"> 
+        <Sidebar />
+        <div class="flex flex-col w-full" > 
+            <div class="px-8 py-6">
 
                 <div class="flex w-full items-center gap-1.5">
                     <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text"
@@ -38,7 +36,7 @@
                                     </div>
                                     <div class="grid gap-2">
                                         <div class="grid grid-cols-3 items-center gap-4">
-                                            <Select v-model="selectedStatus" @change="testing">
+                                            <Select v-model="selectedStatus">
                                                 <SelectTrigger class="w-[180px]">
                                                     <SelectValue placeholder="Select status" />
                                                 </SelectTrigger>
@@ -47,7 +45,7 @@
                                                         <SelectLabel>Status</SelectLabel>
                                                         <SelectItem value="Owned">Owned</SelectItem>
                                                         <SelectItem value="Sold">Sold</SelectItem>
-                                                        <SelectItem value="Shipped">Shipped</SelectItem>
+                                                        <!--<SelectItem value="Shipped">Shipped</SelectItem>-->
                                                     </SelectGroup>
                                                 </SelectContent>
                                             </Select>
@@ -59,10 +57,57 @@
                                     <div class="w-3/4">
                                         <Input v-model="buyPrice" type="number" placeholder="Bought for" />
                                     </div>
+                                    <div class="w-3/4">
+                                        <Input v-model="purchaseDate" type="date" placeholder="Purchase Date" />
+                                    </div>
                                     <div class="w-3/4" v-if="selectedStatus == 'Sold'">
                                         <Input v-model="sellPrice" type="number" placeholder="Sold for" />
                                     </div>
-                                    <div>Selected: {{ selectedStatus }}</div>
+                                    <div class="w-3/4" v-if="selectedStatus == 'Sold'">
+                                        <Input v-model="sellDate" type="date" placeholder="Sell Date" />
+                                    </div>
+                                    <div class="w-3/4" v-if="selectedStatus == 'Sold'">
+                                        <Select v-model="clientId">
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select client" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Clients</SelectLabel>
+                                                    <SelectItem v-for="client in clients" :key="client.id"
+                                                        :value="client.id">{{ client.name }}</SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div class="w-3/4" v-if="selectedStatus == 'Sold'">
+                                        <Select v-model="teamId">
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select team member" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectGroup>
+                                                    <SelectLabel>Members</SelectLabel>
+                                                    <SelectItem v-for="team in teams" :key="team.id" :value="team.id">{{team.name }}</SelectItem>
+                                                </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+
+                                    <Alert variant="destructive" v-if="invalidData">
+                                        <AlertCircle class="w-4 h-4" />
+                                        <AlertTitle>Error</AlertTitle>
+                                        <AlertDescription>
+                                            Please insert valid data!
+                                        </AlertDescription>
+                                    </Alert>
+                                    <Alert variant="destructive" v-if="invalidDate">
+                                        <AlertCircle class="w-4 h-4" />
+                                        <AlertTitle>Error</AlertTitle>
+                                        <AlertDescription>
+                                            The sell date must be after the purchase date!
+                                        </AlertDescription>
+                                    </Alert>
 
                                     <Alert variant="success" v-if="storageSuccesfull">
                                         <CheckCircle class="w-4 h-4" />
@@ -108,6 +153,20 @@
             </div>
         </div>
     </div>
+    <AlertDialog :open="showDialogPrice" onOpenChange="">
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Attention!</AlertDialogTitle>
+                <AlertDialogDescription>
+                    The sell price is lower than the buy price! Is this correct?
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel @click="res()">Cancel</AlertDialogCancel>
+                <AlertDialogAction @click="redo()">Yes</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
 </template>
 
 <script setup>
@@ -118,6 +177,7 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { apiServerAddress } from '@/main.ts'
 import { CheckCircle } from 'lucide-vue-next';
+import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import {
     Popover,
@@ -134,6 +194,18 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -148,9 +220,19 @@ const selectedStatus = ref('Owned');
 const selectedQuantity = ref();
 const buyPrice = ref();
 const sellPrice = ref();
+const clientId = ref();
+const teamId = ref();
+const purchaseDate = ref();
+const sellDate = ref();
 const storageSuccesfull = ref(false);
+const invalidData = ref(false);
+const invalidDate = ref(false);
+const showDialogPrice = ref(false);
 const email = ref('');
 const selector = route.params.sel;
+const clients = ref([]);
+const teams = ref([]);
+const assertClient = ref(false);
 
 async function fetchWatch() {
     try {
@@ -190,30 +272,118 @@ async function addToStorage() {
         user_email: email.value,
         watch_reference: "",
         status: selectedStatus.value,
-        quantity: selectedQuantity.value,
+        quantity: 1,
         custom_watch_reference: reference,
-        buy_price: buyPrice.value,
-        sell_price: 0
+        buyPrice: 0,
+        sellPrice: 0,
+        clientId: null,
+        teamId: null,
+        purchaseDate: null,
+        sellDate: null
     };
-    if (sellPrice.value == undefined) {
-        newStorage.sell_price = 0;
+    invalidData.value = false;
+    storageSuccesfull.value = false;
+    if (isValidPrice(buyPrice.value)) {
+        newStorage.buyPrice = buyPrice.value;
     } else {
-        newStorage.sell_price = sellPrice.value;
+        invalidData.value = true;
+    }
+    if (isValidPrice(selectedQuantity.value)) {
+        newStorage.selectedQuantity = selectedQuantity.value;
+    } else {
+        invalidData.value = true;
+    }
+    if (sellPrice.value != undefined && isValidPrice(sellPrice.value)) {
+        newStorage.sellPrice = sellPrice.value;
+    } else {
+        if (sellPrice.value != undefined) {
+            invalidData.value = true;
+        }
+    }
+    if (teamId.value != undefined) {
+        newStorage.teamId = teamId.value;
+    }
+    if (clientId.value != undefined) {
+        newStorage.clientId = clientId.value;
     }
 
-    try {
-        const response = await axios.post(`${apiServerAddress}/v1/storage/addWatchToStorage`, newStorage, {
-            headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-        });
-        storageSuccesfull.value = true;
-        console.log('Watch added to storage. ', response.data);
-    } catch (error) {
-        console.error('Failed to add watch to storage:', error);
+    if (purchaseDate.value != undefined && isValidDate(purchaseDate.value)) {
+        newStorage.purchaseDate = purchaseDate.value;
+    } else {
+        invalidData.value = true;
+    }
+
+    if (sellDate.value != undefined && isValidDate(sellDate.value)) {
+        newStorage.sellDate = sellDate.value;
+    } else {
+        if (sellDate.value != undefined) {
+            invalidData.value = true;
+        }
+    }
+
+    if (!invalidData.value) {
+        var flag = true;
+        var flag2 = true;
+        if (newStorage.status == "Sold") {
+            flag = soldAfterPurchase(newStorage.sellDate, newStorage.purchaseDate);
+            flag2 = soldForMoreOrEqual(newStorage.sellPrice, newStorage.buyPrice);
+        }
+        if (flag) {
+            invalidDate.value = false;
+            if (flag2 || assertClient.value) {
+                showDialogPrice.value = false;
+                assertClient.value = false;
+                try {
+                    const response = await axios.post(`${apiServerAddress}/v1/storage/addWatchToStorage`, newStorage, {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('token'),
+                        },
+                    });
+                    storageSuccesfull.value = true;
+                    console.log('Custom watch added to storage. ', response.data);
+                } catch (error) {
+                    console.log(newStorage)
+                    console.error('Failed to add custom watch to storage:', error);
+                }
+            } else {
+                showDialogPrice.value = true;
+            }
+
+        } else {
+            invalidDate.value = true;
+        }
     }
 }
 
+async function getClients(email) {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            });
+
+        clients.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch clients:', error);
+    }
+}
+
+async function getTeam(email) {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/team/getTeam/${email}`,
+            {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+            });
+
+        teams.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch clients:', error);
+    }
+}
 
 onMounted(async () => {
     const token = localStorage.getItem('token');
@@ -224,10 +394,33 @@ onMounted(async () => {
 
     fetchWatch();
     fetchWatchImage();
+    getClients(email.value);
+    getTeam(email.value);
 });
 
-const testing = () => {
-    console.log('Selected status changed to:', selectedStatus.value);
-};
 
+//Utils
+function isNullOrEmpty(str) {
+    return !str || str.trim() === '';
+}
+function isValidDate(date) {
+    const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
+    return dateFormat.test(date);
+}
+function soldAfterPurchase(dateSold, datePurchase) {
+    return dateSold > datePurchase;
+}
+function soldForMoreOrEqual(priceSold, pricePurchase) {
+    return priceSold >= pricePurchase;
+}
+function isValidPrice(price) {
+    return !isNaN(price) && price >= 0 && price != '';;
+}
+function redo() {
+    assertClient.value = true;
+    addToStorage();
+}
+function res() {
+    showDialogPrice.value = false;
+}
 </script>

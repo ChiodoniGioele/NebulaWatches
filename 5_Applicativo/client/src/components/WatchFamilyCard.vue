@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center border border-gray-200 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
+     <div class="text-center border-stone-500 border-2 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] pt-2">
         <router-link class="block p-5" :to="`/brand/${brandName}/family/${family.id}/watches`">
             <div>
                 <div v-if="!isLoading">

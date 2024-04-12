@@ -12,3 +12,6 @@ errors.log
 
 #Ignora file tmp
 ~.tmp
+
+#Ignora db
+*.db

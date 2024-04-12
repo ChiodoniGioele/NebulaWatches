@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -25,4 +26,12 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     @Modifying
     @Query("UPDATE Storage s SET s.quantity = ?1 WHERE id = ?2")
     void updateQuantityById(int quantity, Long id);
+
+    @Query("SELECT SUM(s.quantity) FROM Storage s WHERE s.team.id = ?1")
+    int sumQuantityByTeam(Long teamId);
+
+    //Query scritta in mysql e non in JPA a causa di date_sub()
+    @Query(value = "SELECT SUM(s.quantity) FROM storage s WHERE s.team_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3", nativeQuery = true)
+    int sumQuantityByTeamMonth(Long teamId, LocalDate begin, LocalDate end);
+
 }

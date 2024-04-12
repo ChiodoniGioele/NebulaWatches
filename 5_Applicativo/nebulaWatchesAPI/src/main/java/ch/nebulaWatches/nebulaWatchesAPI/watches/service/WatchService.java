@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -57,6 +59,14 @@ public class WatchService {
                 .map(Watch::toDTO)
                 .collect(Collectors.toList());
         return watchesDTOs;
+    }
+
+    public List<String> getWatchesByBrandOptimized(String brandName) {
+        return watchRepository.findByBrandOptimized(brandName);
+    }
+
+    public List<String> getWatchesByFamilyOptimized(int familyId){
+        return watchRepository.findByFamilyOptimized(familyId);
     }
 
 
@@ -114,7 +124,10 @@ public class WatchService {
 
     public Page<Watch> findByCriteria(String query, List<Brand> brands, List<Family> families,
                                         List<Material> materials, List<WatchShape> watchShapes, List<WatchIndexes> watchIndexes,
-                                      List<DialColor> dialColors, List<DialFinish> dialFinishes, int page, int size, String sortBy) {
+                                      List<DialColor> dialColors, List<DialFinish> dialFinishes,
+                                      float minDiameter, float maxDiameter, float minWaterResistance, float maxWaterResistance,
+                                      int minProductionTimeYear, int maxProductionTimeYear, Float minPrice,
+                                      Float maxPrice, int page, int size, String sortBy) {
         // Implement logic to fetch filtered watches based on the provided criteria
         Sort.Direction sortDirection = Sort.Direction.ASC;
         Pageable paging = PageRequest.of(page, size, sortDirection, sortBy);
@@ -175,8 +188,22 @@ public class WatchService {
             dialFinishesNames = null;
         }
 
-
         //return watchRepository.findByCriteria(query, brands, families, materialNames, paging);
-        return watchRepository.findByCriteria(query, brandNames, familyIds, materialNames, watchShapesNames, watchIndexesNames, dialColorsNames, dialFinishesNames, paging);
+        /*
+        return watchRepository.findByCriteria(query, brandNames, familyIds, materialNames, watchShapesNames,
+                watchIndexesNames, dialColorsNames, dialFinishesNames, minDiameter, maxDiameter, minWaterResistance,
+                maxWaterResistance, minProductionTimeYear, maxProductionTimeYear, minPrice, maxPrice, paging);
+
+         */
+        if(minPrice != null || maxPrice != null){
+            return watchRepository.findByCriteria(query, brandNames, familyIds, materialNames, watchShapesNames,
+                    watchIndexesNames, dialColorsNames, dialFinishesNames , minDiameter, maxDiameter, minWaterResistance, maxWaterResistance, minPrice, maxPrice, paging);
+        } else {
+            return watchRepository.findByCriteria(query, brandNames, familyIds, materialNames, watchShapesNames,
+                    watchIndexesNames, dialColorsNames, dialFinishesNames , minDiameter, maxDiameter, minWaterResistance, maxWaterResistance, paging);
+        }
+
+        // minPrice, maxPrice
+        // minDiameter, maxDiameter, minWaterResistance, maxWaterResistance
     }
 }

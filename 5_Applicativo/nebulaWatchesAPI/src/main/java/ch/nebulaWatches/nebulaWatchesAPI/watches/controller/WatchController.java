@@ -95,7 +95,15 @@ public class WatchController {
             @RequestParam(required = false) List<WatchIndexes> watchIndexes,
             @RequestParam(required = false) List<DialColor> dialColors,
             @RequestParam(required = false) List<DialFinish> dialFinishes,
-            @RequestParam(required = false) List<Material> materials) {
+            @RequestParam(required = false) List<Material> materials,
+            @RequestParam(defaultValue = "0") float minDiameter,
+            @RequestParam(defaultValue = "1000") float maxDiameter,
+            @RequestParam(defaultValue = "0") float minWaterResistance,
+            @RequestParam(defaultValue = "30000") float maxWaterResistance,
+            @RequestParam(defaultValue = "0") int minProductionTimeYear,
+            @RequestParam(defaultValue = "2100") int maxProductionTimeYear,
+            @RequestParam(required = false) Float minPrice,
+            @RequestParam(required = false) Float maxPrice) {
         // Convert list of string IDs to list of objects (e.g., Brand, Family, Material)
         /*
         List<Brand> brandObjects = null;
@@ -124,7 +132,11 @@ public class WatchController {
             }
         }*/
 
-        Page<Watch> watches = watchService.findByCriteria(query, brands, families, materials, watchShapes, watchIndexes, dialColors, dialFinishes, page, pageSize, sortBy);
+        Page<Watch> watches = watchService.findByCriteria(query, brands, families, materials, watchShapes, watchIndexes,
+                dialColors, dialFinishes, minDiameter, maxDiameter, minWaterResistance,
+                maxWaterResistance, minProductionTimeYear, maxProductionTimeYear, minPrice, maxPrice,
+                page, pageSize, sortBy);
+
         return ResponseEntity.ok(watches);
     }
 

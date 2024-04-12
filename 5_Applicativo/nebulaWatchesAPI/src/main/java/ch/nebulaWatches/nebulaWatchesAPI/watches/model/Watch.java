@@ -8,18 +8,23 @@ import org.hibernate.annotations.JdbcType;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "watch")
+@Table(name = "watch", indexes = {
+        @Index(name = "idx_watch_search", columnList = "reference, name, description"),
+        @Index(name = "idx_watch_reference", columnList = "reference")
+})
 public class Watch {
     @Id
     private String reference;
     private Float retailPrice;
     private String name;
-    private Integer movementId;
-    private String movementName;
+    // private Integer movementId;
+    // private String movementName;
     private String productionTime;
     private String isLimitedTo;
     @Column(columnDefinition = "TINYINT(1)")
@@ -35,6 +40,9 @@ public class Watch {
     @Lob
     private Blob image;
 
+    @ManyToOne
+    @JoinColumn(name = "movement_id")
+    private Movement movement;
 
     @ManyToOne
     @JoinColumn(name = "family_id")
@@ -80,6 +88,10 @@ public class Watch {
     @OneToMany(mappedBy = "watch", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WatchUsesMaterials> materialsUsed;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "watch", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WatchHasPrice> hasPrices;
+
     // Getters and setters
 
     public String getReference() {
@@ -104,22 +116,6 @@ public class Watch {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getMovementId() {
-        return movementId;
-    }
-
-    public void setMovementId(Integer movementId) {
-        this.movementId = movementId;
-    }
-
-    public String getMovementName() {
-        return movementName;
-    }
-
-    public void setMovementName(String movementName) {
-        this.movementName = movementName;
     }
 
     public String getProductionTime() {
@@ -287,6 +283,29 @@ public class Watch {
         return image;
     }
 
+    public List<WatchHasPrice> getHasPrices() {
+        return hasPrices;
+    }
+
+    public void setHasPrices(List<WatchHasPrice> hasPrices) {
+        this.hasPrices = hasPrices;
+    }
+
+    public void addPrice(WatchHasPrice price) {
+        if (this.hasPrices == null) {
+            this.hasPrices = new ArrayList<>();
+        }
+        this.hasPrices.add(price);
+        price.setWatch(this);
+    }
+
+    public void removePrice(WatchHasPrice price) {
+        if (this.hasPrices != null) {
+            this.hasPrices.remove(price);
+            price.setWatch(null);
+        }
+    }
+
     @JsonIgnore
     public byte[] getImageBytes() throws SQLException {
         int blobLength = (int) image.length();
@@ -303,8 +322,8 @@ public class Watch {
         watchDTO.setReference(this.reference);
         watchDTO.setRetailPrice(this.retailPrice);
         watchDTO.setName(this.name);
-        watchDTO.setMovementId(this.movementId);
-        watchDTO.setMovementName(this.movementName);
+        //watchDTO.setMovementId(this.movementId);
+        //watchDTO.setMovementName(this.movementName);
         watchDTO.setProductionTime(this.productionTime);
         watchDTO.setIsLimitedTo(this.isLimitedTo);
         watchDTO.setIsBackOpen(this.isBackOpen);
@@ -322,6 +341,17 @@ public class Watch {
             watchDTO.setMaterialsUsedNames(materialNames);
         }
 
+        if (this.hasPrices != null) {
+            List<Float> prices = new ArrayList<>();
+            List<Date> dates = new ArrayList<>();
+            for (WatchHasPrice price : this.hasPrices) {
+                prices.add(price.getPrice());
+                dates.add(price.getDate());
+            }
+            watchDTO.setPrices(prices);
+            watchDTO.setDates(dates);
+        }
+
         watchDTO.setFamily(this.family != null ? this.family.getName() : null);
         watchDTO.setCaseMaterial(this.caseMaterial != null ? this.caseMaterial.getName() : null);
         watchDTO.setBezelMaterial(this.bezelMaterial != null ? this.bezelMaterial.getName() : null);
@@ -333,6 +363,7 @@ public class Watch {
         watchDTO.setWatchIndexes(this.watchIndexes != null ? this.watchIndexes.getName() : null);
         watchDTO.setHands(this.hands != null ? this.hands.getName() : null);
         watchDTO.setBrand(family != null ? family.getBrand().getName() : null);
+        watchDTO.setMovement(movement != null ? movement.getName() : null);
 
         return watchDTO;
     }

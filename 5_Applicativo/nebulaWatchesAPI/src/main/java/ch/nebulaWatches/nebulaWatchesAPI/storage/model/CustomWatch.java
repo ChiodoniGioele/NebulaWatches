@@ -16,6 +16,7 @@ import java.sql.SQLException;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomWatch {
+
     @Id
     private String reference;
     private String name;

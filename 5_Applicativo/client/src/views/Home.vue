@@ -1,12 +1,12 @@
 <template>
-    <div class="grid lg:grid-cols-5 min-h-screen"> 
-        <Sidebar class="hidden lg:block" />
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col" > 
-            <div class="px-4 py-6 lg:px-8"> 
+    <div class="flex h-screen"> 
+        <Sidebar />
+        <div class="flex flex-col w-full" > 
+            <div class="px-8 py-6"> 
 
                 <div class="flex w-full items-center gap-2.5">
-                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch..." />
-                    <Button @click="router.push('/search')" type="submit" class="bg-blue-600"> Search </Button>
+                    <Input class="border-stone-900 border" @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch..." />
+                    <Button @click="router.push('/search')" type="submit"> Search </Button>
                     <Button variant="outline" @click="toFavourite">
                         <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
                         <p class="m-2">Favourites</p>
@@ -46,44 +46,7 @@
                         </PaginationList>
                     </Pagination>
                 </div>
-                <!-- <div class="mt-3 flex gap-2">
-                    <Popover>
-                        <PopoverTrigger>
-                            <Button > <span class="font-normal">Brands ({{ brands.length }})</span> </Button>
-                        </PopoverTrigger>
-                        <PopoverContent class="w-auto">
-                            <div v-for="brand in brands" :key="brand.name" :brand="brand" class="flex items-center space-x-2 mb-3">
-                                <Checkbox id="{{ brand.name }}selected" />
-                                <label
-                                for="{{ brand.name }}selected"
-                                class="text-sm font-light leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                >
-                                {{ brand.name }}
-                                </label>
-                            </div>
-
-                        </PopoverContent>
-                    </Popover> 
-
-                    <Popover>
-                        <PopoverTrigger>
-                            <Button variant="outline"> <span class="font-normal">Brands ({{ brands.length }})</span> </Button>
-                        </PopoverTrigger>
-                        <PopoverContent class="w-auto">
-                            <div v-for="brand in brands" :key="brand.name" :brand="brand" class="flex items-center space-x-2 mb-3">
-                                <Checkbox id="{{ brand.name }}selected" />
-                                <label
-                                for="{{ brand.name }}selected"
-                                class="text-sm font-light leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                >
-                                {{ brand.name }}
-                                </label>
-                            </div>
-
-                        </PopoverContent>
-                    </Popover>
-                </div> -->
-
+                
             </div>
         </div>
     </div>

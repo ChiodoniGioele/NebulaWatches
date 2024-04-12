@@ -1,13 +1,12 @@
 package ch.nebulaWatches.nebulaWatchesAPI.watches.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class WatchDTO {
     private String reference;
     private Float retailPrice;
     private String name;
-    private Integer movementId;
-    private String movementName;
     private String productionTime;
     private String isLimitedTo;
     private Boolean isBackOpen;
@@ -21,6 +20,10 @@ public class WatchDTO {
 
     private List<String> materialsUsedNames;
 
+    private List<Float> prices;
+    private List<Date> dates;
+
+
     private String brand;
     private String family;
     private String caseMaterial;
@@ -32,6 +35,7 @@ public class WatchDTO {
     private String dialFinish;
     private String watchIndexes;
     private String hands;
+    private String movement;
 
     // Constructors, getters, and setters...
 
@@ -48,8 +52,6 @@ public class WatchDTO {
         this.reference = reference;
         this.retailPrice = retailPrice;
         this.name = name;
-        this.movementId = movementId;
-        this.movementName = movementName;
         this.productionTime = productionTime;
         this.isLimitedTo = isLimitedTo;
         this.isBackOpen = isBackOpen;
@@ -95,22 +97,6 @@ public class WatchDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getMovementId() {
-        return movementId;
-    }
-
-    public void setMovementId(Integer movementId) {
-        this.movementId = movementId;
-    }
-
-    public String getMovementName() {
-        return movementName;
-    }
-
-    public void setMovementName(String movementName) {
-        this.movementName = movementName;
     }
 
     public String getProductionTime() {
@@ -279,6 +265,30 @@ public class WatchDTO {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getMovement() {
+        return movement;
+    }
+
+    public void setMovement(String movement) {
+        this.movement = movement;
+    }
+
+    public List<Float> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<Float> prices) {
+        this.prices = prices;
+    }
+
+    public List<Date> getDates() {
+        return dates;
+    }
+
+    public void setDates(List<Date> dates) {
+        this.dates = dates;
     }
 }
 

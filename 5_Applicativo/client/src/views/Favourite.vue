@@ -1,12 +1,12 @@
 <template>
-    <div class="grid lg:grid-cols-5 min-h-screen"> 
-        <Sidebar class="hidden lg:block" />
-        <div class="col-span-3 lg:col-span-4 lg:border-l flex flex-col" > 
-            <div class="px-4 py-6 lg:px-8"> 
+    <div class="flex h-screen"> 
+        <Sidebar />
+        <div class="flex flex-col w-full" > 
+            <div class="px-8 py-6">
 
                 <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch in your favourites..." />
-                    <Button type="submit" class="bg-blue-600"> Search </Button>
+                    <Button type="submit"> Search </Button>
                     <Button variant="outline" @click="toHome"> All Watches</Button>
                 </div>
                 
