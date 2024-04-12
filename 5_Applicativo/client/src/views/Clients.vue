@@ -103,7 +103,7 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="client in clients" :key="client.id">
+            <TableRow v-for="client in clients" :key="client.id" @click="showClientDetails(client)">
               <TableCell class="font-medium">
                 {{ client.name }}
               </TableCell>
@@ -111,8 +111,6 @@
               <TableCell>{{ client.email }}</TableCell>
               <TableCell>{{ client.phone }}</TableCell>
               <TableCell>Ciao</TableCell>
-
-
 
               <TableCell class="flex space-x-4">
                 <Dialog>
@@ -229,6 +227,9 @@ import Sidebar from '@/components/Sidebar.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { apiServerAddress } from '@/main.ts'
+
+
+
 import {
   Table,
   TableBody,
@@ -383,6 +384,14 @@ function isEmailValid(email) {
 }
 function setNotVisible() {
   restOpen.value = !restOpen.value;
+}
+
+import ClientDetail from './ClientDetail.vue';
+
+
+
+async function showClientDetails(client_id){
+  router.push('/clientdetail');
 }
 
 

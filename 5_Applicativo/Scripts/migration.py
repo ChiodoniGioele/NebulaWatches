@@ -1,7 +1,7 @@
 from watches import OldWatchDatabase, WatchDatabase
 from watches import Watch
 
-watches = OldWatchDatabase(db_file_path='/Users/alexandruciobanu/Developer/new_watches_with_prices.db').get_all_watches_in_db()
+watches = OldWatchDatabase(db_file_path='/Users/gioelechiodoni/Documents/new_watches_with_prices.db').get_all_watches_in_db()
 watch_db = WatchDatabase()
 watches_info = []
 watch_number = 0

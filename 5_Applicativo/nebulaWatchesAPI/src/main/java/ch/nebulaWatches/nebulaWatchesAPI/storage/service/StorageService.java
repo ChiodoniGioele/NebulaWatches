@@ -130,5 +130,9 @@ public class StorageService {
         }
     }
 
+    public List<Storage> getWatchesOwnedByClientAndUser(BuysClientRequest request){
+        return storageRepository.findByUserEmailAndClientIdAndStatus(request.getUserEmail(), request.getClientId(), "Sold");
+    }
+
 
 }
