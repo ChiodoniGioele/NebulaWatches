@@ -26,9 +26,7 @@
                         </span>
                     </div>
                     <div v-else class="text-left">
-                        <span class="bg-gray-200 px-2 py-1 rounded-lg inline-block">
-                            {{ message.content }}
-                        </span>
+                        <span class="bg-gray-200 px-2 py-1 rounded-lg inline-block" v-html="message.content"></span>
                     </div>
                 </div>
             </div>
@@ -83,15 +81,18 @@ const sendMessage = async () => {
         try {
             const response = await axios.get(`http://127.0.0.1:8000/ask_bot`, {
                 params: {
-                    jwt: localStorage.getItem('token'),
                     query: query
                 },
                 headers: {
-                    'accept': 'application/json'
-                }
+                    jwt: localStorage.getItem('token'),
+                },
             });
 
-            messages.value.push({ type: 'bot', content: response.data.result });
+            messages.value.push({
+                type: 'bot', // Indicates that the message is from the bot
+                content: response.data.result.replace(/\n/g, '<br>') // The content of the message with newline characters replaced by HTML line breaks
+            });
+
         } catch (error) {
             console.error('Error fetching response:', error);
             messages.value.push({ type: 'bot', content: 'An error occurred while fetching the response.' });
