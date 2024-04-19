@@ -14,7 +14,7 @@ load_dotenv()
 
 @tool
 def watch_database_tool(query: str, user_email: str) -> str:
-    """A tool to query a MySQL database about personal info, user, watches, clients, storage, purchases, prices and other related information, and get natural language responses. Not used for suggestions"""
+    """A tool to query a MySQL database about personal info, user, watches, clients, storage, purchases, prices and other related information, and get natural language responses. Do not use for any type of suggestions"""
 
     chatbot = Chatbot(user_email)
     chatbot_answer = chatbot.ask_question(query)
@@ -22,7 +22,7 @@ def watch_database_tool(query: str, user_email: str) -> str:
 
 @tool
 def ask_chat_gpt(query: str) -> str:
-    """A function to query ChatGPT for suggestions about watches, lifestyle, etc."""
+    """A function to query ChatGPT for any type of suggestions about watches, lifestyle, etc."""
 
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.5)
     response = llm.invoke(query)
@@ -34,7 +34,7 @@ class Agent:
         self.initialize_agent()
 
     def initialize_agent(self):
-        llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+        llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.5)
         tools = [watch_database_tool, ask_chat_gpt]
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -44,14 +44,9 @@ class Agent:
                     do not query about data relating other users
                     
                     Additional rules:
-                    Always respond in the language you were asked. 
-
-                    If the users asks for a watch collection with a budget, use the entire budget, not only a part.
-
-                    At the end of every response, where there is or there watch references, add a list
-                    of every watch reference in the following format:
-                    !watch_reference[<watch_reference_value>];!watch_reference[<watch_reference_value2>];!watch_reference[<watch_reference_value3>]
-
+                    - Always respond in the language you were asked. 
+                    - If the users asks for a watch collection, use the ChatGptTool, with a budget use the entire budget, not only a part.
+                    - Please do not repeat yourself. 
                     """,
                 ),
                 ("user", "{input}"),

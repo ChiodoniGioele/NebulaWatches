@@ -82,7 +82,7 @@
 
 
         <div class="px-10 flex">
-          <h1 class="font-semibold "> Client Graphs </h1>
+          <h1 class="font-semibold "> Client </h1>
         </div>
 
         <Tabs default-value="general" class="px-10 mt-5">

@@ -9,7 +9,7 @@
   </button>
 
   <div :class="{ 'hidden': !isSidebarOpen, 'lg:flex': isSidebarOpen }"
-       class="fixed top-0 left-0 h-full w-64 bg-grey-50 border-r  overflow-y-auto z-10 ">
+       class="fixed top-0 left-0 h-full w-80 bg-grey-50 border-r  overflow-y-auto z-10 ">
 
     <!-- Logo and User Info -->
     <div class="flex flex-col p-4">
@@ -89,7 +89,7 @@
   </div>
 
   <!-- Content -->
-  <div :class="{ 'ml-0': !isSidebarOpen, 'ml-64': isSidebarOpen }" class="flex flex-col flex-1 p-4">
+  <div :class="{ 'ml-0': !isSidebarOpen, 'ml-80': isSidebarOpen }" class="flex flex-col flex-1 p-4">
   </div>
 
 </template>

@@ -18,7 +18,7 @@ class Chatbot:
         uri = f'mysql+mysqlconnector://{self.DB_USER}:{self.DB_PASSWORD}@localhost:3306/NebulaWatches'
         
         self.db = SQLDatabase.from_uri(uri)
-        self.llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.2)
+        self.llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
         self.define_sql_chain()
         self.define_full_chain()

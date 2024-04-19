@@ -2,6 +2,8 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 from agent import Agent  
+import uvicorn
+
 
 AUTH_SERVER = 'http://localhost:64321'
 app = FastAPI()
@@ -43,3 +45,6 @@ async def ask_bot(query: str, jwt: str = Header(...)):
     return {'result': result}
 
 app.middleware("http")(authentication_middleware)
+
+if __name__ == '__main__':
+    uvicorn.run(app, port=6969, host='192.168.27.130')
