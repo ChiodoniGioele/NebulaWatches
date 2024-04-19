@@ -54,7 +54,6 @@
                   </Label>
                   <Input id="phone" v-model="phone" class="col-span-3" />
                 </div>
-
               </div>
               <Alert variant="destructive" v-if="emptyFields">
                 <AlertCircle class="w-4 h-4" />
@@ -81,14 +80,39 @@
       </div>
 
 
-      <div class="mt-12 px-1 flex gap-7 items-center">
-        <div class="flex gap-2">
-          <h1>grafico</h1>
+
+        <div class="px-10 flex">
+          <h1 class="font-semibold "> Client Graphs </h1>
         </div>
-      </div>
+
+        <Tabs default-value="general" class="px-10 mt-5">
+          <TabsList>
+            <TabsTrigger value="general">
+              General
+            </TabsTrigger>
+            <TabsTrigger value="specific">
+              All Time
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="general">
+            <div class="flex justify-center">
+              <div class="w-1/2">
+                <ClientChartSpecific></ClientChartSpecific>
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="specific">
+            <div class="flex justify-center">
+              <div class="w-1/3">
+                <ClientChartGeneral></ClientChartGeneral>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+
+
 
       <div class="mt-12 w-full gap-7 flex items-center justify-center px-10 ">
-
         <Table>
           <TableHeader>
             <TableRow>
@@ -98,7 +122,7 @@
               <TableHead>Surname</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
-              <TableHead>Acquisti</TableHead>
+              <!--<TableHead>Acquisti</TableHead> -->
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -110,9 +134,10 @@
               <TableCell>{{ client.surname }}</TableCell>
               <TableCell>{{ client.email }}</TableCell>
               <TableCell>{{ client.phone }}</TableCell>
-              <TableCell>Ciao</TableCell>
 
-
+              <!--<TableCell>
+                {{ client.acquisti }}
+              </TableCell>  -->
 
               <TableCell class="flex space-x-4">
                 <Dialog>
@@ -133,7 +158,6 @@
                         <Input id="nameMod" v-model="client.name" class="col-span-3" />
                       </div>
                       <div class="grid grid-cols-4 items-center gap-4">
-
                         <Label for="surnameMod" class="text-right">
                           Surname *
                         </Label>
@@ -145,7 +169,6 @@
                         </Label>
                         <Input id="emailMod" v-model="client.email" type="email" class="col-span-3" />
                       </div>
-
                       <div class="grid grid-cols-4 items-center gap-4">
                         <Label for="phoneMod" class="text-right">
                           Phone
@@ -181,16 +204,29 @@
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
+                <Dialog>
+                  <DialogTrigger>
+                    <Button variant="outline">Details</Button>
+                  </DialogTrigger>
+                  <DialogOverlay>
+                    <DialogContent class="max-h-[80vh] max-w-[70vw]">
+                      <DialogHeader>
+                        <DialogTitle>Informations of {{ client.name }} {{ client.surname }}
+                        </DialogTitle>
+                        <DialogDescription>
+                          <b>Email:</b> {{ client.email }} <b>Phone:</b> {{client.phone }}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <ClientExpansion :key="client.id" :client="client"></ClientExpansion>
+                    </DialogContent>
+                  </DialogOverlay>
+                </Dialog>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-
       </div>
-
     </div>
-
-
   </div>
 
 
@@ -201,6 +237,11 @@
 import Chat from '@/components/Chat.vue'
 import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+
+
+
+import ClientExpansion from "@/components/ClientExpansion.vue";
+import ClientChartGeneral from "@/components/ClientChartGeneral.vue";
 
 import {
   Dialog,
@@ -230,6 +271,9 @@ import Sidebar from '@/components/Sidebar.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { apiServerAddress } from '@/main.ts'
+
+
+
 import {
   Table,
   TableBody,
@@ -244,18 +288,19 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-const route = useRoute();
-const router = useRouter();
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import TeamChartGeneral from "@/components/TeamChartGeneral.vue";
+import TeamChartSpecific from "@/components/TeamChartSpecific.vue";
+import ClientChartSpecific from "@/components/ClientChartSpecific.vue";
+
 const clients = ref([]);
 const emailUser = ref('');
-const user = ref();
 const emailNotValid = ref(false);
 const emptyFields = ref(false);
 const restOpen = ref(false);
 
 
 async function fetchClients(email) {
-
   try {
     const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
       {
@@ -263,14 +308,11 @@ async function fetchClients(email) {
           Authorization: 'Bearer ' + localStorage.getItem('token'),
         },
       });
-
     clients.value = response.data;
   } catch (error) {
     console.error('Failed to fetch clients:', error);
   }
 }
-
-
 
 const name = ref('');
 const surname = ref('');
@@ -329,10 +371,7 @@ onMounted(async () => {
   await fetchClients(emailUser.value);
 });
 
-
-
 async function mod(id) {
-
   const userMod = {
     name: nameMod.value,
     surname: surnameMod.value,
@@ -357,7 +396,6 @@ async function mod(id) {
 }
 
 async function del(id) {
-
   try {
     const response = await axios.delete(`${apiServerAddress}/v1/clients/delete/${id}`,
       {
@@ -385,6 +423,9 @@ function isEmailValid(email) {
 function setNotVisible() {
   restOpen.value = !restOpen.value;
 }
+
+
+
 
 
 </script>

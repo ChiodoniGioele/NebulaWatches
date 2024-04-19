@@ -39,6 +39,7 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     @Query(value = "SELECT SUM(s.quantity) FROM storage s WHERE s.team_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3", nativeQuery = true)
     int sumQuantityByTeamMonth(Long teamId, LocalDate begin, LocalDate end);
 
+
     List<Storage> getByTeamId(Long id);
 
     @Query("SELECT s FROM Storage s WHERE (s.watch.reference = ?1 OR s.customWatch.reference = ?1) AND s.user.id = ?2 AND s.purchaseDate = ?3 AND s.buyPrice = ?4 AND s.status.name = ?5")
@@ -48,5 +49,11 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     Optional<Storage> getByRequestSold(String reference, int userId, Date date, float buyPrice, String status, float sellPrice, Date date2, Long teamId, Long clientId);
 
 
+    @Query(value = "SELECT SUM(s.quantity) FROM Storage s WHERE s.client_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3 and s.status_name = ?4", nativeQuery = true)
+    Optional<Integer> sumQuantityByClientMonth(Long clientId, LocalDate begin, LocalDate end, String status);
+
+
+    @Query("SELECT s FROM Storage s WHERE s.user.email = ?1 and s.client.id = ?2 and s.status.name = ?3")
+    List<Storage> findByUserEmailAndClientIdAndStatus(String email, long id, String status);
 
 }

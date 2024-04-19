@@ -15,9 +15,17 @@ import ch.nebulaWatches.nebulaWatchesAPI.watches.repository.WatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.DoubleToIntFunction;
+
+import static ch.nebulaWatches.nebulaWatchesAPI.team.service.TeamService.getEndOfMonth;
+import static ch.nebulaWatches.nebulaWatchesAPI.team.service.TeamService.getStartOfMonth;
 
 @Service
 @RequiredArgsConstructor
@@ -144,6 +152,7 @@ public class StorageService {
         }
     }
 
+
     public List<Storage> getStorageByTeamId(Long id) {
         return storageRepository.getByTeamId(id);
     }
@@ -205,6 +214,30 @@ public class StorageService {
         } else {
             return false;
         }
+
+
+    public List<Storage> getWatchesOwnedByClientAndUser(BuysClientRequest request){
+        return storageRepository.findByUserEmailAndClientIdAndStatus(request.getUserEmail(), request.getClientId(), "Sold");
+    }
+
+
+    // sumQuantityByClientMonth
+    public int getWatchesOwnedByClientMonth(Long id, int month){
+        LocalDate l1 = getStartOfMonth(month);
+        LocalDate l2 = getEndOfMonth(month);
+        Optional<Integer> opt = storageRepository.sumQuantityByClientMonth(id, l1, l2, "Sold");
+
+        if(opt.isPresent()){
+            return opt.get();
+        }
+        return 0;
+    }
+
+    public static LocalDate getStartOfMonth(int months) {
+        return LocalDate.now().minusMonths(months).with(TemporalAdjusters.firstDayOfMonth());
+    }
+    public static LocalDate getEndOfMonth(int months) {
+        return LocalDate.now().minusMonths(months).with(TemporalAdjusters.lastDayOfMonth());
 
     }
 
