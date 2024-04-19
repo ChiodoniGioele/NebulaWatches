@@ -58,8 +58,8 @@ public class UserService {
 
     public void sendAgain(String email) {
         int code = repository.getCode(email);
-        String text = "Hello," + ", \n\r" + "To complete the registration process for your " +
+        String text = "Hello," + " \n\r" + "To complete the registration process for your " +
                 "account, please use the following PIN code: \n\r" + code + "\n\r \n\r Sincerely, \n\r NebulaWatches Team";
-        emailService.sendEmail(InputUtils.testInput(email), "NebulaWatches Account Verification - Your PIN Code", text);
+       emailService.sendEmail(InputUtils.testInput(email), "NebulaWatches Account Verification - Your PIN Code", text);
     }
 }
