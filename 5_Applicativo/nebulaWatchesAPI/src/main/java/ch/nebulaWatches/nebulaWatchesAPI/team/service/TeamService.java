@@ -48,6 +48,7 @@ public class TeamService {
     }
 
     public void removeTeamMember(Long id) {
+        storageRepository.updateTeamIdToNull(id);
         teamRepository.deleteById(id);
     }
 

@@ -56,4 +56,16 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     @Query("SELECT s FROM Storage s WHERE s.user.email = ?1 and s.client.id = ?2 and s.status.name = ?3")
     List<Storage> findByUserEmailAndClientIdAndStatus(String email, long id, String status);
 
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Storage s SET s.client = NULL WHERE s.client.id = :clientId")
+    void updateClientIdToNull(Long clientId);
+
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Storage s SET s.team = NULL WHERE s.team.id = :teamId")
+    void updateTeamIdToNull(Long teamId);
+
 }

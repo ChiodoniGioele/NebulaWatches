@@ -5,6 +5,7 @@ import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.model.ClientRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.service.ClientService;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.repository.StorageRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Family;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class ClientController {
 
     private final ClientRepository repository;
+    private final StorageRepository storageRepository;
     private final ClientService clientService;
 
     @GetMapping("/all/{email}")
@@ -63,6 +65,7 @@ public class ClientController {
 
     @DeleteMapping("/delete/{id}")
     void deleteClient(@PathVariable Long id) {
+        storageRepository.updateClientIdToNull(id);
         repository.deleteById(id);
     }
 
