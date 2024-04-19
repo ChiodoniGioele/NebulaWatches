@@ -121,7 +121,6 @@ async function register() {
     passwordLong.value = false;
     registerFailed.value = false;
     isEmailUsed.value = false;
-
     if (!isNullOrEmpty(username.value) && !isNullOrEmpty(email.value) && !isNullOrEmpty(password.value)) {
         if (isPasswordValid(password.value)) {
             if (!tooLong(password.value)) {
@@ -133,18 +132,14 @@ async function register() {
                             email: email.value,
                             password: password.value
                         });
-                        const token = response.data.token;
-                        if (!isNullOrEmpty(token)) {
-                            localStorage.setItem('token', token);
-                            router.push('/');
-                        } else {
-                            registerFailed.value = true;
-                        }
+                        
+                        localStorage.setItem('email', email.value);
+                        router.push('/verify');
                     } catch (error) {
                         registerFailed.value = true;
                     }
                     }else{
-                        isEmailUsed.value = true;
+                        emailUsed.value = true;
                     }
                     
                 } else {
@@ -165,14 +160,14 @@ async function register() {
 
 async function isEmailUsed(email) {
     try {
-        const response = await axios.get(`${apiServerAddress}/v1/admin/isEmailUsed/${email}`, {
+        const response = await axios.get(`${apiServerAddress}/auth/exists/${email}`, {
             headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token'),
+                
             },
         });
         return response.data;
     } catch (error) {
-        console.error('Failed to remove check email:', error);
+        console.error('Failed to check email:', error);
     }
 }
 

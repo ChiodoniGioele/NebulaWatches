@@ -20,8 +20,8 @@
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" v-model="password" type="password" placeholder="YourPassword" class="bg-gray-50"
-                        required />
+                    <Input id="password" v-model="password" type="password" placeholder="YourPassword"
+                        class="bg-gray-50" required />
                 </div>
                 <Button class="w-full" @click="login">
                     Login
@@ -104,37 +104,50 @@ const password = ref('');
 const router = useRouter();
 const loginFailed = ref(false);
 const role = ref('');
+const verified = ref(false);
 const emailNotValid = ref(false);
 const emptyFields = ref(false);
 
 async function login() {
+
     if (!isNullOrEmpty(email.value) && !isNullOrEmpty(password.value)) {
         emptyFields.value = false;
         if (isEmailValid(email.value)) {
             emailNotValid.value = false;
-            try {
-                const response = await axios.post(`${apiServerAddress}/auth/authenticate`, {
-                    email: email.value,
-                    password: password.value
-                });
+            await getVerified(email.value);
+            if (verified.value) {
+                try {
+                    const response = await axios.post(`${apiServerAddress}/auth/authenticate`, {
+                        email: email.value,
+                        password: password.value
+                    });
 
-                const token = response.data.token;
-                if (!isNullOrEmpty(token)) {
-                    localStorage.setItem('token', token);
+                    const token = response.data.token;
+                    if (!isNullOrEmpty(token)) {
+                        localStorage.setItem('token', token);
 
-                    await getRole(email.value);
-                    if (role.value == "ADMIN") {
-                        router.push('/admin');
+                        await getRole(email.value);
+                        if (role.value == "ADMIN") {
+                            router.push('/admin');
+                        } else {
+                            router.push('/');
+                        }
+
                     } else {
-                        router.push('/');
+                        loginFailed.value = true;
                     }
-
+                } catch (error) {
+                    loginFailed.value = true;
+                    console.error("Login Failed")
+                }
+            } else {
+                if(await exists(email.value)){
+                    localStorage.setItem('email', email.value);
+                    router.push('/verify');
                 }else{
                     loginFailed.value = true;
                 }
-            } catch (error) {
-                loginFailed.value = true;
-                console.error("Login Failed")
+                
             }
         } else {
             emailNotValid.value = true;
@@ -157,6 +170,32 @@ async function getRole(userEmail) {
         role.value = response.data;
     } catch (error) {
         console.error('Failed to fetch Role', error);
+    }
+}
+async function getVerified(email) {
+    try {
+        const response = await axios.get(`${apiServerAddress}/auth/isVerified/${email}`, {
+            headers: {
+
+            },
+        });
+
+        verified.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch Verification', error);
+    }
+}
+async function exists(email) {
+    try {
+        const response = await axios.get(`${apiServerAddress}/auth/exists/${email}`, {
+            headers: {
+
+            },
+        });
+        return response.data;
+        
+    } catch (error) {
+        console.error('Failed to fetch Verification', error);
     }
 }
 
