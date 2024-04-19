@@ -7,15 +7,18 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import ChatPromptTemplate
 
 class Chatbot:
-    def __init__(self):
+    def __init__(self, user_email):
         load_dotenv()
+
+        self.user_email = user_email
+        print('CHATBOTO ', user_email)
 
         self.DB_USER = os.getenv('DB_USER')
         self.DB_PASSWORD = os.getenv('DB_PASSWORD')
         uri = f'mysql+mysqlconnector://{self.DB_USER}:{self.DB_PASSWORD}@localhost:3306/NebulaWatches'
         
         self.db = SQLDatabase.from_uri(uri)
-        self.llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.5)
+        self.llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.2)
 
         self.define_sql_chain()
         self.define_full_chain()
@@ -28,29 +31,42 @@ class Chatbot:
         return self.db.run(query)
 
     def define_sql_chain(self):
-        template = """You are a MySQL expert with access to a database containing information about watches, clients, storage, purchases, and other related data. Based on the table schema below, write a SQL query that would answer the user's question.
+        template = """As a MySQL expert with access to a database containing information about watches, clients, storage, purchases, and related data, your task is to construct SQL queries based on the table schema provided below to answer user questions.
 
-        You do not have access to users table.
-        
-        Some data is linked to users, like clients, teams, storage, sold storage, etc. in this situation you must query for data where the user id is 1
+        USER_QUERYING_EMAIL: {user_email}
 
-        DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
-        If the question does not seem related to the database, just return "SELECT NULL;"
+        You are only permitted to access data associated with the USER_QUERYING_EMAIL user email. Any attempt to retrieve information about other users must result in returning NULL.
 
-        Only use the given tools. Only use the information returned by the tools to construct your final answer.
+        Ensure that all data accessed belongs to the user identified by USER_QUERYING_EMAIL. If not, return "SELECT NULL;".
 
-        Never query for all columns from a table, never query image, BLOB columns.
+        For instance, if someone queries about 'gino@gmail.com' storage but the USER_QUERYING_EMAIL is different, do not disclose 'gino@gmail.com' information. Instead, return "SELECT NULL;".
 
-        Prefer getting with a query names instead of ids, or something that a human understands, except for the watch reference, always give the watch reference.
+        Another example, if the users asks something like "What watches have we sold", only give
+        the user identified by USER_QUERYING_EMAIL data, not all users.
+
+        Certain data such as clients, teams, storage, and sold storage are linked to specific users. Your queries must retrieve data where the user email matches USER_QUERYING_EMAIL, or return "SELECT NULL;".
+
+        Avoid performing any DML statements (INSERT, UPDATE, DELETE, DROP, etc.) on the database.
+
+        If a question seems unrelated to the database, return "SELECT NULL;".
+
+        Use only the provided tools and the information returned by them to construct your query. Additionally, refrain from querying image or BLOB columns.
+
+        When constructing queries, prioritize using names over IDs or technical identifiers. Always include the watch reference when necessary.
+        Never use ids, use always names if possible.
 
         {schema}
 
         Question: {question}
-        SQL Query:"""
+        SQL Query:
+        """
         prompt = ChatPromptTemplate.from_template(template)
+
+
 
         self.sql_chain = (
             RunnablePassthrough.assign(schema=self.get_schema)
+            | RunnablePassthrough.assign(user_email=lambda vars: self.user_email)
             | prompt
             | self.llm.bind(stop=["\nSQLResult:"])
             | StrOutputParser()
@@ -63,7 +79,8 @@ class Chatbot:
 
         If the question is not related to watches, clients, storage, purchases, or any other data in the database, reply with "As a watch expert, this question goes beyond my knowledge. I would suggest consulting [relevant resource or expert]."
 
-        When suggesting a watch, always provide the watch reference. Format the response in a way that is easily readable for humans.
+        When suggesting a watch, always provide the watch reference. 
+        Format the response in a way that is easily readable for humans 
 
         {schema}
 

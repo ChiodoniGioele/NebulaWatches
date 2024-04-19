@@ -13,10 +13,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 @tool
-def watch_database_tool(query: str) -> str:
+def watch_database_tool(query: str, user_email: str) -> str:
     """A tool to query a MySQL database about personal info, user, watches, clients, storage, purchases, prices and other related information, and get natural language responses. Not used for suggestions"""
 
-    chatbot = Chatbot()
+    chatbot = Chatbot(user_email)
     chatbot_answer = chatbot.ask_question(query)
     return chatbot_answer
 
@@ -29,7 +29,8 @@ def ask_chat_gpt(query: str) -> str:
     return response
 
 class Agent:
-    def __init__(self):
+    def __init__(self, user_email):
+        self.user_email = user_email
         self.initialize_agent()
 
     def initialize_agent(self):
@@ -39,7 +40,19 @@ class Agent:
             [
                 (
                     "system",
-                    "You are very powerful assistant, called Gio, but don't know current events",
+                    f"""You are very powerful assistant, called Gio, but don't know current events, you can use tools at a time, user email is {self.user_email} so you only have access to this user, 
+                    do not query about data relating other users
+                    
+                    Additional rules:
+                    Always respond in the language you were asked. 
+
+                    If the users asks for a watch collection with a budget, use the entire budget, not only a part.
+
+                    At the end of every response, where there is or there watch references, add a list
+                    of every watch reference in the following format:
+                    !watch_reference[<watch_reference_value>];!watch_reference[<watch_reference_value2>];!watch_reference[<watch_reference_value3>]
+
+                    """,
                 ),
                 ("user", "{input}"),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
