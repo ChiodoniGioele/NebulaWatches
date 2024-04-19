@@ -33,8 +33,6 @@ public class ClientService {
         }else{
             throw new IllegalArgumentException("Email not valid");
         }
-
-
         repository.save(client);
     }
 
