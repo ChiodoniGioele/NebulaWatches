@@ -14,7 +14,7 @@ export default defineConfig({
       key: fs.readFileSync('./server.key'),
       cert: fs.readFileSync('./server.cert'),
     },
-    port: 443, // Adjust the port number as needed
+    port: 3000, // Adjust the port number as needed
   },
 
   plugins: [

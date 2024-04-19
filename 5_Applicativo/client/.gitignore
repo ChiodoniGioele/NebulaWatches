@@ -27,4 +27,7 @@ coverage
 *.sln
 *.sw?
 
+*.key
+*.cert
+
 *.tsbuildinfo

@@ -214,6 +214,7 @@ public class StorageService {
         } else {
             return false;
         }
+    }
 
 
     public List<Storage> getWatchesOwnedByClientAndUser(BuysClientRequest request){
