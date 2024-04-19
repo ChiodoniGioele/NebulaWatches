@@ -45,14 +45,18 @@
                         <PaginationLast  @click="fetchBrands(totalPages)" />
                         </PaginationList>
                     </Pagination>
+                    
                 </div>
+                
                 
             </div>
         </div>
     </div>
+    <Chat />
 </template>
   
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchBrandCard from '@/components/WatchBrandCard.vue'
 
@@ -60,6 +64,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components//ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Skeleton } from '@/components/ui/skeleton'
+
 
 import {
   Pagination,

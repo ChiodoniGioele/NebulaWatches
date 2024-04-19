@@ -167,9 +167,11 @@
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
+    <Chat />
 </template>
 
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'

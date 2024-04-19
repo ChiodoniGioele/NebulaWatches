@@ -43,10 +43,11 @@
         </div>
     </div>
 
-
+    <Chat />
 </template>
 
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import StorageCard from '@/components/StorageCard.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'

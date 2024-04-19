@@ -57,6 +57,7 @@
                         <PaginationLast  @click="fetchFamiliesOfBrand(totalPages)" />
                         </PaginationList>
                     </Pagination>
+                    
                 </div>
                 
 
@@ -65,9 +66,11 @@
 
         </div>
     </div>
+    <Chat />
 </template>
   
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchFamilyCard from '@/components/WatchFamilyCard.vue'
 import { Input } from '@/components/ui/input'

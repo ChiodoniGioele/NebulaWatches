@@ -125,10 +125,11 @@
         </div>
     </div>
 
-
+    <Chat />
 </template>
 
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import CustomWatchCard from '@/components/CustomWatchCard.vue'
 

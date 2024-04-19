@@ -1,4 +1,6 @@
 <template>
+  <!-- <Chat /> -->
+
   <button @click="toggleSidebar"
     class="lg:hidden fixed top-0 left-0 z-50 bg-white p-3 rounded-full m-4 text-gray-700 hover:text-gray-900 focus:outline-none focus:text-gray-900 focus:bg-gray-200 transition duration-300 ease-in-out">
     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -8,7 +10,7 @@
 
   <div :class="{ 'hidden': !isSidebarOpen, 'lg:flex': isSidebarOpen }"
     class="fixed top-0 left-0 h-full w-64 bg-grey-50 border-r  overflow-y-auto z-10 ">
-    
+
     <!-- Logo and User Info -->
     <div class="flex flex-col p-4">
       <div class="space-y-4 py-4 flex-1">
@@ -23,7 +25,8 @@
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Boxes.png" />
               <span class="text-inherit text-base font-bold">Storage</span>
             </Button>
-            <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8" @click="router.push('/clients');">
+            <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8"
+              @click="router.push('/clients');">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Customer.png" />
               <span class="text-inherit text-base font-bold">Clients</span>
             </Button>
@@ -67,9 +70,11 @@
   <!-- Content -->
   <div :class="{ 'ml-0': !isSidebarOpen, 'ml-64': isSidebarOpen }" class="flex flex-col flex-1 p-4">
   </div>
+
 </template>
 
 <script setup>
+import Chat from '@/components/Chat.vue'
 import { Button } from '../components/ui/button'
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
@@ -93,7 +98,7 @@ onMounted(() => {
 });
 
 async function logout() {
-  try {        
+  try {
     localStorage.removeItem('token');
     router.push('/login');
   } catch (error) {
@@ -108,7 +113,7 @@ async function fetchUserName() {
     const payload = JSON.parse(atob(parts[1]));
     const mail = payload.sub;
     email.value = mail;
-    const response = await axios.get(`${apiServerAddress}/v1/user/getName/${ email.value}`, {
+    const response = await axios.get(`${apiServerAddress}/v1/user/getName/${email.value}`, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
       },
@@ -119,15 +124,15 @@ async function fetchUserName() {
   }
 }
 
-async function toTeam(){
+async function toTeam() {
   router.push('/team');
 }
 
-async function toHome(){
+async function toHome() {
   router.push('/');
 }
 
-async function toStorage(){
+async function toStorage() {
   router.push('/storage');
 }
 
@@ -136,5 +141,4 @@ onMounted(async () => {
 });
 </script>
 
-<style>
-</style>
+<style></style>

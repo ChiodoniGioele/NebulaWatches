@@ -361,6 +361,8 @@
             </div>
         </div>
     </div>
+    <Chat />
+    
     <AlertDialog :open="showDialogPrice" onOpenChange="">
         <AlertDialogContent>
             <AlertDialogHeader>
@@ -375,9 +377,11 @@
             </AlertDialogFooter>
         </AlertDialogContent>
     </AlertDialog>
+    
 </template>
 
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from "@/components/Sidebar.vue";
 import WatchPricesChart from '@/components/WatchPricesChart.vue'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'

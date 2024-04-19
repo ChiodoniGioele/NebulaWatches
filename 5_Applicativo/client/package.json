@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "serve": "vite serve --host 0.0.0.0",
-    "dev": "vite --host 0.0.0.0",
+    "serve": "vite serve --host 0.0.0.0 --port 443",
+    "dev": "vite --host 0.0.0.0 --port 443",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",

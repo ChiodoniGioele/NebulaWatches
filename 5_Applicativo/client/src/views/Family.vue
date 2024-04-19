@@ -59,16 +59,18 @@
                         <PaginationLast  @click="fetchWatchesOfBrands(totalPages)" />
                         </PaginationList>
                     </Pagination>
+                    
                 </div>
             </div>
         </div>
     </div>
 
     
-
+    <Chat />
 </template>
   
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchCard from '@/components/WatchCard.vue'
 import { Input } from '@/components/ui/input'

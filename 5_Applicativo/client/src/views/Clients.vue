@@ -194,10 +194,11 @@
   </div>
 
 
-
+  <Chat />
 </template>
 
 <script setup>
+import Chat from '@/components/Chat.vue'
 import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 

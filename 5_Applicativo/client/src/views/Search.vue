@@ -48,7 +48,7 @@
                                 <Button class="border-stone-900" variant="outline"> <span class="font-normal">Families ({{ families.length }})</span> </Button>
                             </PopoverTrigger>
                             <PopoverContent class="w-auto">
-                                <ScrollArea class="h-[40vh] p-2">
+                                <ScrollArea class="max-h-[40vh] p-2">
                                     <div v-for="family in families" :key="family.id" class="flex items-center space-x-2 mb-3">
                                        
                                         <Checkbox v-if="familiesSelected.includes(family)" :id="`${family.id}-checkbox`" @click="handleBrandSelection(brand)" checked/>
@@ -293,9 +293,11 @@
             </div>
         </div>
     </div>
+    <Chat />
 </template>
   
 <script setup>
+import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchCard from '@/components/WatchCard.vue'
 import { Input } from '@/components/ui/input'
