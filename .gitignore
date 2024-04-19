@@ -17,6 +17,5 @@ errors.log
 #Ignora db
 *.db
 
-*.cert
-
 *.key
+*.cert

@@ -19,6 +19,7 @@ public class AdminService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final EmailService emailService;
 
     public User getUser(int id) {
         Optional<User> user = repository.findById(id);
@@ -47,6 +48,11 @@ public class AdminService {
 
     public void saveUser(AdminRequest request){
         User user = new User();
+        int code = -1;
+        if(!request.isVerified()){
+            code = (int) (100000 + Math.random() * 900000);
+        }
+        user.setCode(code);
         user.setUsername(InputUtils.testInput(request.getUsername()));
         user.setEmail(InputUtils.testInput(request.getEmail()));
         user.setPassword(passwordEncoder.encode(InputUtils.testInput(request.getPassword())));
@@ -54,6 +60,10 @@ public class AdminService {
             user.setLoginMode(request.isLoginMode());
         user.setVerified(request.isVerified());
         repository.save(user);
+
+        String text = "Hello " + request.getUsername() + ", \n\r" + "To complete the registration process for your " +
+                "account, please use the following PIN code: \n\r" + code + "\n\r \n\r Sincerely, \n\r NebulaWatches Team";
+        emailService.sendEmail(InputUtils.testInput(request.getEmail()), "NebulaWatches Account Verification - Your PIN Code", text);
     }
     public void updateUser(AdminRequest request){
         Optional<User> user = repository.findById(request.getId());

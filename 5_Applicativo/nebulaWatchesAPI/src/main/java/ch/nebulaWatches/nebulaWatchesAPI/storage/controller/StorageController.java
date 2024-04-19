@@ -1,29 +1,24 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.controller;
+
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.exceptions.DuplicateReferenceException;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatch;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.CustomWatchRequest;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
-import ch.nebulaWatches.nebulaWatchesAPI.storage.model.StorageRequest;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.*;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.CustomWatchService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StatusStorageService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StorageService;
-import ch.nebulaWatches.nebulaWatchesAPI.watches.dto.WatchDTO;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @CrossOrigin
 @RestController
@@ -144,4 +139,58 @@ public class StorageController {
         return storageService.getStorageByTeamId(teamId);
     }
 
+    @GetMapping("/getWatchSoldByClient")
+    public ResponseEntity<List<Storage>> getSoldWatchesByClient(@RequestParam String userEmail, @RequestParam Long clientId) {
+        try {
+            BuysClientRequest request = new BuysClientRequest();
+            request.setUserEmail(userEmail);
+            request.setClientId(clientId);
+
+            List<Storage> watches = storageService.getWatchesOwnedByClientAndUser(request);
+            return ResponseEntity.ok(watches);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/getWatchSoldByClientNum")
+    public ResponseEntity<Integer> getSoldWatchesByClientNum(@RequestParam String userEmail, @RequestParam Long clientId) {
+        try {
+            BuysClientRequest request = new BuysClientRequest();
+            request.setUserEmail(userEmail);
+            request.setClientId(clientId);
+
+            System.err.println(userEmail + "  " + clientId);
+
+            List<Storage> watches = storageService.getWatchesOwnedByClientAndUser(request);
+            Integer num = watches.size();
+
+            return ResponseEntity.ok(num);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/getWatchSoldByClientTotalExpenses")
+    public ResponseEntity<Double> getWatchSoldByClientTotalExpenses(@RequestParam String userEmail, @RequestParam Long clientId) {
+        try {
+            BuysClientRequest request = new BuysClientRequest();
+            request.setUserEmail(userEmail);
+            request.setClientId(clientId);
+            List<Storage> watches = storageService.getWatchesOwnedByClientAndUser(request);
+            Double spese = 0.0;
+            for (Storage watch : watches){
+                spese += watch.getSellPrice();
+            }
+            return ResponseEntity.ok(spese);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @GetMapping("/getWatchesOwnedByClientMonth")
+    public Integer getWatchesByClientMonth(@RequestParam Long id, @RequestParam int month){
+        return storageService.getWatchesOwnedByClientMonth(id, month);
+    }
 }
