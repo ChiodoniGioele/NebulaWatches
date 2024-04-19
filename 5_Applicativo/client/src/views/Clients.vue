@@ -111,7 +111,7 @@
         </Tabs>
 
         <div class="px-10 flex mt-7">
-                <h1 class="font-semibold "> Client Members </h1>
+                <h1 class="font-semibold "> Clients </h1>
             </div>
 
       <div class="mt-12 w-full gap-7 flex items-center justify-center px-10 ">
