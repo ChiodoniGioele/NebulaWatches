@@ -22,7 +22,7 @@
 
                     </div>
                     <div class="flex gap-2 w-auto" v-if="!selector">
-                        <Popover ref="popover">
+                        <Popover ref="popover" :open="restOpen" @update:open="setNotVisible">
                             <PopoverTrigger as-child>
                                 <Button variant="outline">Add to storage</Button>
                             </PopoverTrigger>
@@ -116,6 +116,11 @@
                                             Watch added to storage!
                                         </AlertDescription>
                                     </Alert>
+                                    <div
+                                        class="flex items-center text-gray-500 border border-gray-300 rounded-md p-2 text-sm">
+                                        <Info class="w-4 h-4 mr-2" />
+                                        <span>All fields are required!</span>
+                                    </div>
                                     <Button variant="outline" @click="addToStorage">Add to storage</Button>
                                 </div>
                             </PopoverContent>
@@ -179,6 +184,7 @@ import { apiServerAddress } from '@/main.ts'
 import { CheckCircle } from 'lucide-vue-next';
 import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Info } from 'lucide-vue-next'
 import {
     Popover,
     PopoverContent,
@@ -233,6 +239,7 @@ const selector = route.params.sel;
 const clients = ref([]);
 const teams = ref([]);
 const assertClient = ref(false);
+const restOpen = ref(false);
 
 async function fetchWatch() {
     try {
@@ -341,6 +348,11 @@ async function addToStorage() {
                     });
                     storageSuccesfull.value = true;
                     console.log('Custom watch added to storage. ', response.data);
+                    buyPrice.value = null;
+                    selectedQuantity.value = null;
+                    purchaseDate.value = null;
+                    sellPrice.value = null;
+                    sellDate.value = null;
                 } catch (error) {
                     console.log(newStorage)
                     console.error('Failed to add custom watch to storage:', error);
@@ -408,7 +420,9 @@ function isValidDate(date) {
     return dateFormat.test(date);
 }
 function soldAfterPurchase(dateSold, datePurchase) {
-    return dateSold > datePurchase;
+    const milliseconds1 = Date.parse(dateSold);
+    const milliseconds2 = Date.parse(datePurchase);
+    return milliseconds1 >= milliseconds2;
 }
 function soldForMoreOrEqual(priceSold, pricePurchase) {
     return priceSold >= pricePurchase;
@@ -422,5 +436,18 @@ function redo() {
 }
 function res() {
     showDialogPrice.value = false;
+}
+function setNotVisible() {
+    restOpen.value = !restOpen.value;
+    if(!restOpen.value){
+        invalidData.value = false;
+        storageSuccesfull.value = false;
+        invalidDate.value = false;
+        buyPrice.value = null;
+        selectedQuantity.value = null;
+        purchaseDate.value = null;
+        sellPrice.value = null;
+        sellDate.value = null;
+    }
 }
 </script>

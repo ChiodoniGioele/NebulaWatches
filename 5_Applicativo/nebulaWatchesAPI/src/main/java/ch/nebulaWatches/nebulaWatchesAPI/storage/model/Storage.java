@@ -36,7 +36,7 @@ public class Storage {
     @JoinColumn(name = "status_name")
     private StatusStorage status;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "custom_watch_reference")
     private CustomWatch customWatch;
 
@@ -46,11 +46,11 @@ public class Storage {
     @JoinColumn(name = "sell_price", nullable = true)
     private float sellPrice;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
 

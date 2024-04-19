@@ -49,24 +49,24 @@
                                 <div class="grid gap-4 py-4">
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="email" class="text-right">
-                                            Email
+                                            Email *
                                         </Label>
                                         <Input id="email" class="col-span-3" v-model="newUser.email" required />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="username" class="text-right">
-                                            Username
+                                            Username *
                                         </Label>
                                         <Input id="username" class="col-span-3" v-model="newUser.username" required />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="password" class="text-right">
-                                            Password
+                                            Password *
                                         </Label>
                                         <Input id="password" class="col-span-3" type="password"
                                             v-model="newUser.password" required />
                                     </div>
-                                    <div class="grid grid-cols-4 items-center gap-4">
+                                    <!--<div class="grid grid-cols-4 items-center gap-4">
                                         <Label class="text-right">
                                             Mode
                                         </Label>
@@ -87,7 +87,7 @@
                                                 </SelectContent>
                                             </Select>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label class="text-right">
                                             Verified
@@ -129,7 +129,22 @@
                                     <AlertCircle class="w-4 h-4" />
                                     <AlertTitle>Error</AlertTitle>
                                     <AlertDescription>
-                                        Failed, password too short or too simple!
+                                        Password must be at least 5 characters long and contain at least 1 uppercase
+                                        letter, 1 lowercase letter, 1 number, and 1 special character.
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="passwordLong">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Failed, password too long! Max 25 charachters
+                                    </AlertDescription>
+                                </Alert>
+                                <Alert variant="destructive" v-if="emailUsed">
+                                    <AlertCircle class="w-4 h-4" />
+                                    <AlertTitle>Error</AlertTitle>
+                                    <AlertDescription>
+                                        Failed, email is already used!
                                     </AlertDescription>
                                 </Alert>
                                 <DialogFooter>
@@ -147,7 +162,6 @@
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="p-4">Id</th>
                                 <th scope="col" class="p-4">Email</th>
                                 <th scope="col" class="p-4">Username</th>
                                 <th scope="col" class="p-4">Password</th>
@@ -160,8 +174,7 @@
                         <tbody>
                             <tr v-for="(user, index) in users" :key="index"
                                 class="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                <td class="p-4">{{ user.id }}</td>
-                                <td class="p-4">{{ user.email }}</td>
+                                <td class="p-4 text-gray-700 font-medium">{{ user.email }}</td>
                                 <td class="p-4">{{ user.name }}</td>
                                 <td class="p-4">********</td>
                                 <td class="p-4">{{ user.role }}</td>
@@ -187,26 +200,26 @@
                                                     <div class="grid gap-4 py-4">
                                                         <div class="grid grid-cols-4 items-center gap-4">
                                                             <Label for="email" class="text-right">
-                                                                Email
+                                                                Email *
                                                             </Label>
                                                             <Input id="email" class="col-span-3"
                                                                 v-model="selectedUser.email" />
                                                         </div>
                                                         <div class="grid grid-cols-4 items-center gap-4">
                                                             <Label for="username" class="text-right">
-                                                                Username
+                                                                Username *
                                                             </Label>
                                                             <Input id="username" class="col-span-3"
                                                                 v-model="selectedUser.name" />
                                                         </div>
                                                         <div class="grid grid-cols-4 items-center gap-4">
                                                             <Label for="password" class="text-right">
-                                                                Password
+                                                                Password *
                                                             </Label>
                                                             <Input id="password" class="col-span-3" type="password"
                                                                 v-model="editUser.password" />
                                                         </div>
-                                                        <div class="grid grid-cols-4 items-center gap-4">
+                                                        <!--<div class="grid grid-cols-4 items-center gap-4">
                                                             <Label class="text-right">
                                                                 Mode
                                                             </Label>
@@ -228,7 +241,7 @@
                                                                     </SelectContent>
                                                                 </Select>
                                                             </div>
-                                                        </div>
+                                                        </div>-->
                                                         <div class="grid grid-cols-4 items-center gap-4">
                                                             <Label class="text-right">
                                                                 Verified
@@ -394,20 +407,24 @@ const emailNotValid = ref(false);
 const emptyFields = ref(false);
 const restOpen = ref(false);
 const passwordShort = ref(false);
+const passwordLong = ref(false);
+const emailUsed = ref(false);
+const totalPages = ref(1);
+const actualPage = ref(1)
 
-    async function fetchUsers() {
-        try {
-            const response = await axios.get(`${apiServerAddress}/v1/admin/getUsers`, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.getItem('token'),
-                },
-            });
+async function fetchUsers() {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/admin/getUsers`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
 
-            users.value = response.data;
-        } catch (error) {
-            console.error('Failed to fetch users', error);
-        }
+        users.value = response.data;
+    } catch (error) {
+        console.error('Failed to fetch users', error);
     }
+}
 const getNumberOfUsers = () => {
     return users.value.length;
 };
@@ -445,6 +462,19 @@ async function deleteUser(userEmail) {
     }
 }
 
+async function isEmailUsed(email) {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/admin/isEmailUsed/${email}`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to check email:', error);
+    }
+}
+
 const newUser = {
     id: 0,
     email: "",
@@ -458,23 +488,40 @@ async function saveUser() {
     emailNotValid.value = false;
     emptyFields.value = false;
     passwordShort.value = false;
+    passwordLong.value = false;
+    newUser.loginMode = false;
+    emailUsed.value = false;
 
     if (!isNullOrEmpty(newUser.email) && !isNullOrEmpty(newUser.username) && !isNullOrEmpty(newUser.password)) {
         if (isEmailValid(newUser.email)) {
-            if(isPasswordValid(newUser.password)) {
-                try {
-                const response = await axios.post(`${apiServerAddress}/v1/admin/saveUser`, newUser, {
-                    headers: {
-                        Authorization: 'Bearer ' + localStorage.getItem('token'),
-                    },
-                });
-                console.log('User saved. ', response.data);
-                setNotVisible();
-                await fetchUsers();
-            } catch (error) {
-                console.error('Failed to save user:', error);
-            }
-            }else{
+            if (isPasswordValid(newUser.password)) {
+                if (!tooLong(newUser.password)) {
+                    if(! await isEmailUsed(newUser.email)){
+                        try {
+                        const response = await axios.post(`${apiServerAddress}/v1/admin/saveUser`, newUser, {
+                            headers: {
+                                Authorization: 'Bearer ' + localStorage.getItem('token'),
+                            },
+                        });
+                        console.log('User saved. ', response.data);
+                        setNotVisible();
+                        await fetchUsers();
+
+                        newUser.email = "";
+                        newUser.password = "";
+                        newUser.username = "";
+                        newUser.verified = "";
+                    } catch (error) {
+                        console.error('Failed to save user:', error);
+                    }
+                    }else{
+                        emailUsed.value = true;
+                    }
+                    
+                } else {
+                    passwordLong.value = true;
+                }
+            } else {
                 passwordShort.value = true;
             }
         } else {
@@ -496,6 +543,7 @@ const editUser = {
 
 
 async function updateUser() {
+    editUser.loginMode = false;
     try {
         await setValues();
 
@@ -595,5 +643,10 @@ function isPasswordValid(password) {
         return false;
     }
     return true;
+}
+function tooLong(password) {
+    if (password.length > 25) {
+        return true;
+    }
 }
 </script>

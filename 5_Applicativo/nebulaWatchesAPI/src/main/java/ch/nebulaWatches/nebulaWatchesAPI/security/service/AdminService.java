@@ -41,6 +41,9 @@ public class AdminService {
     public void removeUser(AdminRequest request) {
         repository.deleteByEmail(request.getEmail());
     }
+    public void archive(AdminRequest request) {
+        repository.setArchivedTrue(request.getEmail());
+    }
 
     public void saveUser(AdminRequest request){
         User user = new User();
@@ -75,6 +78,10 @@ public class AdminService {
         String mail = payload.split("\"")[3];
         User user = userService.getUserByEmail(mail);
         return user.getRole().equals(Role.ADMIN);
+    }
+
+    public boolean isEmailUsed(String mail) {
+        return repository.isEmailUsed(mail);
     }
 }
 

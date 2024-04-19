@@ -31,7 +31,7 @@
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/User Account.png" />
               <span class="text-inherit text-base font-bold">Team</span>
             </Button>
-            <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8">
+            <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8" @click="router.push('/comunication');">
               <img class="me-3" height="20px" width="20px" src="@/assets/icons/Chat.png" />
               <span class="text-inherit text-base font-bold">Communication</span>
             </Button>

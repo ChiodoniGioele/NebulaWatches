@@ -26,7 +26,7 @@
                 <div class="grid grid-cols-4 items-center gap-4">
 
                   <Label for="name" class="text-right">
-                    Name
+                    Name *
                   </Label>
                   <Input id="name" v-model="name" class="col-span-3" />
 
@@ -34,7 +34,7 @@
                 <div class="grid grid-cols-4 items-center gap-4">
 
                   <Label for="surname" class="text-right">
-                    Surname
+                    Surname *
                   </Label>
                   <Input id="surname" v-model="surname" class="col-span-3" />
 
@@ -42,7 +42,7 @@
 
                 <div class="grid grid-cols-4 items-center gap-4">
                   <Label for="email" class="text-right">
-                    Email
+                    Email *
                   </Label>
                   <Input id="email" v-model="email" class="col-span-3" />
 
@@ -128,20 +128,20 @@
                     <div class="grid gap-4 py-4">
                       <div class="grid grid-cols-4 items-center gap-4">
                         <Label for="nameMod" class="text-right">
-                          Name
+                          Name *
                         </Label>
                         <Input id="nameMod" v-model="client.name" class="col-span-3" />
                       </div>
                       <div class="grid grid-cols-4 items-center gap-4">
 
                         <Label for="surnameMod" class="text-right">
-                          Surname
+                          Surname *
                         </Label>
                         <Input id="surnameMod" v-model="client.surname" class="col-span-3" />
                       </div>
                       <div class="grid grid-cols-4 items-center gap-4">
                         <Label for="emailMod" class="text-right">
-                          Email
+                          Email *
                         </Label>
                         <Input id="emailMod" v-model="client.email" type="email" class="col-span-3" />
                       </div>

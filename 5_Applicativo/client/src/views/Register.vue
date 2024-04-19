@@ -24,7 +24,7 @@
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" type="password" v-model="password" placeholder="••••••••" class="bg-gray-50"
+                    <Input id="password" type="password" v-model="password" placeholder="YourPassword" class="bg-gray-50"
                         required />
                 </div>
                 <Button class="w-full" @click="register">
@@ -41,7 +41,7 @@
                     <AlertCircle class="w-4 h-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        Registration failed, password too short or too simple!
+                        Password must be at least 5 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
                     </AlertDescription>
                 </Alert>
                 <Alert variant="destructive" v-if="emptyFields">
@@ -56,6 +56,20 @@
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
                         Registration failed, please provide an correct email!
+                    </AlertDescription>
+                </Alert>
+                <Alert variant="destructive" v-if="passwordLong">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Failed, password too long! Max 25 charachters
+                    </AlertDescription>
+                </Alert>
+                <Alert variant="destructive" v-if="emailUsed">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Failed, email is already used!
                     </AlertDescription>
                 </Alert>
             </CardContent>
@@ -97,33 +111,49 @@ const registerFailed = ref(false);
 const passwordShort = ref(false);
 const emailNotValid = ref(false);
 const emptyFields = ref(false);
+const passwordLong = ref(false);
+const emailUsed = ref(false);
 
 async function register() {
+    emptyFields.value = false;
+    passwordShort.value = false;
+    emailNotValid.value = false;
+    passwordLong.value = false;
+    registerFailed.value = false;
+    isEmailUsed.value = false;
+
     if (!isNullOrEmpty(username.value) && !isNullOrEmpty(email.value) && !isNullOrEmpty(password.value)) {
-        emptyFields.value = false;
         if (isPasswordValid(password.value)) {
-            passwordShort.value = false;
-            if (isEmailValid(email.value)) {
-                emailNotValid.value = false;
-                try {
-                    const response = await axios.post(`${apiServerAddress}/auth/register`, {
-                        username: username.value,
-                        email: email.value,
-                        password: password.value
-                    });
-                    const token = response.data.token;
-                    if (!isNullOrEmpty(token)) {
-                        localStorage.setItem('token', token);
-                        router.push('/');
-                    } else {
+            if (!tooLong(password.value)) {
+                if (isEmailValid(email.value)) {
+                    if(! await isEmailUsed(email.value)){
+                        try {
+                        const response = await axios.post(`${apiServerAddress}/auth/register`, {
+                            username: username.value,
+                            email: email.value,
+                            password: password.value
+                        });
+                        const token = response.data.token;
+                        if (!isNullOrEmpty(token)) {
+                            localStorage.setItem('token', token);
+                            router.push('/');
+                        } else {
+                            registerFailed.value = true;
+                        }
+                    } catch (error) {
                         registerFailed.value = true;
                     }
-                } catch (error) {
-                    registerFailed.value = true;
+                    }else{
+                        isEmailUsed.value = true;
+                    }
+                    
+                } else {
+                    emailNotValid.value = true;
                 }
             } else {
-                emailNotValid.value = true;
+                passwordLong.value = true;
             }
+
         } else {
             passwordShort.value = true;
         }
@@ -133,6 +163,18 @@ async function register() {
     }
 }
 
+async function isEmailUsed(email) {
+    try {
+        const response = await axios.get(`${apiServerAddress}/v1/admin/isEmailUsed/${email}`, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token'),
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to remove check email:', error);
+    }
+}
 
 //Utils
 function isNullOrEmpty(str) {
@@ -153,5 +195,9 @@ function isEmailValid(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
 }
-
+function tooLong(password) {
+    if (password.length > 25) {
+        return true;
+    }
+}
 </script>
