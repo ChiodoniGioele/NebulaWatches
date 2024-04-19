@@ -38,5 +38,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT COUNT(u) > 0 FROM User u WHERE u.email = ?1")
     boolean isEmailUsed(String email);
 
+    @Query("SELECT u FROM User u WHERE u.code = ?1 AND u.email = ?2")
+    Optional<User> findByCodeAndEmail(int code, String email);
+
+    @Query("SELECT u.verified FROM User u WHERE u.email = ?1")
+    Optional<Boolean> isVerified(String email);
+
+    @Query("SELECT code FROM User WHERE email = ?1")
+    int getCode(String email);
+
 }
 
