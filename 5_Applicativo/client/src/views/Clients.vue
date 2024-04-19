@@ -4,12 +4,12 @@
     <div class="flex flex-col w-full">
       <div class="py-6 px-8">
         <div class="mt-5 flex gap-7 items-center">
-          <div>
+          <!--<div>
             <Button @click="$router.back()" variant="secondary">
               <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
-              <!-- Go back -->
+              
             </Button>
-          </div>
+          </div>-->
 
           <div class="w-full flex gap-7 items-center"></div>
           <Dialog :open="restOpen" @update:open="setNotVisible">
@@ -110,7 +110,9 @@
           </TabsContent>
         </Tabs>
 
-
+        <div class="px-10 flex mt-7">
+                <h1 class="font-semibold "> Client Members </h1>
+            </div>
 
       <div class="mt-12 w-full gap-7 flex items-center justify-center px-10 ">
         <Table>
@@ -123,6 +125,7 @@
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
               <!--<TableHead>Acquisti</TableHead> -->
+              <TableHead></TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -204,6 +207,8 @@
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
+              </TableCell>
+              <TableCell>
                 <Dialog>
                   <DialogTrigger>
                     <Button variant="outline">Details</Button>
