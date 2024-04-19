@@ -13,6 +13,7 @@ import Admin from './views/Admin.vue';
 import StorageCustom from './views/StorageCustom.vue';
 import CustomWatch from './views/CustomWatch.vue';
 import Clients from './views/Clients.vue';
+import Comunication from './views/Comunication.vue';
 
 const routes: Array<RouteRecordRaw> = [
     { path: '/', component: Home },
@@ -29,6 +30,7 @@ const routes: Array<RouteRecordRaw> = [
     { path: '/storageCustom', component: StorageCustom },
     { path: '/customWatch/:reference/:sel?', component: CustomWatch },
     {path: '/clients', component: Clients},
+    {path: '/comunication', component: Comunication}
 ];
 
 const router = createRouter({

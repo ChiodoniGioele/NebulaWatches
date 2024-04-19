@@ -14,7 +14,9 @@ import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.repository.WatchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,57 +33,67 @@ public class StorageService {
     public List<Storage> getAllStorage() {
         return storageRepository.findAll();
     }
-    public int getQuantityStorage(Long id){ return storageRepository.findQuantityById(id);}
-    public Optional<Storage> getStorage(int id){ return storageRepository.findById(id);}
+
+    public int getQuantityStorage(Long id) {
+        return storageRepository.findQuantityById(id);
+    }
+
+    public Optional<Storage> getStorage(int id) {
+        return storageRepository.findById(id);
+    }
 
     public List<Storage> getWatchesByUserId(int userId) {
         return storageRepository.findByUser(userId);
     }
+
     public void addWatchToStorage(StorageRequest request) {
-        Storage storage = new Storage();
-        User user = userRepository.findByEmail(request.getUser_email())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        storage.setUser(user);
-        if (!request.getWatch_reference().isEmpty()) {
-            Watch watch = watchRepository.findByReference(request.getWatch_reference())
-                    .orElseThrow(() -> new IllegalArgumentException("Watch not found"));
-            storage.setWatch(watch);
-        }else if(!request.getCustom_watch_reference().isEmpty()){
-            CustomWatch customWatch = customWatchRepository.findByReference(request.getCustom_watch_reference())
-                    .orElseThrow(() -> new IllegalArgumentException("Custom Watch not found"));
-            storage.setCustomWatch(customWatch);
-        }
-
-        if(request.getQuantity() <= 0 || request.getQuantity() > 100){
-            storage.setQuantity(1);
-        }else {
-            storage.setQuantity(request.getQuantity());
-        }
-        storage.setStatus(new StatusStorage(request.getStatus()));
-        if(request.getBuyPrice() < 0 ){
-            storage.setBuyPrice(0);
-        }else {
-            storage.setBuyPrice(request.getBuyPrice());
-        }
-        storage.setPurchaseDate(request.getPurchaseDate());
-        if(storage.getStatus().getName().equals("Sold")){
-            if(request.getSellPrice() < 0 ){
-                storage.setSellPrice(0);
-            }else {
-                storage.setSellPrice(request.getSellPrice());
+        if (!isRequestInStorage(request)) {
+            Storage storage = new Storage();
+            User user = userRepository.findByEmail(request.getUser_email())
+                    .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            storage.setUser(user);
+            if (!request.getWatch_reference().isEmpty()) {
+                Watch watch = watchRepository.findByReference(request.getWatch_reference())
+                        .orElseThrow(() -> new IllegalArgumentException("Watch not found"));
+                storage.setWatch(watch);
+            } else if (!request.getCustom_watch_reference().isEmpty()) {
+                CustomWatch customWatch = customWatchRepository.findByReference(request.getCustom_watch_reference())
+                        .orElseThrow(() -> new IllegalArgumentException("Custom Watch not found"));
+                storage.setCustomWatch(customWatch);
             }
-            Client client = clientRepository.findById(request.getClientId())
-                    .orElseThrow(() -> new IllegalArgumentException("Client not found"));
-            storage.setClient(client);
-            Team team = teamRepository.findById(request.getTeamId())
-                    .orElseThrow(() -> new IllegalArgumentException("Team not found"));
-            storage.setTeam(team);
-            storage.setSellDate(request.getSellDate());
-        }else{
-            storage.setSellPrice(0);
+
+            if (request.getQuantity() <= 0 || request.getQuantity() > 2147483646) {
+                storage.setQuantity(1);
+            } else {
+                storage.setQuantity(request.getQuantity());
+            }
+            storage.setStatus(new StatusStorage(request.getStatus()));
+            if (request.getBuyPrice() < 0) {
+                storage.setBuyPrice(0);
+            } else {
+                storage.setBuyPrice(request.getBuyPrice());
+            }
+            storage.setPurchaseDate(request.getPurchaseDate());
+            if (storage.getStatus().getName().equals("Sold")) {
+                if (request.getSellPrice() < 0) {
+                    storage.setSellPrice(0);
+                } else {
+                    storage.setSellPrice(request.getSellPrice());
+                }
+                Client client = clientRepository.findById(request.getClientId())
+                        .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+                storage.setClient(client);
+                Team team = teamRepository.findById(request.getTeamId())
+                        .orElseThrow(() -> new IllegalArgumentException("Team not found"));
+                storage.setTeam(team);
+                storage.setSellDate(request.getSellDate());
+            } else {
+                storage.setSellPrice(0);
+            }
+
+            storageRepository.save(storage);
         }
 
-        storageRepository.save(storage);
     }
 
     public void removeFromStorage(StorageRequest request) {
@@ -89,7 +101,7 @@ public class StorageService {
     }
 
     public void editStorage(StorageRequest request) throws IllegalArgumentException {
-        Optional<Storage> storage = getStorage((int)request.getId());
+        Optional<Storage> storage = getStorage((int) request.getId());
         Storage newStorage = new Storage();
         if (storage.isPresent()) {
             Storage storage1 = storage.get();
@@ -97,9 +109,9 @@ public class StorageService {
                 newStorage.setQuantity(request.getQuantity());
                 newStorage.setUser(storage1.getUser());
                 newStorage.setStatus(new StatusStorage(request.getStatus()));
-                if(storage1.getWatch() != null){
+                if (storage1.getWatch() != null) {
                     newStorage.setWatch(storage1.getWatch());
-                }else if(storage1.getCustomWatch() != null){
+                } else if (storage1.getCustomWatch() != null) {
                     newStorage.setCustomWatch(storage1.getCustomWatch());
                 }
                 newStorage.setSellPrice(request.getSellPrice());
@@ -114,11 +126,13 @@ public class StorageService {
                 newStorage.setPurchaseDate(request.getPurchaseDate());
                 newStorage.setSellDate(request.getSellDate());
 
-                storageRepository.save(newStorage);
+                if (!isRequestInStorageEdit(request)) {
+                    storageRepository.save(newStorage);
+                }
 
-                if(storage1.getQuantity() == request.getQuantity()){
+                if (storage1.getQuantity() == request.getQuantity()) {
                     storageRepository.deleteById(request.getId());
-                }else{
+                } else {
                     int qty = storage1.getQuantity() - request.getQuantity();
                     storageRepository.updateQuantityById(qty, request.getId());
                 }
@@ -130,9 +144,68 @@ public class StorageService {
         }
     }
 
-    public List<Storage> getStorageByTeamId(Long id){
+    public List<Storage> getStorageByTeamId(Long id) {
         return storageRepository.getByTeamId(id);
     }
 
+    public boolean isRequestInStorage(StorageRequest request) {
+
+        User user = userRepository.findByEmail(request.getUser_email())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Optional<Storage> existingStorage;
+        if (request.getStatus().equals("Owned")) {
+            if (!Objects.equals(request.getWatch_reference(), "")) {
+                existingStorage = storageRepository.getByRequest(request.getWatch_reference(), user.getId(), request.getPurchaseDate(), request.getBuyPrice(), request.getStatus());
+            } else {
+                existingStorage = storageRepository.getByRequest(request.getCustom_watch_reference(), user.getId(), request.getPurchaseDate(), request.getBuyPrice(), request.getStatus());
+            }
+            if (existingStorage.isPresent()) {
+                Storage storage = existingStorage.get();
+                storage.setQuantity(storage.getQuantity() + request.getQuantity());
+                storageRepository.save(storage);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (!Objects.equals(request.getWatch_reference(), "")) {
+                existingStorage = storageRepository.getByRequestSold(request.getWatch_reference(), user.getId(), request.getPurchaseDate(), request.getBuyPrice(), request.getStatus(), request.getSellPrice(), request.getSellDate(), request.getTeamId(), request.getClientId());
+            } else {
+                existingStorage = storageRepository.getByRequestSold(request.getCustom_watch_reference(), user.getId(), request.getPurchaseDate(), request.getBuyPrice(), request.getStatus(), request.getSellPrice(), request.getSellDate(), request.getTeamId(), request.getClientId());
+            }
+            if (existingStorage.isPresent()) {
+                Storage storage = existingStorage.get();
+                storage.setQuantity(storage.getQuantity() + request.getQuantity());
+                storageRepository.save(storage);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public boolean isRequestInStorageEdit(StorageRequest request) {
+        User user = userRepository.findByEmail(request.getUser_email())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Optional<Storage> existingStorage;
+
+        if (!Objects.equals(request.getWatch_reference(), "")) {
+            existingStorage = storageRepository.getByRequestSold(request.getWatch_reference(), user.getId(), request.getPurchaseDate(), request.getBuyPrice(), "Sold", request.getSellPrice(), request.getSellDate(), request.getTeamId(), request.getClientId());
+        } else {
+            existingStorage = storageRepository.getByRequestSold(request.getCustom_watch_reference(), user.getId(), request.getPurchaseDate(), request.getBuyPrice(), "Sold", request.getSellPrice(), request.getSellDate(), request.getTeamId(), request.getClientId());
+        }
+        if (existingStorage.isPresent()) {
+            Storage storage = existingStorage.get();
+            storage.setQuantity(storage.getQuantity() + request.getQuantity());
+            storageRepository.save(storage);
+
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
 }

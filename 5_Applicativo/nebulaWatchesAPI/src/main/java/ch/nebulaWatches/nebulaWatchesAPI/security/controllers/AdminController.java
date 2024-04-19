@@ -60,11 +60,11 @@ public class AdminController {
         try {
             String token = headers.getFirst("Authorization");
             if(token != null && adminService.isAdminByToken(token)){
-                adminService.removeUser(request);
-                return ResponseEntity.ok("User removed successfully.");
+                adminService.archive(request);
+                return ResponseEntity.ok("User archived successfully.");
             }else{
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only admins are allowed to remove users.");
+                        .body("Only admins are allowed to archive users.");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -116,6 +116,10 @@ public class AdminController {
         } catch (Exception e) {
             return null;
         }
+    }
+    @GetMapping("/isEmailUsed/{email}")
+    public boolean isEmailUsed(@PathVariable String email){
+        return adminService.isEmailUsed(email);
     }
 
 }

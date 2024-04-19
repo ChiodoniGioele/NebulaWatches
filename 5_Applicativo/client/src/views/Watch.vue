@@ -4,8 +4,8 @@
         <div class="flex flex-col w-full">
             <div class="px-8 py-6">
                 <div class="flex w-full items-center gap-1.5">
-                    <Input class="border-stone-900" @click="router.push('/search')" @change="router.push('/search')" id="email" type="text"
-                        placeholder="Search a watch ..." />
+                    <Input class="border-stone-900" @click="router.push('/search')" @change="router.push('/search')"
+                        id="email" type="text" placeholder="Search a watch ..." />
                     <Button @click="router.push('/search')" type="submit">
                         Search
                     </Button>
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="flex gap-2 w-auto">
-                        <Popover ref="popover" v-if="!selector">
+                        <Popover ref="popover" v-if="!selector" :open="restOpen" @update:open="setNotVisible">
                             <PopoverTrigger as-child>
                                 <Button variant="outline">Add to storage</Button>
                             </PopoverTrigger>
@@ -128,6 +128,11 @@
                                             The sell date must be after the purchase date!
                                         </AlertDescription>
                                     </Alert>
+                                    <div
+                                        class="flex items-center text-gray-500 border border-gray-300 rounded-md p-2 text-sm">
+                                        <Info class="w-4 h-4 mr-2" />
+                                        <span>All fields are required!</span>
+                                    </div>
                                     <Button variant="outline" @click="addToStorage">Add to storage</Button>
                                 </div>
                             </PopoverContent>
@@ -169,11 +174,13 @@
                                                     <TooltipProvider :delayDuration="400" class="">
                                                         <Tooltip class="">
                                                             <TooltipTrigger>
-                                                                
-                                                                <Button variant="outline" class="w-full" @click="redirectWatchChartsAnalytics()">
+
+                                                                <Button variant="outline" class="w-full"
+                                                                    @click="redirectWatchChartsAnalytics()">
                                                                     <div class="flex gap-2">
                                                                         <div>
-                                                                            <img class="h-6" src="@/assets/icons/watchcharts.png" />
+                                                                            <img class="h-6"
+                                                                                src="@/assets/icons/watchcharts.png" />
                                                                         </div>
                                                                         <div>
                                                                             Watchcharts
@@ -392,6 +399,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { apiServerAddress } from "@/main.ts";
 import { CheckCircle } from "lucide-vue-next";
 import { AlertCircle } from 'lucide-vue-next'
+import { Info } from 'lucide-vue-next'
 import {
     Popover,
     PopoverContent,
@@ -462,21 +470,22 @@ const email = ref('');
 const materialsUsedNames = ref('');
 const prices = ref([]);
 const dates = ref([]);
+const restOpen = ref(false);
 
-function redirectWatchChartsAnalytics(){
-    window.open(`https://watchcharts.com/watches/search?q=${watch.value.reference}`,'_blank')
+function redirectWatchChartsAnalytics() {
+    window.open(`https://watchcharts.com/watches/search?q=${watch.value.reference}`, '_blank')
 }
 
-function redirectWatchChartsMarketplace(){
-    window.open(`https://marketplace.watchcharts.com/listings?page=1&q=${watch.value.reference}`,'_blank')
+function redirectWatchChartsMarketplace() {
+    window.open(`https://marketplace.watchcharts.com/listings?page=1&q=${watch.value.reference}`, '_blank')
 }
 
-function redirectChrono24(){
-    window.open(`https://www.chrono24.it/search/index.htm?query=${watch.value.reference}&dosearch=true&searchexplain=1}`,'_blank')
+function redirectChrono24() {
+    window.open(`https://www.chrono24.it/search/index.htm?query=${watch.value.reference}&dosearch=true&searchexplain=1}`, '_blank')
 }
 
-function redirectEbay(){
-    window.open(`https://www.ebay.com/`,'_blank')
+function redirectEbay() {
+    window.open(`https://www.ebay.com/`, '_blank')
 }
 
 function removeItemFromArray(arr, value) {
@@ -561,7 +570,7 @@ async function addToStorage() {
         invalidData.value = true;
     }
     if (isValidPrice(selectedQuantity.value)) {
-        newStorage.selectedQuantity = selectedQuantity.value;
+        newStorage.quantity = selectedQuantity.value;
     } else {
         invalidData.value = true;
     }
@@ -612,6 +621,11 @@ async function addToStorage() {
                     });
                     storageSuccesfull.value = true;
                     console.log('Watch added to storage. ', response.data);
+                    buyPrice.value = null;
+                    selectedQuantity.value = null;
+                    purchaseDate.value = null;
+                    sellPrice.value = null;
+                    sellDate.value = null;
                 } catch (error) {
                     console.error('Failed to add watch to storage:', error);
                 }
@@ -624,7 +638,6 @@ async function addToStorage() {
         }
     }
 }
-
 
 async function addOrRemoveFavourite() {
     const newFavourite = {
@@ -746,7 +759,9 @@ function isValidDate(date) {
     return dateFormat.test(date);
 }
 function soldAfterPurchase(dateSold, datePurchase) {
-    return dateSold > datePurchase;
+    const milliseconds1 = Date.parse(dateSold);
+    const milliseconds2 = Date.parse(datePurchase);
+    return milliseconds1 >= milliseconds2;
 }
 function soldForMoreOrEqual(priceSold, pricePurchase) {
     return priceSold >= pricePurchase;
@@ -761,5 +776,18 @@ function redo() {
 }
 function res() {
     showDialogPrice.value = false;
+}
+function setNotVisible() {
+    restOpen.value = !restOpen.value;
+    if(!restOpen.value){
+        invalidData.value = false;
+        storageSuccesfull.value = false;
+        invalidDate.value = false;
+        buyPrice.value = null;
+        selectedQuantity.value = null;
+        purchaseDate.value = null;
+        sellPrice.value = null;
+        sellDate.value = null;
+    }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
-     <div class="text-center border-stone-500 border-2 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] pt-2">
+    <div
+        class="text-center border-stone-500 border-2 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] pt-2">
         <div class="h-[50px]">
             <div class="pt-1 pr-1 pl-1 flex justify-between">
                 <div class="self-center align-middle text-gray-400 text-sm">
@@ -17,7 +18,7 @@
                             <DialogHeader>
                                 <DialogTitle>Set Watch Sold:</DialogTitle>
                                 <AlertDialogDescription>
-                                    Here you can edit this when you sell it:
+                                    Here you can edit this watch when you sell it:
                                     <br>
                                     • Current amount: {{ storage.quantity }}
                                     <br>
@@ -109,6 +110,10 @@
                                     The sell date must be after the purchase date!
                                 </AlertDescription>
                             </Alert>
+                            <div class="flex items-center text-gray-500 border border-gray-300 rounded-md p-2 text-sm">
+                                <Info class="w-4 h-4 mr-2" />
+                                <span>All fields are required!</span>
+                            </div>
                             <DialogFooter>
                                 <Button type="submit" @click="editStorage">
                                     Save Changes
@@ -315,6 +320,8 @@ const oldStorage = {
 };
 const editStrg = {
     id: props.storage.id,
+    watch_reference: "",
+    user_email: "",
     quantity: 1,
     status: "Sold",
     buyPrice: props.storage.buyPrice,
@@ -380,7 +387,7 @@ async function editStorage() {
     if (!isValidPrice(editStrg.quantity)) {
         invalidData.value = true;
     }
-
+    editStrg.user_email = emailUser.value;
     if (!invalidData.value) {
         var flag = soldAfterPurchase(editStrg.sellDate, editStrg.purchaseDate);
         var flag2 = soldForMoreOrEqual(editStrg.sellPrice, editStrg.buyPrice);
@@ -389,6 +396,11 @@ async function editStorage() {
             if (flag2 || assertClient.value) {
                 showDialogPrice.value = false;
                 assertClient.value = false;
+                if(props.storage.watch){
+                    editStrg.watch_reference = props.storage.watch.reference;
+                }else{
+                    editStrg.watch_reference = props.storage.customWatch.reference;
+                }
                 try {
                     const response = await axios.post(`${apiServerAddress}/v1/storage/editStorageWatch`, editStrg, {
                         headers: {
@@ -458,7 +470,9 @@ function isValidDate(date) {
     return dateFormat.test(date);
 }
 function soldAfterPurchase(dateSold, datePurchase) {
-    return dateSold > datePurchase;
+    const milliseconds1 = Date.parse(dateSold);
+    const milliseconds2 = Date.parse(datePurchase);
+    return milliseconds1 >= milliseconds2;
 }
 function soldForMoreOrEqual(priceSold, pricePurchase) {
     return priceSold >= pricePurchase;

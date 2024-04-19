@@ -1,6 +1,9 @@
 package ch.nebulaWatches.nebulaWatchesAPI.storage.repository;
 
+import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
+import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
+import ch.nebulaWatches.nebulaWatchesAPI.team.model.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StorageRepository extends JpaRepository<Storage, Integer> {
@@ -35,5 +40,13 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     int sumQuantityByTeamMonth(Long teamId, LocalDate begin, LocalDate end);
 
     List<Storage> getByTeamId(Long id);
+
+    @Query("SELECT s FROM Storage s WHERE (s.watch.reference = ?1 OR s.customWatch.reference = ?1) AND s.user.id = ?2 AND s.purchaseDate = ?3 AND s.buyPrice = ?4 AND s.status.name = ?5")
+    Optional<Storage> getByRequest(String reference, int userId, Date date, float buyPrice, String status);
+
+    @Query("SELECT s FROM Storage s WHERE (s.watch.reference = ?1 OR s.customWatch.reference = ?1) AND s.user.id = ?2 AND s.purchaseDate = ?3 AND s.buyPrice = ?4 AND s.status.name = ?5 AND s.sellPrice = ?6 AND s.sellDate = ?7 AND s.team.id = ?8 AND s.client.id = ?9")
+    Optional<Storage> getByRequestSold(String reference, int userId, Date date, float buyPrice, String status, float sellPrice, Date date2, Long teamId, Long clientId);
+
+
 
 }

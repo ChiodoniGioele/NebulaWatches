@@ -20,7 +20,7 @@
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" v-model="password" type="password" placeholder="••••••••" class="bg-gray-50"
+                    <Input id="password" v-model="password" type="password" placeholder="YourPassword" class="bg-gray-50"
                         required />
                 </div>
                 <Button class="w-full" @click="login">
