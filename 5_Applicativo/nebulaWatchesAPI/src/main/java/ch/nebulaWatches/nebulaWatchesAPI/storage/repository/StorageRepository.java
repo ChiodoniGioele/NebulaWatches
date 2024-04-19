@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StorageRepository extends JpaRepository<Storage, Integer> {
@@ -33,6 +34,10 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     //Query scritta in mysql e non in JPA a causa di date_sub()
     @Query(value = "SELECT SUM(s.quantity) FROM storage s WHERE s.team_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3", nativeQuery = true)
     int sumQuantityByTeamMonth(Long teamId, LocalDate begin, LocalDate end);
+
+
+    @Query(value = "SELECT SUM(s.quantity) FROM Storage s WHERE s.client_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3 and s.status_name = ?4", nativeQuery = true)
+    Optional<Integer> sumQuantityByClientMonth(Long clientId, LocalDate begin, LocalDate end, String status);
 
 
     @Query("SELECT s FROM Storage s WHERE s.user.email = ?1 and s.client.id = ?2 and s.status.name = ?3")

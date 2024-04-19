@@ -6,8 +6,12 @@ import ch.nebulaWatches.nebulaWatchesAPI.clients.model.ClientRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.clients.repository.ClientRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.BuysClientRequest;
+import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,4 +37,6 @@ public class ClientService {
 
         repository.save(client);
     }
+
+
 }
