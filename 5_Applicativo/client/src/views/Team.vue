@@ -90,7 +90,7 @@
             </div>
 
             <div class="px-10 flex">
-                <h1 class="font-semibold "> Team Graphs </h1>
+                <h1 class="font-semibold "> Team </h1>
             </div>
 
             <Tabs default-value="general" class="px-10 mt-5">

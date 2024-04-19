@@ -4,10 +4,10 @@
         <div class="flex flex-col w-full" > 
             <div class="px-8 py-6">
                 
-                <div class="flex w-full items-center gap-2.5">
+                <!-- <div class="flex w-full items-center gap-2.5">
                     <Input id="email" type="text" placeholder="Search a watch in your storage..." />
                     <Button type="submit"> Search </Button>
-                </div>
+                </div> -->
 
                 <div class="mt-12 px-1 flex gap-3 items-center">
                     <div class="flex gap-2">
