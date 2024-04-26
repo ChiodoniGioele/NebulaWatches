@@ -8,6 +8,7 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.service.JwtService;
 import ch.nebulaWatches.nebulaWatchesAPI.security.service.UserService;
 import ch.nebulaWatches.nebulaWatchesAPI.utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.WatchIndexes;
+import com.mailjet.client.errors.MailjetException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +59,7 @@ public class AuthenticationController {
         return userService.isUserPresent(email);
     }
     @GetMapping("/sendAgain")
-    public void send(@RequestParam("email") String email){
+    public void send(@RequestParam("email") String email) throws MailjetException {
         userService.sendAgain(email);
 
     }
