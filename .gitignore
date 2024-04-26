@@ -3,8 +3,19 @@
 
 #Ignora file ~
 ~*.docx
-~*.tmp
-~*
 
-# Mac
-.DS*
+#Ignora gli errori
+errors.log
+
+#Ignora i file di environment che contengono 
+.env
+*.env
+
+#Ignora file tmp
+~.tmp
+
+#Ignora db
+*.db
+
+*.key
+*.cert

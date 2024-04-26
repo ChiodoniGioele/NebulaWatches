@@ -46,8 +46,13 @@ class Watch:
     def split_values_in_dict(self):
         self.values.pop(len(self.values) - 1)  # removes the last line because it's blank
         values_dict = {}
+        retail_prices_amount = 0
         for line_value in self.values:
             header, value = line_value.split('¦')
+
+            if header == 'retail_price ':
+                retail_prices_amount += 1
+                header = f'retail_price{retail_prices_amount} '
             values_dict[header] = value
         return values_dict
     
@@ -241,16 +246,26 @@ class WatchDatabase:
             return existing_hands
     
     #@handle_sql_exceptions
-    def movement_exists(self, movement_reference):
-        pass
+    def movement_exists(self, movement_name):
+        self.cursor_obj.execute('SELECT * FROM movement WHERE name LIKE %s', (movement_name,))
+        rows = self.cursor_obj.fetchall()
+        return rows[0][0] if len(rows) > 0 else None
 
     #@handle_sql_exceptions
-    def add_movement(self, movement):
-        pass
+    def add_movement(self, movement_name):
+        existing_movement = self.movement_exists(movement_name)
+        if existing_movement is None:
+            self.cursor_obj.execute('INSERT INTO movement(name) VALUES(%s)', (movement_name,))
+            self.conn.commit()
+
+            movement_id = self.cursor_obj.lastrowid
+            return movement_id
+        else:
+            return existing_movement
 
     #@handle_sql_exceptions
     def watch_material_relationship_exists(self, watch_reference, material_name):
-        self.cursor_obj.execute('SELECT * FROM watchUsesMaterials WHERE watch_reference LIKE %s AND material_name LIKE %s', (watch_reference, material_name,))
+        self.cursor_obj.execute('SELECT * FROM watch_uses_materials WHERE watch_reference LIKE %s AND material_name LIKE %s', (watch_reference, material_name,))
         rows = self.cursor_obj.fetchall()
         return rows[0][0] if len(rows) > 0 else None
 
@@ -264,10 +279,26 @@ class WatchDatabase:
         existing_watch_material_relationship = self.watch_material_relationship_exists(watch_reference, material_name)
 
         if not existing_watch_material_relationship:
-            self.cursor_obj.execute('INSERT INTO watchUsesMaterials(watch_reference, material_name) VALUES(%s, %s)', (watch_reference, material_name,))
+            self.cursor_obj.execute('INSERT INTO watch_uses_materials(watch_reference, material_name) VALUES(%s, %s)', (watch_reference, material_name,))
             self.conn.commit()
         else:
             return existing_watch_material_relationship
+        
+    
+    def watch_retail_price_relationship_exists(self, watch_reference, date, retail_price):
+        self.cursor_obj.execute('SELECT * FROM watch_has_price WHERE watch_reference LIKE %s AND date LIKE %s AND price LIKE %s', (watch_reference, date, float(retail_price)))
+        rows = self.cursor_obj.fetchall()
+        return rows[0][0] if len(rows) > 0 else None
+
+    #@handle_sql_exceptions
+    def add_watch_retail_price_relationship(self, watch_reference, date, retail_price):
+        existing_watch_retail_price_relationship = self.watch_retail_price_relationship_exists(watch_reference, date, retail_price)
+
+        if not existing_watch_retail_price_relationship:
+            self.cursor_obj.execute('INSERT INTO watch_has_price(watch_reference, date, price) VALUES(%s, %s,%s)', (watch_reference, date, float(retail_price)))
+            self.conn.commit()
+        else:
+            return existing_watch_retail_price_relationship
     
     #@handle_sql_exceptions
     def watch_exists(self, watch_reference):
@@ -299,6 +330,7 @@ class WatchDatabase:
             values_dict = watch.split_values_in_dict()
 
             all_materials_used = []
+            dates_and_prices = []
 
             optional_values_cols += 'retail_price, '
             optional_values += self.add_optional_value(-1)
@@ -320,8 +352,6 @@ class WatchDatabase:
                     brand_id = self.add_brand(watch.brand)
                     family_id = self.add_family(value, brand_id)
                     optional_values += self.add_optional_value(family_id)
-                elif header == 'movement':
-                    pass
                 elif header == 'produced':
                     optional_values_cols += 'production_time, '
                     
@@ -370,8 +400,11 @@ class WatchDatabase:
                 elif header == 'color':
                     optional_values_cols += 'dial_color_name, '
                     optional_values += self.add_optional_value_string(self.add_dial_color(value))
+                elif header == 'movement':
+                    optional_values_cols += 'movement_id, '
+                    optional_values += self.add_optional_value(self.add_movement(value))
                 elif header == 'indexes':
-                    optional_values_cols += 'indexes_name, '
+                    optional_values_cols += 'watch_indexes_name, '
                     optional_values += self.add_optional_value_string(self.add_indexes(value))
                 elif header == 'hands':
                     optional_values_cols += 'hands_name, '
@@ -390,7 +423,7 @@ class WatchDatabase:
                 elif header == 'coating':
                     optional_values_cols += 'coating_material_name, '
                     material_id = self.add_material(value)
-                    optional_values += self.add_optional_value(material_id)
+                    optional_values += self.add_optional_value_string(material_id)
 
                     #self.add_watch_material_relationship(watch.reference, value)
                     all_materials_used.append(value)
@@ -398,8 +431,21 @@ class WatchDatabase:
                     materials_used = value.split(', ')
                     for mat in materials_used:
                         self.add_material(mat)
-                        all_materials_used.append(value)
+                        all_materials_used.append(mat)
                         #self.add_watch_material_relationship(watch.reference,self.add_material(mat))
+                elif 'retail_price' in header:
+                    value = value.strip()
+                    if value != ',NULL':
+                        price_values = value.split(',')
+                        date = price_values[0]
+                        price = price_values[1].replace(',', '')
+                        # print(watch.reference)
+                        # print('|' + date + '|')
+                        # print('|' + price + '|')
+                        #self.add_watch_retail_price_relationship(watch.reference, date, price)
+                        dates_and_prices.append([date, price])
+                    
+                
                 # else:
                 #     optional_values_cols += header + ', '
                 #     optional_values += value + ', '
@@ -418,23 +464,26 @@ class WatchDatabase:
             # input()
 
             query = f'INSERT INTO watch({optional_values_cols}, image) VALUES({optional_values}, %s)'
-            # print(query)
-            # print('QUERY DA FARE')
-            self.cursor_obj.execute(query, (watch.image_data))
-            # print('QUERY FATTA')
-            #self.cursor_obj(query)
+            self.cursor_obj.execute(query, (watch.image_data,))
+
             self.conn.commit()
-            # print('QUERY COMMIT')
 
             for mat in all_materials_used:
                 self.add_watch_material_relationship(watch.reference,self.add_material(mat))
             
+            print(dates_and_prices)
+
+            with open('prices.log', 'a') as f:
+                f.write(str(dates_and_prices) + '\n')
+
+            for date_and_price in dates_and_prices:
+                self.add_watch_retail_price_relationship(watch.reference, date_and_price[0], date_and_price[1])
             self.conn.commit()
 
 
 class OldWatchDatabase:
-    def __init__(self):
-        self.db_file_path = '/Users/alexandruciobanu/Developer/WatchesScraper'
+    def __init__(self, db_file_path='/Users/alexandruciobanu/Developer/new_watches_with_prices.db'):
+        self.db_file_path = db_file_path
         self.cursor_obj = None
         self.conn = None
         self.create_db_connection()
@@ -474,6 +523,36 @@ class OldWatchDatabase:
 
     def get_all_watches_in_db(self):
         self.cursor_obj.execute('SELECT * FROM watch')
+        rows = self.cursor_obj.fetchall()
+        
+        return rows
+
+    def create_db_watch_table(self):
+        table_creation = """
+        CREATE TABLE watch (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            retail_price REAL,
+
+            brand TEXT,
+            reference TEXT,
+            name TEXT,
+
+            full_data TEXT,
+            description TEXT,
+            image BLOB
+        );
+        """
+        self.cursor_obj.execute(table_creation)
+
+    def get_watches_count(self):
+        query = f"SELECT COUNT(*) FROM watch"
+        self.cursor_obj.execute(query)
+        result = self.cursor_obj.fetchone()
+
+        return result[0]
+    
+    def get_watches_by_limit(self, limit_size, offset):
+        self.cursor_obj.execute(f'SELECT * FROM watch LIMIT {limit_size} OFFSET {offset}')
         rows = self.cursor_obj.fetchall()
         
         return rows

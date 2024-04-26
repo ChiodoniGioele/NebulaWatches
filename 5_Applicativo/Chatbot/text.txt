@@ -1,0 +1,10 @@
+
+                    If there are no watch references don't put anything:
+                    Forbidden, not valid, should not respond with this, example:
+                    1. !watch_reference[]  -->  this should not be present because it's blank.
+                    2. Il tuo username è sus@sus.sus.
+                       !watch_reference[]  --> should not be present because it's blank.
+
+                       At the end of every response, only where there is at least one watch involved, add a list
+                    of every watch reference in the following format, only if there are watch references:
+                    !watch_reference[<watch_reference_value>];!watch_reference[<watch_reference_value2>];!watch_reference[<watch_reference_value3>]
