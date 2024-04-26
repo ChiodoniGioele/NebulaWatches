@@ -51,6 +51,9 @@ public class AdminService {
         int code = -1;
         if(!request.isVerified()){
             code = (int) (100000 + Math.random() * 900000);
+            String text = "Hello " + request.getUsername() + ", \n\r" + "To complete the registration process for your " +
+                    "account, please use the following PIN code: \n\r" + code + "\n\r \n\r Sincerely, \n\r NebulaWatches Team";
+            emailService.sendEmail(InputUtils.testInput(request.getEmail()), "NebulaWatches Account Verification - Your PIN Code", text);
         }
         user.setCode(code);
         user.setUsername(InputUtils.testInput(request.getUsername()));
@@ -61,9 +64,6 @@ public class AdminService {
         user.setVerified(request.isVerified());
         repository.save(user);
 
-        String text = "Hello " + request.getUsername() + ", \n\r" + "To complete the registration process for your " +
-                "account, please use the following PIN code: \n\r" + code + "\n\r \n\r Sincerely, \n\r NebulaWatches Team";
-        emailService.sendEmail(InputUtils.testInput(request.getEmail()), "NebulaWatches Account Verification - Your PIN Code", text);
     }
     public void updateUser(AdminRequest request){
         Optional<User> user = repository.findById(request.getId());

@@ -43,7 +43,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        if (InputUtils.isEmailValid(request.getEmail())) {
+        if (InputUtils.isEmailValid(request.getEmail()) && !repository.isArchived(request.getEmail()).get()) {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             InputUtils.testInput(request.getEmail()),
