@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    @Query(value = "select c from Client c where c.user.email = ?1")
+    @Query(value = "select c from Client c where c.user.email = ?1 and c.status = true")
     List<Client> findAllByUserEmail(String email);
 }

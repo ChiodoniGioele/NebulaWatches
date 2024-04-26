@@ -48,8 +48,13 @@ public class TeamService {
     }
 
     public void removeTeamMember(Long id) {
-        storageRepository.updateTeamIdToNull(id);
-        teamRepository.deleteById(id);
+        //storageRepository.updateTeamIdToNull(id);
+        //teamRepository.deleteById(id);
+        Optional<Team> team = teamRepository.findById(id);
+        if (team.isPresent()) {
+            team.get().setStatus(false);
+            teamRepository.save(team.get());
+        }
     }
 
     public void updateTeamMember(TeamRequest request){
