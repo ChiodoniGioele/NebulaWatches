@@ -59,7 +59,13 @@ public class CustomWatchService {
         }
     }
     public void removeCustomWatch(CustomWatchRequest request) {
-        customWatchRepository.deleteByReference(request.getReference());
+        //customWatchRepository.deleteByReference(request.getReference());
+        Optional<CustomWatch> cw = customWatchRepository.findByReference(request.getReference());
+        if(cw.isPresent()){
+            CustomWatch customWatch = cw.get();
+            customWatch.setStatus(false);
+            customWatchRepository.save(customWatch);
+        }
     }
     public Optional<CustomWatch> getWatch(String reference) {
         return customWatchRepository.findByReference(reference);
