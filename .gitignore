@@ -19,3 +19,5 @@ errors.log
 
 *.key
 *.cert
+
+.DS_Store
