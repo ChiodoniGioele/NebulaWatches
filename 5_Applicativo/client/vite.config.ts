@@ -10,11 +10,11 @@ import autoprefixer from "autoprefixer"
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    https: {
-      key: fs.readFileSync('./server.key'),
-      cert: fs.readFileSync('./server.cert'),
-    },
-    port: 3000, // Adjust the port number as needed
+    // https: {
+    //   key: fs.readFileSync('./server.key'),
+    //   cert: fs.readFileSync('./server.cert'),
+    // },
+    port: 8080, 
   },
 
   plugins: [

@@ -20,7 +20,7 @@ const chartData = ref({
   labels: null,
   datasets: [
     {
-      label: 'Watches Sold',
+      label: 'Watches Bought',
       backgroundColor: '',
       borderColor: '',
       borderWidth: 1,
@@ -47,7 +47,7 @@ const chartOptions = ref({
   plugins: {
     title: {
       display: true,
-      text: "Sold Watches by Clients"
+      text: "Watches Bought By Clients"
     },
     legend: {
       display: true

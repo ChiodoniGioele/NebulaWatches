@@ -56,7 +56,7 @@ const chartOptions = ref({
   plugins: {
     title: {
       display: true,
-      text: "Watches Sold last Year"
+      text: "Watches Bought Last Year"
     },
     legend: {
       display: true
@@ -77,10 +77,10 @@ async function fetchValueForMonth(id, month) {
     if (response.data != -1) {
       return response.data;
     }
-    console.log('Failed to count sold watches');
+    console.log('Failed to count bought watches');
     return 0;
   } catch (error) {
-    console.error('Failed to count sold watches', error);
+    console.error('Failed to count bought watches', error);
   }
 }
 

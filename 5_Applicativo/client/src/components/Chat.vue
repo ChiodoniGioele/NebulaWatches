@@ -79,7 +79,7 @@ const sendMessage = async () => {
         inputMessage.value = '';
 
         try {
-            const response = await axios.get(`http://192.168.27.130:6969/ask_bot`, {
+            const response = await axios.get(`http://localhost:6969/ask_bot`, {
                 params: {
                     query: query
                 },

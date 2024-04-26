@@ -47,4 +47,4 @@ async def ask_bot(query: str, jwt: str = Header(...)):
 app.middleware("http")(authentication_middleware)
 
 if __name__ == '__main__':
-    uvicorn.run(app, port=6969, host='192.168.27.130')
+    uvicorn.run(app, port=6969, host='localhost')
