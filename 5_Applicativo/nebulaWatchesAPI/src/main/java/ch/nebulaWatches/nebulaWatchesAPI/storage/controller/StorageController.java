@@ -7,6 +7,7 @@ import ch.nebulaWatches.nebulaWatchesAPI.storage.service.CustomWatchService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StatusStorageService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StorageService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundException;
+import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -163,7 +164,11 @@ public class StorageController {
             System.err.println(userEmail + "  " + clientId);
 
             List<Storage> watches = storageService.getWatchesOwnedByClientAndUser(request);
-            Integer num = watches.size();
+            Integer num = 0;
+
+            for (Storage watch : watches){
+                num += watch.getQuantity();
+            }
 
             return ResponseEntity.ok(num);
         } catch (Exception e) {
@@ -179,7 +184,7 @@ public class StorageController {
             List<Storage> watches = storageService.getWatchesOwnedByClientAndUser(request);
             Double spese = 0.0;
             for (Storage watch : watches){
-                spese += watch.getSellPrice();
+                spese += watch.getSellPrice() * watch.getQuantity();
             }
             return ResponseEntity.ok(spese);
 
