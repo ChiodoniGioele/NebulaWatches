@@ -47,5 +47,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT code FROM User WHERE email = ?1")
     int getCode(String email);
 
+    @Query("SELECT u.archived FROM User u WHERE u.email = ?1")
+    Optional<Boolean> isArchived(String email);
 }
 

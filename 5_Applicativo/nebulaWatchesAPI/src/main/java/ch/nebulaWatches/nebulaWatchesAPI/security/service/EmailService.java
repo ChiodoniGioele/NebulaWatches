@@ -23,8 +23,8 @@ public class EmailService {
         properties.put("mail.smtp.host", "smtp.gmail.com");
 
         // Proxy properties
-        properties.put("mail.smtp.proxy.host", "YOUR_PROXY_HOST");
-        properties.put("mail.smtp.proxy.port", "YOUR_PROXY_PORT");
+        //properties.put("mail.smtp.proxy.host", "10.0.2.2");
+        //properties.put("mail.smtp.proxy.port", "5865");
 
         String from = "nebulawatchesproject@gmail.com";
         String username = "nebulawatchesproject@gmail.com";
