@@ -22,6 +22,7 @@ import java.util.Optional;
 public class CustomWatchService {
     private final UserRepository userRepository;
     private final CustomWatchRepository customWatchRepository;
+
     public void addCustomWatch(CustomWatchRequest request) throws IOException {
         CustomWatch customWatch = new CustomWatch();
         User user = userRepository.findByEmail(request.getEmail())
