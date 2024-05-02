@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
                                     <div class="w-3/4">
-                                        <Input v-model="selectedQuantity" type="number" placeholder="Quantity" />
+---------------------------                                        <Input v-model="selectedQuantity" type="number" placeholder="Quantity" />
                                     </div>
                                     <div class="w-3/4">
                                         <Input v-model="buyPrice" type="number" placeholder="Bought for" />
@@ -281,7 +281,7 @@ async function addToStorage() {
         user_email: email.value,
         watch_reference: "",
         status: selectedStatus.value,
-        quantity: 1,
+        quantity: selectedQuantity.value,
         custom_watch_reference: reference,
         buyPrice: 0,
         sellPrice: 0,
@@ -290,6 +290,7 @@ async function addToStorage() {
         purchaseDate: null,
         sellDate: null
     };
+    console.log(selectedQuantity.value);
     invalidData.value = false;
     storageSuccesfull.value = false;
     if (isValidPrice(buyPrice.value)) {
