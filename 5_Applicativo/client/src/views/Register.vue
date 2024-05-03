@@ -1,3 +1,6 @@
+<!--
+this page allows users to register.
+-->
 <template>
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <router-link to="/" class="flex items-center mb-8 text-4xl text-gray-900 dark:text-white">
@@ -24,8 +27,8 @@
                 </div>
                 <div class="grid gap-2">
                     <Label for="password">Password</Label>
-                    <Input id="password" type="password" v-model="password" placeholder="YourPassword" class="bg-gray-50"
-                        required />
+                    <Input id="password" type="password" v-model="password" placeholder="YourPassword"
+                        class="bg-gray-50" required />
                 </div>
                 <Button class="w-full" @click="register">
                     Register
@@ -41,7 +44,8 @@
                     <AlertCircle class="w-4 h-4" />
                     <AlertTitle>Error</AlertTitle>
                     <AlertDescription>
-                        Password must be at least 5 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.
+                        Password must be at least 5 characters long and contain at least 1 uppercase letter, 1 lowercase
+                        letter, 1 number, and 1 special character.
                     </AlertDescription>
                 </Alert>
                 <Alert variant="destructive" v-if="emptyFields">
@@ -72,6 +76,13 @@
                         Failed, email is already used!
                     </AlertDescription>
                 </Alert>
+                <Alert variant="destructive" v-if="inputTooLong">
+                    <AlertCircle class="w-4 h-4" />
+                    <AlertTitle>Error</AlertTitle>
+                    <AlertDescription>
+                        Failed, email or username too long, max 50 charachters!
+                    </AlertDescription>
+                </Alert>
             </CardContent>
             <CardFooter>
                 <Label>Already have an account? <router-link to="login" class="text-blue-500 hover:underline">Login
@@ -82,6 +93,7 @@
 </template>
 
 <script setup>
+// import
 import { Separator } from 'radix-vue';
 import { Button } from '@/components/ui/button'
 import {
@@ -103,6 +115,7 @@ import { useRouter } from 'vue-router';
 
 import { apiServerAddress } from '@/main.ts'
 
+// varibles
 const username = ref('');
 const email = ref('');
 const password = ref('');
@@ -113,7 +126,10 @@ const emailNotValid = ref(false);
 const emptyFields = ref(false);
 const passwordLong = ref(false);
 const emailUsed = ref(false);
+const inputTooLong = ref(false);
 
+
+// This function registers the new user
 async function register() {
     emptyFields.value = false;
     passwordShort.value = false;
@@ -121,27 +137,33 @@ async function register() {
     passwordLong.value = false;
     registerFailed.value = false;
     isEmailUsed.value = false;
+    inputTooLong.value = false;
     if (!isNullOrEmpty(username.value) && !isNullOrEmpty(email.value) && !isNullOrEmpty(password.value)) {
         if (isPasswordValid(password.value)) {
             if (!tooLong(password.value)) {
                 if (isEmailValid(email.value)) {
-                    if(! await isEmailUsed(email.value)){
-                        try {
-                        const response = await axios.post(`${apiServerAddress}/auth/register`, {
-                            username: username.value,
-                            email: email.value,
-                            password: password.value
-                        });
+                    if (! await isEmailUsed(email.value)) {
+                        if (isGoodLenght(email.value) && isGoodLenght(username.value)) {
+                            try {
+                                const response = await axios.post(`${apiServerAddress}/auth/register`, {
+                                    username: username.value,
+                                    email: email.value,
+                                    password: password.value
+                                });
+
+                                localStorage.setItem('email', email.value);
+                                router.push('/verify');
+                            } catch (error) {
+                                registerFailed.value = true;
+                            }
+                        }else{
+                            inputTooLong.value = true;
+                        }
                         
-                        localStorage.setItem('email', email.value);
-                        router.push('/verify');
-                    } catch (error) {
-                        registerFailed.value = true;
-                    }
-                    }else{
+                    } else {
                         emailUsed.value = true;
                     }
-                    
+
                 } else {
                     emailNotValid.value = true;
                 }
@@ -158,11 +180,12 @@ async function register() {
     }
 }
 
+// This function allows you to check whether the email has already been used
 async function isEmailUsed(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/auth/exists/${email}`, {
             headers: {
-                
+
             },
         });
         return response.data;
@@ -191,6 +214,11 @@ function isEmailValid(email) {
 }
 function tooLong(password) {
     if (password.length > 25) {
+        return true;
+    }
+}
+function isGoodLenght(testString) {
+    if (testString.length < 50) {
         return true;
     }
 }

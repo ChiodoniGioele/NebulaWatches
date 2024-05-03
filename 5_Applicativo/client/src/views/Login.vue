@@ -1,3 +1,7 @@
+<!--
+ This page allows the user to log into the site.
+ It is the page that is called if the authentication token is not present or has expired
+ -->
 <template>
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <router-link to="/" class="flex items-center mb-8 text-4xl text-gray-900 dark:text-white">
@@ -78,6 +82,8 @@
 </template>
 
 <script setup>
+
+// import
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button'
 import {
@@ -98,7 +104,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { apiServerAddress } from '@/main.ts'
 
 
-
+// varaibles
 const email = ref('');
 const password = ref('');
 const router = useRouter();
@@ -108,6 +114,7 @@ const verified = ref(false);
 const emailNotValid = ref(false);
 const emptyFields = ref(false);
 
+// This function allows you to login
 async function login() {
 
     if (!isNullOrEmpty(email.value) && !isNullOrEmpty(password.value)) {
@@ -158,7 +165,7 @@ async function login() {
     }
 
 }
-
+// This function get the role of the user
 async function getRole(userEmail) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/admin/getRole/${userEmail}`, {
@@ -172,6 +179,8 @@ async function getRole(userEmail) {
         console.error('Failed to fetch Role', error);
     }
 }
+
+// This function get true if the user is verified
 async function getVerified(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/auth/isVerified/${email}`, {
@@ -185,6 +194,7 @@ async function getVerified(email) {
         console.error('Failed to fetch Verification', error);
     }
 }
+// This function get true if the user is exists
 async function exists(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/auth/exists/${email}`, {

@@ -1,3 +1,6 @@
+<!--
+  This page shows the families that belong to the selected brand.
+-->
 <template>
     <div class="flex h-screen"> 
         <Sidebar />
@@ -70,6 +73,7 @@
 </template>
   
 <script setup>
+// import
 import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchFamilyCard from '@/components/WatchFamilyCard.vue'
@@ -103,6 +107,7 @@ const totalPages = ref(1)
 const totalFamiliesCount = ref(0)
 const actualPage = ref(1)
 
+//This function allows families belonging to the exencted brand to be loaded with a random clock belonging to the family
 async function fetchFamiliesOfBrand(pageRequestValue) {
     try {
         window.scrollTo({ top: 0, behavior: 'smooth' });

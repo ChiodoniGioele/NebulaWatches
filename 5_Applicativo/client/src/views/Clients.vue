@@ -1,3 +1,7 @@
+<!--
+  This page allows you to view all clients with their details.
+  This also contains a graph showing the number of purchases for different customers.
+ -->
 <template>
   <div class="flex h-screen">
     <Sidebar />
@@ -69,6 +73,20 @@
                   Failed, please provide a valid email!
                 </AlertDescription>
               </Alert>
+              <Alert variant="destructive" v-if="phoneNotValid">
+                <AlertCircle class="w-4 h-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed, please provide a valid phone number!
+                </AlertDescription>
+              </Alert>
+              <Alert variant="destructive" v-if="inputTooLong">
+                <AlertCircle class="w-4 h-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed, email, name or surname too long, max 50 charachters!
+                </AlertDescription>
+              </Alert>
               <DialogFooter>
                 <Button @click="saveClient">
                   Save
@@ -81,38 +99,38 @@
 
 
 
-        <div class="px-10 flex">
-          <h1 class="font-semibold "> Client </h1>
-        </div>
+      <div class="px-10 flex">
+        <h1 class="font-semibold "> Client </h1>
+      </div>
 
-        <Tabs default-value="general" class="px-10 mt-5">
-          <TabsList>
-            <TabsTrigger value="general">
-              General
-            </TabsTrigger>
-            <TabsTrigger value="specific">
-              All Time
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="general">
-            <div class="flex justify-center">
-              <div class="w-1/2">
-                <ClientChartSpecific></ClientChartSpecific>
-              </div>
+      <Tabs default-value="general" class="px-10 mt-5">
+        <TabsList>
+          <TabsTrigger value="general">
+            General
+          </TabsTrigger>
+          <TabsTrigger value="specific">
+            All Time
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="general">
+          <div class="flex justify-center">
+            <div class="w-1/2">
+              <ClientChartSpecific></ClientChartSpecific>
             </div>
-          </TabsContent>
-          <TabsContent value="specific">
-            <div class="flex justify-center">
-              <div class="w-1/3">
-                <ClientChartGeneral></ClientChartGeneral>
-              </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="specific">
+          <div class="flex justify-center">
+            <div class="w-1/3">
+              <ClientChartGeneral></ClientChartGeneral>
             </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </TabsContent>
+      </Tabs>
 
-        <div class="px-10 flex mt-7">
-                <h1 class="font-semibold "> Clients </h1>
-            </div>
+      <div class="px-10 flex mt-7">
+        <h1 class="font-semibold "> Clients </h1>
+      </div>
 
       <div class="mt-12 w-full gap-7 flex items-center justify-center px-10 ">
         <Table>
@@ -219,7 +237,7 @@
                         <DialogTitle>Informations of {{ client.name }} {{ client.surname }}
                         </DialogTitle>
                         <DialogDescription>
-                          <b>Email:</b> {{ client.email }} <b>Phone:</b> {{client.phone }}
+                          <b>Email:</b> {{ client.email }} <b>Phone:</b> {{ client.phone }}
                         </DialogDescription>
                       </DialogHeader>
                       <ClientExpansion :key="client.id" :client="client"></ClientExpansion>
@@ -239,6 +257,7 @@
 </template>
 
 <script setup>
+// imports
 import Chat from '@/components/Chat.vue'
 import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -303,8 +322,10 @@ const emailUser = ref('');
 const emailNotValid = ref(false);
 const emptyFields = ref(false);
 const restOpen = ref(false);
+const phoneNotValid = ref(false);
+const inputTooLong = ref(false);
 
-
+// This function makes it possible to take all clients from the user lodge.
 async function fetchClients(email) {
   try {
     const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
@@ -325,6 +346,7 @@ const email = ref('');
 const phone = ref('');
 const saveFailed = ref(false);
 
+// This function allows new clients to be saved.
 async function saveClient() {
   const newClient = {
     name: name.value,
@@ -336,37 +358,50 @@ async function saveClient() {
   }
   emptyFields.value = false;
   emailNotValid.value = false;
+  phoneNotValid.value = false;
+  inputTooLong.value = false;
+
   if (isNullOrEmpty(newClient.name) || isNullOrEmpty(newClient.surname) || isNullOrEmpty(newClient.email)) {
     emptyFields.value = true;
   }
 
   if (!emptyFields.value) {
     if (isEmailValid(newClient.email)) {
-      try {
-        const response = await axios.post(`${apiServerAddress}/v1/clients/add`, newClient,
-          {
-            headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-          });
-          setNotVisible();
-        fetchClients(emailUser.value);
-        console.log("Client saved!", response.data)
-
-      } catch (error) {
-        console.error('Registration failed:', error);
-        saveFailed.value = true;
+      if (!isNullOrEmpty(newClient.phone)) {
+        if (!verifyPhone(newClient.phone)) {
+          phoneNotValid.value = true;
+        }
       }
-      name.value = null;
-      surname.value = null;
-      email.value = null;
-      phone.value = null;
+      if (verifyString(newClient.email) && verifyString(newClient.name) && verifyString(newClient.surname)) {
+        if (!phoneNotValid.value) {
+          try {
+            const response = await axios.post(`${apiServerAddress}/v1/clients/add`, newClient,
+              {
+                headers: {
+                  Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+              });
+            setNotVisible();
+            fetchClients(emailUser.value);
+            console.log("Client saved!", response.data)
+
+          } catch (error) {
+            console.error('Registration failed:', error);
+            saveFailed.value = true;
+          }
+          name.value = null;
+          surname.value = null;
+          email.value = null;
+          phone.value = null;
+        }
+      }else{
+        inputTooLong.value = true;
+      }
     } else {
       emailNotValid.value = true;
     }
   }
 }
-
 
 onMounted(async () => {
   const token = localStorage.getItem('token');
@@ -377,6 +412,7 @@ onMounted(async () => {
   localStorage.removeItem('search');
 });
 
+// This function allows you to edit existing glia clients
 async function mod(id) {
   const userMod = {
     name: nameMod.value,
@@ -429,9 +465,11 @@ function isEmailValid(email) {
 function setNotVisible() {
   restOpen.value = !restOpen.value;
 }
-
-
-
-
-
+function verifyPhone(phoneNumber) {
+  const phoneRegex = /^\+[1-9]\d{1,14}$/;
+  return phoneRegex.test(phoneNumber);
+}
+function verifyString(inputString) {
+  return inputString.length <= 50;
+}
 </script>

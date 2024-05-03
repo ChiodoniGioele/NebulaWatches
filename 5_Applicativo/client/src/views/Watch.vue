@@ -1,3 +1,11 @@
+
+<!--
+
+This page allows you to view the details of the clock, such as price, description
+From this page you can add the clock to storage and also put it as sold.
+
+-->
+
 <template>
     <div class="flex h-screen">
         <Sidebar />
@@ -388,6 +396,9 @@
 </template>
 
 <script setup>
+
+// imports
+
 import Chat from '@/components/Chat.vue'
 import Sidebar from "@/components/Sidebar.vue";
 import WatchPricesChart from '@/components/WatchPricesChart.vue'
@@ -447,6 +458,9 @@ import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+
+// variables
+
 const router = useRouter();
 const route = useRoute();
 const reference = route.params.reference;
@@ -471,6 +485,11 @@ const materialsUsedNames = ref('');
 const prices = ref([]);
 const dates = ref([]);
 const restOpen = ref(false);
+const clients = ref([]);
+const teams = ref([]);
+const assertClient = ref(false);
+
+// navigations
 
 function redirectWatchChartsAnalytics() {
     window.open(`https://watchcharts.com/watches/search?q=${watch.value.reference}`, '_blank')
@@ -488,6 +507,8 @@ function redirectEbay() {
     window.open(`https://www.ebay.com/`, '_blank')
 }
 
+
+// allows you to remove a value from an array
 function removeItemFromArray(arr, value) {
     var i = 0;
     while (i < arr.length) {
@@ -499,11 +520,9 @@ function removeItemFromArray(arr, value) {
     }
     return arr;
 }
-const clients = ref([]);
-const teams = ref([]);
-const assertClient = ref(false);
 
 
+// clock returns
 async function fetchWatch() {
     try {
         const response = await axios.get(
@@ -525,6 +544,7 @@ async function fetchWatch() {
     }
 }
 
+// returns the clock image
 async function fetchWatchImage() {
     try {
         const endpoint = `${apiServerAddress}/v1/watches/` + reference + "/image";
@@ -547,7 +567,7 @@ async function fetchWatchImage() {
     }
 }
 
-
+// permmits to add the clock to the storage
 async function addToStorage() {
     const newStorage = {
         user_email: email.value,
@@ -639,6 +659,7 @@ async function addToStorage() {
     }
 }
 
+// allows you to add or remove the clock from favorites
 async function addOrRemoveFavourite() {
     const newFavourite = {
         user_email: email.value,
@@ -684,6 +705,7 @@ async function addOrRemoveFavourite() {
 
 }
 
+// imposta la l'icona se l'orologio è tra i preferiti
 async function setIconStar() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/favourite/checkFavourite/${reference}/${email.value}`, {
@@ -704,6 +726,7 @@ async function toFavourite() {
     router.push('/favourite');
 }
 
+// allows you to take customers for when you sell the watch
 async function getClients(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
@@ -719,6 +742,7 @@ async function getClients(email) {
     }
 }
 
+// allows you to take Teams for when you sell the clock
 async function getTeam(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/team/getTeam/${email}`,
@@ -734,6 +758,7 @@ async function getTeam(email) {
     }
 }
 
+// function that is called when the page loads
 onMounted(async () => {
     const token = localStorage.getItem('token');
     const parts = token.split('.');
@@ -750,7 +775,8 @@ onMounted(async () => {
 });
 
 
-//Utils
+  //Utils
+
 function isNullOrEmpty(str) {
     return !str || str.trim() === '';
 }
@@ -767,7 +793,7 @@ function soldForMoreOrEqual(priceSold, pricePurchase) {
     return priceSold >= pricePurchase;
 }
 function isValidPrice(price) {
-    return !isNaN(price) && price >= 0 && price != '';
+    return !isNaN(price) && price >= 0 && price != '' && price < 2000000000;
 
 }
 function redo() {

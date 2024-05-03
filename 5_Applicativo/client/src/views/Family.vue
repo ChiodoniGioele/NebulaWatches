@@ -1,3 +1,7 @@
+<!--
+ This page contains the clocks in the families.
+ It is loaded when you select a brand and a family
+ -->
 <template>
     <div class="flex h-screen"> 
         <Sidebar />
@@ -70,6 +74,8 @@
 </template>
   
 <script setup>
+
+// import
 import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchCard from '@/components/WatchCard.vue'
@@ -106,6 +112,7 @@ const totalPages = ref(1)
 const totalWatchesCount = ref(0)
 const actualPage = ref(1)
 
+// Takes the clocks present in the household
 async function fetchWatchesOfBrands(pageRequestValue) {
     try {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -130,7 +137,7 @@ async function fetchWatchesOfBrands(pageRequestValue) {
     console.error('Failed to fetch families:', error);
   }
 }
-
+// for go to favorite
 async function toFavourite(){
   router.push('/favourite');
 }

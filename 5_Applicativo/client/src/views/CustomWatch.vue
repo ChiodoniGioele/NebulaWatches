@@ -1,3 +1,7 @@
+<!--
+ This page allows you to view the selected custom clock in detail.
+ And to add it to the Storage sell it
+-->
 <template>
     <div class="flex h-screen"> 
         <Sidebar />

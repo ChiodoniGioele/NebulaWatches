@@ -1,3 +1,7 @@
+<!--
+ Sidebar visible on every page
+ -->
+
 <template>
   <!-- <Chat /> -->
 
