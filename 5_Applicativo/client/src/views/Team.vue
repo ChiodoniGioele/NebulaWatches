@@ -95,6 +95,13 @@
                                     Failed, please provide a valid role, less than 50 charachters!!
                                 </AlertDescription>
                             </Alert>
+                            <Alert variant="destructive" v-if="inputTooLong">
+                                <AlertCircle class="w-4 h-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>
+                                    Failed, email, name or surname too long, max 50 charachters!
+                                </AlertDescription>
+                            </Alert>
                             <DialogFooter>
                                 <Button @click="saveTeam">
                                     Save
@@ -342,6 +349,7 @@ const emailNotValid = ref(false);
 const emptyFields = ref(false);
 const phoneNotValid = ref(false);
 const roleNotValid = ref(false);
+const inputTooLong = ref(false);
 
 // returns all teams linked to the user
 async function fetchTeam(email) {
@@ -373,6 +381,7 @@ async function saveTeam() {
     emptyFields.value = false;
     roleNotValid.value = false;
     phoneNotValid.value = false;
+    inputTooLong.value = false;    
 
     if (isNullOrEmpty(newTeam.name) || isNullOrEmpty(newTeam.surname) || isNullOrEmpty(newTeam.email)) {
         emptyFields.value = true;
@@ -391,7 +400,8 @@ async function saveTeam() {
                     roleNotValid.value = true;
                 }
             }
-            if (!roleNotValid.value && !phoneNotValid.value) {
+            if(verifyString(newTeam.email) && verifyString(newTeam.name) && verifyString(newTeam.surname)){
+                if (!roleNotValid.value && !phoneNotValid.value) {
                 try {
                     const response = await axios.post(`${apiServerAddress}/v1/team/add`, newTeam,
                         {
@@ -413,6 +423,10 @@ async function saveTeam() {
                 email.value = null;
                 phone.value = null;
             }
+            }else{
+                inputTooLong.value = true;
+            }
+            
         } else {
             emailNotValid.value = true;
         }

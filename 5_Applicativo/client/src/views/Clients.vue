@@ -80,6 +80,13 @@
                   Failed, please provide a valid phone number!
                 </AlertDescription>
               </Alert>
+              <Alert variant="destructive" v-if="inputTooLong">
+                <AlertCircle class="w-4 h-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed, email, name or surname too long, max 50 charachters!
+                </AlertDescription>
+              </Alert>
               <DialogFooter>
                 <Button @click="saveClient">
                   Save
@@ -316,6 +323,7 @@ const emailNotValid = ref(false);
 const emptyFields = ref(false);
 const restOpen = ref(false);
 const phoneNotValid = ref(false);
+const inputTooLong = ref(false);
 
 // This function makes it possible to take all clients from the user lodge.
 async function fetchClients(email) {
@@ -351,6 +359,7 @@ async function saveClient() {
   emptyFields.value = false;
   emailNotValid.value = false;
   phoneNotValid.value = false;
+  inputTooLong.value = false;
 
   if (isNullOrEmpty(newClient.name) || isNullOrEmpty(newClient.surname) || isNullOrEmpty(newClient.email)) {
     emptyFields.value = true;
@@ -363,34 +372,36 @@ async function saveClient() {
           phoneNotValid.value = true;
         }
       }
-      if(!phoneNotValid.value){
-        try {
-        const response = await axios.post(`${apiServerAddress}/v1/clients/add`, newClient,
-          {
-            headers: {
-              Authorization: 'Bearer ' + localStorage.getItem('token'),
-            },
-          });
-        setNotVisible();
-        fetchClients(emailUser.value);
-        console.log("Client saved!", response.data)
+      if (verifyString(newClient.email) && verifyString(newClient.name) && verifyString(newClient.surname)) {
+        if (!phoneNotValid.value) {
+          try {
+            const response = await axios.post(`${apiServerAddress}/v1/clients/add`, newClient,
+              {
+                headers: {
+                  Authorization: 'Bearer ' + localStorage.getItem('token'),
+                },
+              });
+            setNotVisible();
+            fetchClients(emailUser.value);
+            console.log("Client saved!", response.data)
 
-      } catch (error) {
-        console.error('Registration failed:', error);
-        saveFailed.value = true;
+          } catch (error) {
+            console.error('Registration failed:', error);
+            saveFailed.value = true;
+          }
+          name.value = null;
+          surname.value = null;
+          email.value = null;
+          phone.value = null;
+        }
+      }else{
+        inputTooLong.value = true;
       }
-      name.value = null;
-      surname.value = null;
-      email.value = null;
-      phone.value = null;
-      }
-      
     } else {
       emailNotValid.value = true;
     }
   }
 }
-
 
 onMounted(async () => {
   const token = localStorage.getItem('token');
@@ -461,5 +472,4 @@ function verifyPhone(phoneNumber) {
 function verifyString(inputString) {
   return inputString.length <= 50;
 }
-
 </script>

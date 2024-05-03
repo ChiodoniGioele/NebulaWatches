@@ -110,6 +110,7 @@
                                     The sell date must be after the purchase date!
                                 </AlertDescription>
                             </Alert>
+                            
                             <DialogFooter>
                                 <Button type="submit" @click="editStorage">
                                     Save Changes

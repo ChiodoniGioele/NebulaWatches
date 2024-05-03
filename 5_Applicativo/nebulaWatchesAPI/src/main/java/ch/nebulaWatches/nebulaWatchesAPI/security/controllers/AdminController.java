@@ -45,7 +45,7 @@ public class AdminController {
                                @RequestParam Optional<String> sortBy) {
         String token = headers.getFirst("Authorization");
         if(token != null && adminService.isAdminByToken(token)){
-            return adminService.getAllUsers(page.orElse(0), 10, sortBy.orElse("email"));
+            return adminService.getAllUsers(page.orElse(0), 5, sortBy.orElse("email"));
         }else{
             return null;
         }
