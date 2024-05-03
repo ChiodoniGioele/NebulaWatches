@@ -31,5 +31,7 @@ public class CustomWatch {
     @JoinColumn(name = "user_id")
     private User user;
 
+    private boolean status = true;
+
 
 }

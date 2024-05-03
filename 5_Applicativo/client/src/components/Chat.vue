@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <div v-else class="fixed bottom-0 right-0 p-4">
+    <div v-else class="fixed bottom-0 right-0 p-4 pb-11">
         <Button variant="outline" @click="toggleChat" class="h-16 px-4 py-4 rounded-lg focus:outline-none">
             <img class="" height="30px" width="30px" src="@/assets/icons/chat_message_icon.png" />
         </Button>
