@@ -396,7 +396,6 @@ async function saveClient() {
   }
 }
 
-
 onMounted(async () => {
   const token = localStorage.getItem('token');
   const parts = token.split('.');
