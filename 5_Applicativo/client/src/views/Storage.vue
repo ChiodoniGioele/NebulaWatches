@@ -104,6 +104,7 @@ onMounted(async () => {
     const email = payload.sub;
 
     await fetchStorage(email);
+    localStorage.removeItem('search');
 });
 
 

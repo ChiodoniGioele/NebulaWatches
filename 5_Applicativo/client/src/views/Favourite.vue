@@ -72,5 +72,6 @@ onMounted(async () => {
     const email = payload.sub;
 
     await fetchFavourite(email);
+    localStorage.removeItem('search');
 });
 </script>

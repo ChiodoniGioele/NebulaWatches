@@ -216,22 +216,15 @@ public class StorageService {
         }
     }
 
-
     public List<Storage> getWatchesOwnedByClientAndUser(BuysClientRequest request){
         return storageRepository.findByUserEmailAndClientIdAndStatus(request.getUserEmail(), request.getClientId(), "Sold");
     }
 
-
-    // sumQuantityByClientMonth
     public int getWatchesOwnedByClientMonth(Long id, int month){
         LocalDate l1 = getStartOfMonth(month);
         LocalDate l2 = getEndOfMonth(month);
         Optional<Integer> opt = storageRepository.sumQuantityByClientMonth(id, l1, l2, "Sold");
-
-        if(opt.isPresent()){
-            return opt.get();
-        }
-        return 0;
+        return opt.orElse(0);
     }
 
     public static LocalDate getStartOfMonth(int months) {

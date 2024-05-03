@@ -41,7 +41,6 @@ async function fetchRandomWatchFromBrandImage() {
                 Authorization: 'Bearer ' + localStorage.getItem('token')
             },
         });
-
         const imageBase64 = btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''));
         randomWatchFromBrandImage.value = `data:${response.headers['content-type']};base64,${imageBase64}`;
   } catch (error) {

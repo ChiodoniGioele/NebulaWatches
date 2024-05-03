@@ -54,10 +54,12 @@ public class AuthenticationController {
     public boolean isVerified(@PathVariable String email){
         return userService.isUserVerified(email);
     }
+
     @GetMapping("/exists/{email}")
     public boolean existsEmail(@PathVariable String email){
         return userService.isUserPresent(email);
     }
+
     @GetMapping("/sendAgain")
     public void send(@RequestParam("email") String email) throws MailjetException {
         userService.sendAgain(email);

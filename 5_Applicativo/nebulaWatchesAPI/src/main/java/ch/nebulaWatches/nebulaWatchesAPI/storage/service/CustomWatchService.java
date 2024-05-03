@@ -75,6 +75,7 @@ public class CustomWatchService {
             throw new IllegalArgumentException("Image file is required.");
         }
     }
+
     public boolean canUseRef(String ref){
         Optional<CustomWatch> customWatch= customWatchRepository.findByReference(ref);
 

@@ -1,5 +1,5 @@
 <template>
-    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased h-screen">
+    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
 
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
             <div class="flex space-x-3 justify-between">
@@ -26,8 +26,7 @@
                         <form class="flex items-center" @submit.prevent>
                             <label for="simple-search" class="sr-only">Search</label>
                             <div class="relative w-full">
-                                <Input @keyup="searchUser()" v-model="searchContent" type="text"
-                                    placeholder="Search for users" />
+                                <Input @keyup="searchUser()" v-model="searchContent" type="text" placeholder="Search for users" />
                             </div>
                         </form>
                     </div>

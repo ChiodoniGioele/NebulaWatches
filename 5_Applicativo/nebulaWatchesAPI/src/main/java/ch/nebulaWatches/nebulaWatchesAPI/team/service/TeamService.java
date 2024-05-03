@@ -36,7 +36,6 @@ public class TeamService {
         team.setSurname(InputUtils.testInput(request.getSurname()));
         team.setPhone(InputUtils.testInput(request.getPhone()));
         team.setRole(InputUtils.testInput(request.getRole()));
-
         if(InputUtils.isEmailValid(request.getUserEmail())){
             User user = userRepository.findByEmail(InputUtils.testInput(request.getUserEmail()))
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));

@@ -34,13 +34,10 @@ router.beforeEach(async (to, from, next) => {
       router.push('/login');
       return;
     }
-    
     const parts = token.split('.');
     const payload = JSON.parse(atob(parts[1]));
     const email = payload.sub;
-
     await getRole(email);
-    
     if (role.value !== "ADMIN") {
       next(false);
       router.push('/');
@@ -48,7 +45,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   next();
-
 });
 
 async function getRole(userEmail) {

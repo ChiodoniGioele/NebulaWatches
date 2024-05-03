@@ -15,14 +15,14 @@ public class InputUtils {
         sanitizedData = StringEscapeUtils.escapeHtml4(sanitizedData);
         return sanitizedData;
     }
+
     public static boolean isEmailValid(String email) {
         String regex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
-
         return matcher.matches();
     }
+
     public static boolean isValidImageType(MultipartFile file) {
         List<String> allowedTypes = Arrays.asList("image/jpeg", "image/png", "image/gif", "image/jpg");
         return allowedTypes.contains(file.getContentType());

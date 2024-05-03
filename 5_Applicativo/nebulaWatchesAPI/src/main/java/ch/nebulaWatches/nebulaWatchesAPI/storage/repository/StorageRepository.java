@@ -49,7 +49,7 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     Optional<Storage> getByRequestSold(String reference, int userId, Date date, float buyPrice, String status, float sellPrice, Date date2, Long teamId, Long clientId);
 
 
-    @Query(value = "SELECT SUM(s.quantity) FROM Storage s WHERE s.client_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3 and s.status_name = ?4", nativeQuery = true)
+    @Query(value = "SELECT SUM(s.quantity) FROM storage s WHERE s.client_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3 and s.status_name = ?4", nativeQuery = true)
     Optional<Integer> sumQuantityByClientMonth(Long clientId, LocalDate begin, LocalDate end, String status);
 
 

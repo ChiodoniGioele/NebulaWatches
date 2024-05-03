@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center border border-gray-200 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
+    <div class="text-center border-stone-500 border-2  rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
         <div class="h-[50px]">
             <div class="pt-1 pr-1 pl-1 flex justify-end">
                 <div>
