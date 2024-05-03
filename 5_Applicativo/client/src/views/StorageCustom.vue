@@ -1,3 +1,6 @@
+<!--
+ This page allows you to view the custom clocks that have been created and to add new ones.
+ -->
 <template>
     <div class="flex h-screen"> 
         <Sidebar />
@@ -126,6 +129,7 @@
 </template>
 
 <script setup>
+// imports
 import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import CustomWatchCard from '@/components/CustomWatchCard.vue'
@@ -155,6 +159,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import FormData from 'form-data';
 
+// variables
 const route = useRoute();
 const storedWatches = ref([]);
 const emailUs = ref("");
@@ -174,6 +179,7 @@ const customWatch = {
     image: null
 };
 
+// fetch the custom clocks that there are in the st
 async function fetchCustomStorage(userEmail) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/storage/custom/${userEmail}`, {
@@ -187,7 +193,7 @@ async function fetchCustomStorage(userEmail) {
         console.error('Failed to fetch watches by storage and user:', error);
     }
 }
-
+// Allows you to create a new custom clock
 async function saveWatch() {
     invalidFile.value = false;
     customWatch.email = emailUs.value;
@@ -246,6 +252,7 @@ const handleImageChange = (event) => {
     customWatch.image = event.target.files[0];
 };
 
+// function that is called when the page loads
 onMounted(async () => {
     const token = localStorage.getItem('token');
     const parts = token.split('.');

@@ -1,3 +1,7 @@
+<!--
+  This page allows you to see my team members, add a new member.
+  It also shows the sales graph of the respective team members.
+-->
 <template>
     <div class="flex h-screen">
         <Sidebar />
@@ -269,6 +273,8 @@
 </template>
 
 <script setup>
+
+// import
 import Chat from '@/components/Chat.vue'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AlertCircle } from 'lucide-vue-next'
@@ -319,6 +325,7 @@ import TeamExpansion from '@/components/TeamExpansion.vue'
 import TeamChartGeneral from '@/components/TeamChartGeneral.vue';
 import TeamChartSpecific from '@/components/TeamChartSpecific.vue';
 
+// variables
 const route = useRoute();
 const router = useRouter();
 const teams = ref([]);
@@ -336,6 +343,7 @@ const emptyFields = ref(false);
 const phoneNotValid = ref(false);
 const roleNotValid = ref(false);
 
+// returns all teams linked to the user
 async function fetchTeam(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/team/getTeam/${email}`,
@@ -351,6 +359,7 @@ async function fetchTeam(email) {
     }
 }
 
+// allows you to save a new team member.
 async function saveTeam() {
     const newTeam = {
         name: name.value,
@@ -411,6 +420,7 @@ async function saveTeam() {
 
 }
 
+// allows you to edit a team member
 async function mod(id) {
     const teamMod = {
         id: id,
@@ -437,6 +447,7 @@ async function mod(id) {
     }
 }
 
+// allows you to disable/delete a team
 async function deleteTeam(id) {
     try {
         const response = await axios.post(`${apiServerAddress}/v1/team/delete/${id}`,
@@ -455,7 +466,7 @@ async function deleteTeam(id) {
     }
 }
 
-
+// is called when the page is loaded
 onMounted(async () => {
     const token = localStorage.getItem('token');
     const parts = token.split('.');

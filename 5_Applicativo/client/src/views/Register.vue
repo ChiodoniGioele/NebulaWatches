@@ -1,3 +1,6 @@
+<!--
+this page allows users to register.
+-->
 <template>
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <router-link to="/" class="flex items-center mb-8 text-4xl text-gray-900 dark:text-white">
@@ -82,6 +85,7 @@
 </template>
 
 <script setup>
+// import
 import { Separator } from 'radix-vue';
 import { Button } from '@/components/ui/button'
 import {
@@ -103,6 +107,7 @@ import { useRouter } from 'vue-router';
 
 import { apiServerAddress } from '@/main.ts'
 
+// varibles
 const username = ref('');
 const email = ref('');
 const password = ref('');
@@ -114,6 +119,8 @@ const emptyFields = ref(false);
 const passwordLong = ref(false);
 const emailUsed = ref(false);
 
+
+// This function registers the new user
 async function register() {
     emptyFields.value = false;
     passwordShort.value = false;
@@ -158,6 +165,7 @@ async function register() {
     }
 }
 
+// This function allows you to check whether the email has already been used
 async function isEmailUsed(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/auth/exists/${email}`, {

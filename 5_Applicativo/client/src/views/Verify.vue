@@ -1,3 +1,7 @@
+<!--
+  This page is used to verify that the user's email is true.
+  It is displayed when the user confirms their email
+-->
 <template>
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <Card class="w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
@@ -43,6 +47,7 @@
 </template>
 
 <script setup>
+// imports
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -62,11 +67,13 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { apiServerAddress } from '@/main.ts'
 import router from '@/router';
 
+// variables
 const verificationFailed = ref(false);
 const validPin = ref(false);
 const pin = ref(0);
 const email = localStorage.getItem('email');
 
+// allows you to check whether the pin entered matches the pin generated
 async function verifyPin() {
     validPin.value = false;
     verificationFailed.value = false;
@@ -74,6 +81,7 @@ async function verifyPin() {
         if (!isNullOrEmpty(email) && isEmailValid(email)) {
             try {
                 var code = pin.value;
+                // richiama l'API per inviare l'email
                 const response = await axios.post(`${apiServerAddress}/auth/verify?code=${code}&email=${email}`);
                 const token = response.data.token;
                 if (!isNullOrEmpty(token)) {
@@ -95,6 +103,8 @@ async function verifyPin() {
         validPin.value = true;
     }
 }
+
+// allows you to resend the email in case it did not arrive
 async function sendAgain() {
     try {
         await axios.get(`${apiServerAddress}/auth/sendAgain?email=${email}`);
@@ -104,7 +114,7 @@ async function sendAgain() {
     }
 }
 
-
+// check if the pin is valid
 function isValidPin(pin) {
     const pinNumber = parseInt(pin);
     if (!isNaN(pinNumber)) {
@@ -113,6 +123,8 @@ function isValidPin(pin) {
         return false;
     }
 }
+
+// utils
 function isNullOrEmpty(str) {
     return !str || str.trim() === '';
 }

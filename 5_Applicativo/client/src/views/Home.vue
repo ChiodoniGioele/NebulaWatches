@@ -1,3 +1,6 @@
+<!--
+This is the central page that is displayed after login.
+-->
 <template>
     <div class="flex h-screen"> 
         <Sidebar />
@@ -56,6 +59,7 @@
 </template>
   
 <script setup>
+// imports
 import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchBrandCard from '@/components/WatchBrandCard.vue'
@@ -83,6 +87,8 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
+
+// variables
 const router = useRouter();
 const brands = ref([])
 const totalPages = ref(1)
@@ -90,6 +96,7 @@ const totalBrandCount = ref(0)
 const actualPage = ref(1)
 const isLoading = ref(true)
 
+// This function takes the watch brands in the DB
 async function fetchBrands(pageRequestValue) {
     try {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -117,6 +124,7 @@ async function fetchBrands(pageRequestValue) {
 
 }
 
+// To navigate to the favorites page
 async function toFavourite(){
   router.push('/favourite');
 }

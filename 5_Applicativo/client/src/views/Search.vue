@@ -1,3 +1,6 @@
+<!--
+  the search page is displayed when you do a search. This one for puts to do searches for clocks.
+-->
 <template>
     <div class="flex h-screen">
         <Sidebar />
@@ -329,6 +332,8 @@
 </template>
 
 <script setup>
+
+// imports
 import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchCard from '@/components/WatchCard.vue'
@@ -428,6 +433,8 @@ let previousSearchParams = null;
         console.error('Failed to fetch watches:', error);
     }
 }*/
+
+// This function allows you to take the clocks that match the search
 async function fetchFilteredWatches(pageRequestValue) {
     watchesObjects.value = [];
     try {
@@ -494,7 +501,7 @@ async function fetchFilteredWatches(pageRequestValue) {
 }
 
 
-
+// this function allows you to find clocks based on brends
 async function fetchBrandsNames() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/brands/all`, {
@@ -509,6 +516,7 @@ async function fetchBrandsNames() {
     }
 }
 
+// this function allows you to find clocks based on families
 async function fetchSelectedBrandsFamilies() {
     families.value = []
     for (let brand of brandsSelected.value) {
@@ -527,6 +535,7 @@ async function fetchSelectedBrandsFamilies() {
     }
 }
 
+// this function allows you to find clocks based on materials
 async function fetchWatchMaterials() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/materials`, {
@@ -541,6 +550,7 @@ async function fetchWatchMaterials() {
     }
 }
 
+// This function allows you to find clocks based on the shapes
 async function fetchWatchShapes() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/watch_shapes`, {
@@ -555,6 +565,7 @@ async function fetchWatchShapes() {
     }
 }
 
+// This function allows clocks to be found based on the index
 async function fetchWatchIndexes() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/watch_indexes`, {
@@ -568,7 +579,7 @@ async function fetchWatchIndexes() {
         console.error('Failed to fetch materials:', error);
     }
 }
-
+// This function allows clocks to be found based on the dial colors
 async function fetchDialColors() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/dial_colors`, {
@@ -583,6 +594,7 @@ async function fetchDialColors() {
     }
 }
 
+// This function allows clocks to be found based on the dial
 async function fetchDialFinishes() {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/dial_finishes`, {
@@ -598,10 +610,12 @@ async function fetchDialFinishes() {
 }
 
 
+// this function allows you to remove a value from an array
 function removeArrayItem(array, element) {
     return array.filter(item => item !== element);
 }
 
+// handle
 function handleBrandSelection(brand) {
     if (!brandsSelected.value.includes(brand)) {
         brandsSelected.value.push(brand);

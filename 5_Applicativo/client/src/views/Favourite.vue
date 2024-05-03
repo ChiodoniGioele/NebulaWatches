@@ -1,3 +1,4 @@
+<!-- This page shows the clocks that are in the favorites -->
 <template>
     <div class="flex h-screen"> 
         <Sidebar />
@@ -28,6 +29,7 @@
 </template>
   
 <script setup>
+// import
 import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import WatchCard from '@/components/WatchCard.vue'
@@ -47,6 +49,7 @@ const route = useRoute();
 const router = useRouter();
 const favoritedWatches = ref([]);
 
+// This function takes favorite clocks
 async function fetchFavourite(userEmail) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/favourite/${userEmail}`, {
@@ -61,6 +64,7 @@ async function fetchFavourite(userEmail) {
     }
 }
 
+// for come back to home
 async function toHome(){
   router.push('/');
 }

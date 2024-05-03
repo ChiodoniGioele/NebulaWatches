@@ -1,3 +1,7 @@
+<!--
+  This page allows you to view all clients with their details.
+  This also contains a graph showing the number of purchases for different customers.
+ -->
 <template>
   <div class="flex h-screen">
     <Sidebar />
@@ -246,6 +250,7 @@
 </template>
 
 <script setup>
+// imports
 import Chat from '@/components/Chat.vue'
 import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -312,7 +317,7 @@ const emptyFields = ref(false);
 const restOpen = ref(false);
 const phoneNotValid = ref(false);
 
-
+// This function makes it possible to take all clients from the user lodge.
 async function fetchClients(email) {
   try {
     const response = await axios.get(`${apiServerAddress}/v1/clients/all/${email}`,
@@ -333,6 +338,7 @@ const email = ref('');
 const phone = ref('');
 const saveFailed = ref(false);
 
+// This function allows new clients to be saved.
 async function saveClient() {
   const newClient = {
     name: name.value,
@@ -395,6 +401,7 @@ onMounted(async () => {
   localStorage.removeItem('search');
 });
 
+// This function allows you to edit existing glia clients
 async function mod(id) {
   const userMod = {
     name: nameMod.value,

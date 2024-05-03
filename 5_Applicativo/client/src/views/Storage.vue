@@ -1,3 +1,6 @@
+<!--
+  this page allows you to see the clocks in the Storage and those that have not yet been sold
+ -->
 <template>
     <div class="flex h-screen"> 
         <Sidebar />
@@ -49,6 +52,7 @@
 </template>
 
 <script setup>
+// import
 import Chat from '@/components/Chat.vue'
 import Sidebar from '@/components/Sidebar.vue'
 import StorageCard from '@/components/StorageCard.vue'
@@ -75,6 +79,7 @@ import {
   PaginationPrev,
 } from '@/components/ui/pagination'
 
+// variables
 const route = useRoute();
 const router = useRouter();
 const storedWatches = ref([]);
@@ -84,6 +89,7 @@ const storedWatchesSold = ref([]);
 const totalPages = ref(1)
 const actualPage = ref(1)
 
+// this function allow you to fetch che watches in the storage
 async function fetchStorage(userEmail) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/storage/${userEmail}`, {
@@ -99,6 +105,7 @@ async function fetchStorage(userEmail) {
     }
 }
 
+// This function divides the watches in the store between those sold and those not sold
 async function distributeWatches(){
     for(let i = 0; i < storedWatches.value.length; i++){
         if(storedWatches.value[i].status.name == "Sold"){
@@ -113,6 +120,7 @@ async function toCustom() {
     router.push("/storageCustom");
 }
 
+// Function that is loaded when the page loads
 onMounted(async () => {
     const token = localStorage.getItem('token');
     const parts = token.split('.');

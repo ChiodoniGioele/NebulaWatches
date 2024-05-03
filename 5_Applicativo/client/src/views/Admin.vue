@@ -1,3 +1,8 @@
+<!--
+  This is the Administrator's page.
+  This allows you to see all the users who have logged in and their information (not passwords).
+  And to edit them.
+-->
 <template>
     <div class="h-screen bg-gray-50 dark:bg-gray-900">
     <section class="p-3 sm:p-5 antialiased">
@@ -335,6 +340,7 @@
 </template>
 
 <script setup>
+// import
 import Sidebar from '@/components/Sidebar.vue'
 import { AlertCircle } from 'lucide-vue-next'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -391,6 +397,7 @@ import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 import { Trash2 } from 'lucide-vue-next'
 
+// variables
 const route = useRoute();
 const router = useRouter();
 const users = ref([]);
@@ -408,6 +415,7 @@ const totalPages = ref(1);
 const actualPage = ref(1)
 const totalUserCount = ref(0)
 
+// This function allows you to upload all users who have logged in
 async function fetchUsers(pageRequestValue) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/admin/getUsersPaged?page=${(pageRequestValue - 1)}&sortBy=email`, {
@@ -432,6 +440,7 @@ async function toHome() {
     router.push('/');
 }
 
+// This function returns the role of the user
 async function getRole(userEmail) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/admin/getRole/${userEmail}`, {
@@ -445,7 +454,7 @@ async function getRole(userEmail) {
         console.error('Failed to fetch Role', error);
     }
 }
-
+// This function allows you to delete the user
 async function deleteUser(userEmail) {
     try {
         const response = await axios.post(`${apiServerAddress}/v1/admin/deleteUser`, { "email": userEmail }, {
@@ -460,7 +469,7 @@ async function deleteUser(userEmail) {
         console.error('Failed to remove watch from storage:', error);
     }
 }
-
+// This function allows you to see if the email is already in use.
 async function isEmailUsed(email) {
     try {
         const response = await axios.get(`${apiServerAddress}/v1/admin/isEmailUsed/${email}`, {
@@ -482,7 +491,7 @@ const newUser = {
     username: "",
     verified: ""
 };
-
+// This function allows you to create a new user
 async function saveUser() {
     emailNotValid.value = false;
     emptyFields.value = false;
@@ -540,7 +549,7 @@ const editUser = {
     verified: ""
 };
 
-
+// This function allows you to edit a user
 async function updateUser() {
     editUser.loginMode = false;
     try {
@@ -559,14 +568,8 @@ async function updateUser() {
     }
 }
 
-async function setValues() {
-    editUser.id = selectedUser.value.id;
-    editUser.email = selectedUser.value.email;
-    editUser.loginMode = selectedUser.value.loginMode;
-    editUser.username = selectedUser.value.name;
-    editUser.verified = selectedUser.value.verified;
-}
 
+// This function allows you to delete the user data
 async function delValues() {
     editUser.id = 0;
     editUser.email = "";
@@ -579,6 +582,7 @@ const searchCt = {
     searchContent: ""
 };
 
+// This function allows you to search for a user
 async function searchUser() {
     searchCt.searchContent = searchContent.value;
     try {
@@ -595,6 +599,8 @@ async function searchUser() {
     }
 }
 
+// utils
+
 async function logout() {
     try {
         localStorage.removeItem('token');
@@ -603,6 +609,15 @@ async function logout() {
         console.error(error)
     }
 }
+
+async function setValues() {
+  editUser.id = selectedUser.value.id;
+  editUser.email = selectedUser.value.email;
+  editUser.loginMode = selectedUser.value.loginMode;
+  editUser.username = selectedUser.value.name;
+  editUser.verified = selectedUser.value.verified;
+}
+
 
 onMounted(async () => {
     await fetchUsers(1);
@@ -621,7 +636,6 @@ onBeforeMount(async () => {
 
 });
 
-//Utils
 function isNullOrEmpty(str) {
     return !str || str.trim() === '';
 }
