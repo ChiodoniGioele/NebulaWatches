@@ -34,10 +34,9 @@ public class EmailService {
                                         .put(new JSONObject()
                                                 .put("Email", email)
                                                 .put("Name", email)))
-                                .put(Emailv31.Message.SUBJECT, "LogIn in NebulaWatches")
-                                //.put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
+                                .put(Emailv31.Message.SUBJECT, "NebulaWatches Account Verification")
                                 .put(Emailv31.Message.HTMLPART,
-                                        "<title>Benvenuto su NebulaWatches</title><style>body {font-family: Arial, sans-serif;background-color: #f4f4f4;margin: 0;padding: 0;}  .container {max-width: 600px;margin: 50px auto;padding: 20px;background-color: #ffffff;border-radius: 10px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}  .welcome-heading {text-align: center;color: #333333;}  .login-code-container {text-align: center;margin-top: 30px;}  .login-code {display: inline-block;padding: 10px 20px;background-color: #4CAF50;color: #ffffff;border-radius: 20px;font-size: 20px;}</style></head><body><div class='container'><h1 class='welcome-heading'>Benvenuto su NebulaWatches!</h1><p>Per favore, inserisci il codice di autenticazione qui sotto:</p><div class='login-code-container'><div class='login-code'>"+code+"</div></div></div>"
+                                        "<title>Welcome to NebulaWatches</title><style>body {font-family: Arial, sans-serif;background-color: #f4f4f4;margin: 0;padding: 0;}  .container {max-width: 600px;margin: 50px auto;padding: 20px;background-color: #ffffff;border-radius: 10px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);}  .welcome-heading {text-align: center;color: #333333;}  .login-code-container {text-align: center;margin-top: 30px;}  .login-code {display: inline-block;padding: 10px 20px;background-color: #4CAF50;color: #ffffff;border-radius: 20px;font-size: 20px;}</style></head><body><div class='container'><h1 class='welcome-heading'>Welcome to NebulaWatches!</h1><p>Please complete your account verification with the code below:</p><div class='login-code-container'><div class='login-code'>"+code+"</div></div></div>"
                                 )));
         response = client.post(request);
         System.out.println(response.getStatus());

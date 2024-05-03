@@ -179,7 +179,6 @@ function isPasswordValid(password) {
     if (password.length < 5) {
         return false;
     }
-
     const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
     if (!complexityRegex.test(password)) {
         return false;

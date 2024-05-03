@@ -4,13 +4,6 @@
         <div class="flex flex-col w-full" > 
             <div class="px-8 py-6">
 
-                <div class="flex w-full items-center gap-1.5">
-                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text"
-                        placeholder="Search a watch ..." />
-                    <Button @click="router.push('/search')" type="submit" class="bg-blue-600"> Search </Button>
-
-                </div>
-
                 <div class="mt-5 flex items-center">
                     <div class="w-full flex gap-7 items-center">
                         <div>
@@ -132,6 +125,7 @@
                 <div class="mt-12 flex flex-wrap gap-5">
                     <div class="flex gap-20">
                         <img class="h-[300px] border border-gray-200 rounded-lg" :src="watchImage" alt="Watch Image" />
+
                         <div class="pt-2">
                             <ScrollArea class="h-[70vh] p-7">
                                 <div class="pb-4">

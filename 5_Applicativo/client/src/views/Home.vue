@@ -90,8 +90,6 @@ const totalBrandCount = ref(0)
 const actualPage = ref(1)
 const isLoading = ref(true)
 
-//const pageRequestValue = ref(0)
-
 async function fetchBrands(pageRequestValue) {
     try {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -125,6 +123,7 @@ async function toFavourite(){
 
 onMounted(async () => {
     fetchBrands(1);
+    localStorage.removeItem('search');
 });
 
 
