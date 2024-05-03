@@ -478,7 +478,7 @@ function soldForMoreOrEqual(priceSold, pricePurchase) {
     return priceSold >= pricePurchase;
 }
 function isValidPrice(price) {
-    return !isNaN(price) && price >= 0 && price != '';
+    return !isNaN(price) && price >= 0 && price != '' && price < 2000000000;
 }
 function redo() {
     assertClient.value = true;

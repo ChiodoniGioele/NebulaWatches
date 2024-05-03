@@ -1,5 +1,6 @@
 <template>
-    <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
+    <div class="h-screen bg-gray-50 dark:bg-gray-900">
+    <section class="p-3 sm:p-5 antialiased">
 
         <div class="mx-auto max-w-screen-2xl px-4 lg:px-12">
             <div class="flex space-x-3 justify-between">
@@ -15,7 +16,7 @@
                     <div class="flex-1 flex items-center space-x-2">
                         <h5>
                             <span class="text-gray-500">Users: </span>
-                            <span class="dark:text-white">{{ getNumberOfUsers() }}</span>
+                            <span class="dark:text-white">{{ totalUserCount }}</span>
                         </h5>
                     </div>
 
@@ -305,12 +306,6 @@
                 </div>
                 <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
                     aria-label="Table navigation">
-                    <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                        Showing
-                        <span class="font-semibold text-gray-900 dark:text-white">1-{{ getNumberOfUsers() }}</span>
-                        of
-                        <span class="font-semibold text-gray-900 dark:text-white">{{ getNumberOfUsers() }}</span>
-                    </span>
                 </nav>
             </div>
         </div>
@@ -323,7 +318,7 @@
                     <template v-for="(item, index) in items">
                         <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                             <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'"
-                                @click="fetchBfetchUsersrands(item.value); scrollToTop()">
+                                @click="fetchUsers(item.value); scrollToTop()">
                                 {{ item.value }}
                             </Button>
                         </PaginationListItem>
@@ -336,6 +331,7 @@
             </Pagination>
         </div>
     </section>
+</div>
 </template>
 
 <script setup>
