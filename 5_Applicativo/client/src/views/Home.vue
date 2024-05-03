@@ -8,7 +8,7 @@
                     <Input class="border-stone-900 border" @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch..." />
                     <Button @click="router.push('/search')" type="submit"> Search </Button>
                     <Button variant="outline" @click="toFavourite">
-                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
+                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png" alt="go back"/>
                         <p class="m-2">Favourites</p>
                     </Button>
                 </div>

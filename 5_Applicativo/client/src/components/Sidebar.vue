@@ -14,29 +14,29 @@
     <!-- Logo and User Info -->
     <div class="flex flex-col p-4">
       <div class="space-y-4 py-4 flex-1">
-        <img src="@/assets/Logo.png" alt="">
+        <img src="@/assets/Logo.png" alt="Project logo">
         <div class="px-1 pt-8 w-[100%] ">
           <div class="">
             <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8" @click="toHome">
-              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Watch.png"/>
+              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Watch.png" alt="watch"/>
               <span class="text-inherit text-base font-bold">Watches</span>
             </Button>
             <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8" @click="toStorage">
-              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Boxes.png"/>
+              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Boxes.png" alt="storage">
               <span class="text-inherit text-base font-bold">Storage</span>
             </Button>
             <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8"
                     @click="router.push('/clients');">
-              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Customer.png"/>
+              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Customer.png" alt="client "/>
               <span class="text-inherit text-base font-bold">Clients</span>
             </Button>
             <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8" @click="toTeam">
-              <img class="me-3" height="20px" width="20px" src="@/assets/icons/User Account.png"/>
+              <img class="me-3" height="20px" width="20px" src="@/assets/icons/User Account.png" alt="team"/>
               <span class="text-inherit text-base font-bold">Team</span>
             </Button>
             <Button variant="ghost" class="flex items-center py-0 gap-2 w-full justify-start pl-8"
                     @click="router.push('/comunication');">
-              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Chat.png"/>
+              <img class="me-3" height="20px" width="20px" src="@/assets/icons/Chat.png" alt="emails">
               <span class="text-inherit text-base font-bold">Communication</span>
             </Button>
           </div>
@@ -89,7 +89,7 @@
   </div>
 
   <!-- Content -->
-  <div :class="{ 'ml-0': !isSidebarOpen, 'ml-80': isSidebarOpen }" class="flex flex-col flex-1 p-4">
+  <div :class="{ 'ml-0': !isSidebarOpen, 'ml-80': isSidebarOpen }" class="flex flex-col flex-1 p-4 ">
   </div>
 
 </template>

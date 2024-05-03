@@ -5,8 +5,8 @@
             <div class="px-8 py-6">
 
                 <div class="flex w-full items-center gap-2.5">
-                    <Input id="email" type="text" placeholder="Search a watch in your favourites..." />
-                    <Button type="submit"> Search </Button>
+                    <Input class="border-stone-900 border" @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch..." />
+                    <Button @click="router.push('/search')" type="submit"> Search </Button>
                     <Button variant="outline" @click="toHome"> All Watches</Button>
                 </div>
                 

@@ -4,6 +4,8 @@ import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.team.model.Team;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +23,11 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
             "LEFT JOIN CustomWatch cw ON s.customWatch.reference = cw.reference " +
             "WHERE s.user.id = ?1")
     List<Storage> findByUser(int userId);
+
+    @Query("SELECT s FROM Storage s LEFT JOIN Watch w ON s.watch.reference = w.reference " +
+            "LEFT JOIN CustomWatch cw ON s.customWatch.reference = cw.reference " +
+            "WHERE s.user.id = ?1")
+    Page<Storage> findByUser(int userId, Pageable pageable);
 
     @Transactional
     void deleteById(Long id);

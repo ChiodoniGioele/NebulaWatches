@@ -15,7 +15,7 @@
                     <div class="w-full flex gap-7 items-center">
                         <div>
                             <Button @click="$router.back()" variant="secondary">
-                                <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+                                <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" alt="go back"/>
                                 <!-- Go back -->
                             </Button>
                         </div>

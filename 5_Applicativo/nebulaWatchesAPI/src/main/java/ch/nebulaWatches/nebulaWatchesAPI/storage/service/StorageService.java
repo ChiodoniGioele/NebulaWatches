@@ -13,6 +13,9 @@ import ch.nebulaWatches.nebulaWatchesAPI.team.repository.TeamRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.repository.WatchRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLOutput;
@@ -52,6 +55,15 @@ public class StorageService {
 
     public List<Storage> getWatchesByUserId(int userId) {
         return storageRepository.findByUser(userId);
+    }
+
+    public Page<Storage> getWatchesByUserId(int userId, int page, int pageLength, String sortBy) {
+        if (page < 0 || pageLength <= 0) {
+            throw new IllegalArgumentException("Invalid page or length parameters");
+        }
+        Sort.Direction sortDirection = Sort.Direction.ASC;
+        return storageRepository.findByUser(userId, PageRequest.of(page, pageLength, sortDirection, sortBy));
+
     }
 
     public void addWatchToStorage(StorageRequest request) {
