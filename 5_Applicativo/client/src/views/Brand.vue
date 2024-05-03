@@ -8,7 +8,7 @@
                     <Input class="border-stone-900" @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch ..." />
                     <Button @click="router.push('/search')" type="submit"> Search </Button>
                     <Button variant="outline" @click="toFavourite">
-                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
+                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png" alt="Favourites"/>
                         <p class="m-2">Favourites</p>
                     </Button>
                 </div>
@@ -16,7 +16,7 @@
                 <div class="mt-5 flex gap-7 items-center">
                     <div>
                         <Button @click="$router.back()" variant="secondary">
-                            <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+                            <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" alt="Go back" />
                             <!-- Go back -->
                         </Button>
                     </div>

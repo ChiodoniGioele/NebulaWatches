@@ -39,6 +39,8 @@
                         </div>
                     </TabsContent>
                 </Tabs>
+
+                
             </div>
         </div>
     </div>
@@ -62,11 +64,25 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
+import {
+  Pagination,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+} from '@/components/ui/pagination'
+
 const route = useRoute();
 const router = useRouter();
 const storedWatches = ref([]);
 const storedWatchesNotSold = ref([]);
 const storedWatchesSold = ref([]);
+
+const totalPages = ref(1)
+const actualPage = ref(1)
 
 async function fetchStorage(userEmail) {
     try {

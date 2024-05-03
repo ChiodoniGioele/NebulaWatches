@@ -12,8 +12,8 @@
 
                 <div class="mt-5 flex gap-7 items-center">
                     <div>
-                        <Button @click="$router.back(), setNullStorage()" variant="secondary">
-                            <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+                        <Button @click="$router.back()" variant="secondary"> 
+                            <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" alt="go back logo"/>
                             <!-- Go back -->
                         </Button>
                     </div>

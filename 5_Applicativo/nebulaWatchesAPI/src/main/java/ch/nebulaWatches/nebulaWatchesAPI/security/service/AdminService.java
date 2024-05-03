@@ -7,6 +7,9 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import com.mailjet.client.errors.MailjetException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,15 @@ public class AdminService {
     }
     public List<User> getAllUsers() {
         return repository.findAllUsersWithUserRole();
+    }
+
+    public Page<User> getAllUsers(int page, int pageLength, String sortBy) {
+        if (page < 0 || pageLength <= 0) {
+            throw new IllegalArgumentException("Invalid page or length parameters");
+        }
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        return repository.findAllUsersWithUserRole(PageRequest.of(page, pageLength, sortDirection, sortBy));
+
     }
 
     public Role getRole(String userEmail) {

@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.Role;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +21,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.role = 'USER' AND u.archived = false")
     List<User> findAllUsersWithUserRole();
+
+    @Query("SELECT u FROM User u WHERE u.role = 'USER' AND u.archived = false")
+    Page<User> findAllUsersWithUserRole(Pageable pageable);
 
     @Query("SELECT role FROM User WHERE email = ?1")
     Role getRoleForUser(String userEmail);

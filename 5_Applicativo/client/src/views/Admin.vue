@@ -317,21 +317,21 @@
         <div class="mt-12 px-1 w-full gap-7 flex items-center justify-center">
             <Pagination v-slot="{ page }" :total="totalPages * 10" :sibling-count="3" show-edges :default-page="1">
                 <PaginationList v-slot="{ items }" class="flex items-center gap-1 w-full">
-                    <PaginationFirst @click="fetchBrands(1)" />
-                    <PaginationPrev @click="fetchBrands(actualPage - 1)" />
+                    <PaginationFirst @click="fetchUsers(1)" />
+                    <PaginationPrev @click="fetchUsers(actualPage - 1)" />
 
                     <template v-for="(item, index) in items">
                         <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
                             <Button class="w-10 h-10 p-0" :variant="item.value === page ? 'default' : 'outline'"
-                                @click="fetchBrands(item.value); scrollToTop()">
+                                @click="fetchBfetchUsersrands(item.value); scrollToTop()">
                                 {{ item.value }}
                             </Button>
                         </PaginationListItem>
                         <PaginationEllipsis v-else :key="item.type" :index="index" />
                     </template>
 
-                    <PaginationNext @click="fetchBrands(actualPage + 1)" />
-                    <PaginationLast @click="fetchBrands(totalPages)" />
+                    <PaginationNext @click="fetchUsers(actualPage + 1)" />
+                    <PaginationLast @click="fetchUsers(totalPages)" />
                 </PaginationList>
             </Pagination>
         </div>
@@ -410,16 +410,20 @@ const passwordLong = ref(false);
 const emailUsed = ref(false);
 const totalPages = ref(1);
 const actualPage = ref(1)
+const totalUserCount = ref(0)
 
-async function fetchUsers() {
+async function fetchUsers(pageRequestValue) {
     try {
-        const response = await axios.get(`${apiServerAddress}/v1/admin/getUsers`, {
+        const response = await axios.get(`${apiServerAddress}/v1/admin/getUsersPaged?page=${(pageRequestValue - 1)}&sortBy=email`, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem('token'),
             },
         });
 
-        users.value = response.data;
+        users.value = response.data.content;
+        totalPages.value = response.data.totalPages;
+        actualPage.value = pageRequestValue;
+        totalUserCount.value = response.data.totalElements
     } catch (error) {
         console.error('Failed to fetch users', error);
     }
@@ -455,7 +459,7 @@ async function deleteUser(userEmail) {
         });
 
         console.log('Watch removed from storage. ', response.data);
-        await fetchUsers();
+        await fetchUsers(actualPage.value);
     } catch (error) {
         console.error('Failed to remove watch from storage:', error);
     }
@@ -504,7 +508,7 @@ async function saveUser() {
                         });
                         console.log('User saved. ', response.data);
                         setNotVisible();
-                        await fetchUsers();
+                        await fetchUsers(actualPage.value);
 
                         newUser.email = "";
                         newUser.password = "";
@@ -553,7 +557,7 @@ async function updateUser() {
         });
         console.log('User updated. ', response.data);
         await delValues();
-        await fetchUsers();
+        await fetchUsers(actualPage.value);
     } catch (error) {
         console.error('Failed to update user:', error);
     }
@@ -605,7 +609,7 @@ async function logout() {
 }
 
 onMounted(async () => {
-    await fetchUsers();
+    await fetchUsers(1);
 });
 
 onBeforeMount(async () => {

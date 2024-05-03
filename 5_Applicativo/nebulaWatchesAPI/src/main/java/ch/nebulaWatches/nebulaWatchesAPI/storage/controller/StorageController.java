@@ -7,8 +7,10 @@ import ch.nebulaWatches.nebulaWatchesAPI.storage.service.CustomWatchService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StatusStorageService;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.service.StorageService;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.exceptions.WatchNotFoundException;
+import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Family;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,24 @@ public class StorageController {
         List<Storage> storages = storageService.getWatchesByUserId(userId);
         return ResponseEntity.ok(storages);
     }
+
+    /*
+    @GetMapping("/{userEmail}")
+    public ResponseEntity<Page<Storage>> getWatchesByStorageAndUser(@PathVariable String userEmail,
+                                                                    @RequestParam Optional<Integer> page,
+                                                                    @RequestParam Optional<String> sortBy) {
+        int userId = userService.getId(userEmail);
+
+        try{
+            Page<Storage> storages = storageService.getWatchesByUserId(userId, page.orElse(0), 20, sortBy.orElse("id"));
+            return ResponseEntity.ok(storages);
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+     */
 
     @PostMapping("/addWatchToStorage")
     public ResponseEntity<String> addWatchToStorage(@RequestBody StorageRequest request) {
