@@ -1,3 +1,6 @@
+<!--
+Card for displaying custom watches. This is is used in CustomWath to show the watches already entered.
+-->
 <template>
     <div class="text-center border-stone-500 border-2  rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%]">
         <div class="h-[50px]">

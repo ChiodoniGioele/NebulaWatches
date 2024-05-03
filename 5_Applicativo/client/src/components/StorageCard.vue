@@ -1,3 +1,6 @@
+<!--
+  Clock card. This is used in storage, Client and Team details.
+-->
 <template>
     <div
         class="text-center border-stone-500 border-2 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] pt-2">

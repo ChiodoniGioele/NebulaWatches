@@ -1,3 +1,6 @@
+<!--
+ Bar graph for visualization of client buy
+-->
 <template>
   <Bar v-if="loaded" id="teamChart" :options="chartOptions" :data="chartData"/>
   <Skeleton v-else class="w-[25vw] h-[12vw] rounded-md"/>

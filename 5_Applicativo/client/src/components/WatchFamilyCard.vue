@@ -1,3 +1,6 @@
+<!--
+Card representing the brand's family of watches with a random image of a watch present in the family.
+-->
 <template>
      <div class="text-center border-stone-500 border-2 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] pt-2">
         <router-link class="block p-5" :to="`/brand/${brandName}/family/${family.id}/watches`">

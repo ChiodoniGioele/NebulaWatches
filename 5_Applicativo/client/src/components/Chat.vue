@@ -1,3 +1,6 @@
+<!--
+ Chatbot component dialog for interaction with Gio Bot  (our chatbot)
+-->
 <template>
     <div v-if="isOpen" class="fixed bottom-0 right-0 p-4">
         <div class="bg-white rounded-lg shadow-lg w-[32rem] border-2 border-stone-900 z-50" style="z-index: 9999;">

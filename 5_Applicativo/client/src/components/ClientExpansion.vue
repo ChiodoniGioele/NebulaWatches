@@ -1,3 +1,6 @@
+<!--
+ Dialog for detailed view of client data
+ -->
 <template>
   <h3>Total watches buys: {{ totalBuys }}</h3> <!-- creare API -->
   <h3>Total watches expenses: {{ totalExpenses }} CHF</h3> <!-- creare API -->
