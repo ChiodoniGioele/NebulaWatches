@@ -4,6 +4,8 @@ import ch.nebulaWatches.nebulaWatchesAPI.clients.model.Client;
 import ch.nebulaWatches.nebulaWatchesAPI.storage.model.Storage;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.team.model.Team;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +23,11 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
             "LEFT JOIN CustomWatch cw ON s.customWatch.reference = cw.reference " +
             "WHERE s.user.id = ?1")
     List<Storage> findByUser(int userId);
+
+    @Query("SELECT s FROM Storage s LEFT JOIN Watch w ON s.watch.reference = w.reference " +
+            "LEFT JOIN CustomWatch cw ON s.customWatch.reference = cw.reference " +
+            "WHERE s.user.id = ?1")
+    Page<Storage> findByUser(int userId, Pageable pageable);
 
     @Transactional
     void deleteById(Long id);
@@ -49,7 +56,7 @@ public interface StorageRepository extends JpaRepository<Storage, Integer> {
     Optional<Storage> getByRequestSold(String reference, int userId, Date date, float buyPrice, String status, float sellPrice, Date date2, Long teamId, Long clientId);
 
 
-    @Query(value = "SELECT SUM(s.quantity) FROM Storage s WHERE s.client_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3 and s.status_name = ?4", nativeQuery = true)
+    @Query(value = "SELECT SUM(s.quantity) FROM storage s WHERE s.client_id = ?1 AND s.sell_date > ?2 AND s.sell_date < ?3 and s.status_name = ?4", nativeQuery = true)
     Optional<Integer> sumQuantityByClientMonth(Long clientId, LocalDate begin, LocalDate end, String status);
 
 

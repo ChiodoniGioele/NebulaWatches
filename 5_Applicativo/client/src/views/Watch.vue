@@ -10,7 +10,7 @@
                         Search
                     </Button>
                     <Button variant="outline" @click="toFavourite">
-                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png" />
+                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png" alt="favourites" />
                         <p class="m-2">Favourites</p>
                     </Button>
                 </div>
@@ -19,7 +19,7 @@
                     <div class="w-full flex gap-7 items-center">
                         <div>
                             <Button @click="$router.back()" variant="secondary">
-                                <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+                                <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" alt="go back" />
                                 <!-- Go back -->
                             </Button>
                         </div>
@@ -138,8 +138,8 @@
                             </PopoverContent>
                         </Popover>
                         <Button variant="outline" @click="addOrRemoveFavourite">
-                            <img v-if="!isStarClicked" class="m-5 h-[25px] w-[25px]" src="@/assets/star.png" />
-                            <img v-else class="m-5 h-[25px] w-[25px]" src="@/assets/star_full.png" />
+                            <img v-if="!isStarClicked" class="m-5 h-[25px] w-[25px]" src="@/assets/star.png" alt="star" />
+                            <img v-else class="m-5 h-[25px] w-[25px]" src="@/assets/star_full.png" alt="full star"/>
                         </Button>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                                                                     <div class="flex gap-2">
                                                                         <div>
                                                                             <img class="h-6"
-                                                                                src="@/assets/icons/watchcharts.png" />
+                                                                                src="@/assets/icons/watchcharts.png" alt="watchcharts logo" />
                                                                         </div>
                                                                         <div>
                                                                             Watchcharts
@@ -217,7 +217,7 @@
                                 <Button variant="outline" class="block" @click="redirectWatchChartsMarketplace()">
                                     <div class="flex gap-2">
                                         <div>
-                                            <img class="h-6" src="@/assets/icons/watchcharts.png" />
+                                            <img class="h-6" src="@/assets/icons/watchcharts.png" alt="watchcharts logo" />
                                         </div>
                                         <div>
                                             Watchcharts Marketplace
@@ -228,7 +228,7 @@
                                 <Button variant="outline" class="block" @click="redirectChrono24()">
                                     <div class="flex gap-2">
                                         <div>
-                                            <img class="h-6" src="@/assets/icons/chrono24.png" />
+                                            <img class="h-6" src="@/assets/icons/chrono24.png" alt="chrono24 logo"/>
                                         </div>
                                         <div>
                                             Chrono24

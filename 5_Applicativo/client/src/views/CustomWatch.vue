@@ -4,18 +4,11 @@
         <div class="flex flex-col w-full" > 
             <div class="px-8 py-6">
 
-                <div class="flex w-full items-center gap-1.5">
-                    <Input @click="router.push('/search')" @change="router.push('/search')" id="email" type="text"
-                        placeholder="Search a watch ..." />
-                    <Button @click="router.push('/search')" type="submit" class="bg-blue-600"> Search </Button>
-
-                </div>
-
                 <div class="mt-5 flex items-center">
                     <div class="w-full flex gap-7 items-center">
                         <div>
                             <Button @click="$router.back()" variant="secondary">
-                                <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+                                <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" alt="go back"/>
                                 <!-- Go back -->
                             </Button>
                         </div>
@@ -52,7 +45,7 @@
                                         </div>
                                     </div>
                                     <div class="w-3/4">
-                                        <Input v-model="selectedQuantity" type="number" placeholder="Quantity" />
+---------------------------                                        <Input v-model="selectedQuantity" type="number" placeholder="Quantity" />
                                     </div>
                                     <div class="w-3/4">
                                         <Input v-model="buyPrice" type="number" placeholder="Bought for" />
@@ -132,6 +125,7 @@
                 <div class="mt-12 flex flex-wrap gap-5">
                     <div class="flex gap-20">
                         <img class="h-[300px] border border-gray-200 rounded-lg" :src="watchImage" alt="Watch Image" />
+
                         <div class="pt-2">
                             <ScrollArea class="h-[70vh] p-7">
                                 <div class="pb-4">
@@ -281,7 +275,7 @@ async function addToStorage() {
         user_email: email.value,
         watch_reference: "",
         status: selectedStatus.value,
-        quantity: 1,
+        quantity: selectedQuantity.value,
         custom_watch_reference: reference,
         buyPrice: 0,
         sellPrice: 0,
@@ -290,6 +284,7 @@ async function addToStorage() {
         purchaseDate: null,
         sellDate: null
     };
+    console.log(selectedQuantity.value);
     invalidData.value = false;
     storageSuccesfull.value = false;
     if (isValidPrice(buyPrice.value)) {

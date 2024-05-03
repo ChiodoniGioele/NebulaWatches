@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository
 public interface CustomWatchRepository extends JpaRepository<CustomWatch, Integer> {
-    @Query("SELECT c FROM CustomWatch c WHERE c.user.id = ?1")
+    @Query("SELECT c FROM CustomWatch c WHERE c.user.id = ?1 and c.status = true ")
     List<CustomWatch> findByUser(int userId);
 
     Optional<CustomWatch> findByReference(String reference);

@@ -65,13 +65,19 @@ public class ClientController {
 
     @DeleteMapping("/delete/{id}")
     void deleteClient(@PathVariable Long id) {
-        storageRepository.updateClientIdToNull(id);
-        repository.deleteById(id);
+        //storageRepository.updateClientIdToNull(id);
+        //repository.deleteById(id);
+        Optional<Client> c = repository.findById(id);
+        if(c.isPresent()){
+            Client client = c.get();
+            client.setStatus(false);
+            repository.save(client);
+        }
+
     }
 
     @PutMapping("/update/{id}")
     ResponseEntity<Client> replaceClient(@RequestBody Client newClient, @PathVariable Long id) {
-
         try{
             return ResponseEntity.ok(
                     repository.findById(id)

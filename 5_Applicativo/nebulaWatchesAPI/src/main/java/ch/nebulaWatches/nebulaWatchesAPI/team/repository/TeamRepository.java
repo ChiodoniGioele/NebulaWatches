@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
-    @Query(value = "select t from Team t where t.user.email = ?1")
+    @Query(value = "select t from Team t where t.user.email = ?1 and t.status = true")
     List<Team> findAllByUserEmail(String email);
 
     @Transactional

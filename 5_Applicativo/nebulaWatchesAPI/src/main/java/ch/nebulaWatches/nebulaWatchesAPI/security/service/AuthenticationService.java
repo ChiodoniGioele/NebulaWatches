@@ -3,6 +3,7 @@ package ch.nebulaWatches.nebulaWatchesAPI.security.service;
 import ch.nebulaWatches.nebulaWatchesAPI.utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.*;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
+import com.mailjet.client.errors.MailjetException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,9 +31,12 @@ public class AuthenticationService {
                     .code(verCode)
                     .build();
             repository.save(user);
-            String text = "Hello " + request.getUsername() + ", \n\r" + "To complete the registration process for your " +
-                    "account, please use the following PIN code: \n\r" + verCode + "\n\r \n\r Sincerely, \n\r NebulaWatches Team";
-            emailService.sendEmail(InputUtils.testInput(request.getEmail()), "NebulaWatches Account Verification - Your PIN Code", text);
+            try {
+                emailService.sendEmail(InputUtils.testInput(request.getEmail()), verCode);
+            }catch (Exception e ){
+                System.err.println(e);
+            }
+
 
             var jwtToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()

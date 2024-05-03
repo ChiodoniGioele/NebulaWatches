@@ -27,6 +27,8 @@ public class Client {
 
     private String notes;
 
+    private boolean status = true;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

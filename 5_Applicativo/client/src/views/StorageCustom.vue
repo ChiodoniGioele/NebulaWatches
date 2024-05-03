@@ -4,14 +4,11 @@
         <div class="flex flex-col w-full" > 
             <div class="px-8 py-6">
 
-                <div class="flex w-full items-center gap-2.5">
-                    <Input id="email" type="text" placeholder="Search a watch in your custom watches..." />
-                    <Button type="submit" class="bg-blue-600"> Search </Button>
-                </div>
+                
                 <div class="mt-5 flex gap-7 items-center">
                     <div>
                         <Button @click="$router.back()" variant="secondary">
-                            <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" />
+                            <img class="max-h-[25px] opacity-40" src="@/assets/icons/back.png" alt="go back">
                         </Button>
                     </div>
                 </div>

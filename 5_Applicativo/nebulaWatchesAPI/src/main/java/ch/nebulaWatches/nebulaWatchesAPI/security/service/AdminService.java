@@ -5,7 +5,11 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.models.AdminRequest;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.Role;
 import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
+import com.mailjet.client.errors.MailjetException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +38,15 @@ public class AdminService {
         return repository.findAllUsersWithUserRole();
     }
 
+    public Page<User> getAllUsers(int page, int pageLength, String sortBy) {
+        if (page < 0 || pageLength <= 0) {
+            throw new IllegalArgumentException("Invalid page or length parameters");
+        }
+        Sort.Direction sortDirection = Sort.Direction.DESC;
+        return repository.findAllUsersWithUserRole(PageRequest.of(page, pageLength, sortDirection, sortBy));
+
+    }
+
     public Role getRole(String userEmail) {
         return repository.getRoleForUser(userEmail);
     }
@@ -46,14 +59,17 @@ public class AdminService {
         repository.setArchivedTrue(request.getEmail());
     }
 
-    public void saveUser(AdminRequest request){
+    public void saveUser(AdminRequest request) {
         User user = new User();
         int code = -1;
         if(!request.isVerified()){
             code = (int) (100000 + Math.random() * 900000);
-            String text = "Hello " + request.getUsername() + ", \n\r" + "To complete the registration process for your " +
-                    "account, please use the following PIN code: \n\r" + code + "\n\r \n\r Sincerely, \n\r NebulaWatches Team";
-            emailService.sendEmail(InputUtils.testInput(request.getEmail()), "NebulaWatches Account Verification - Your PIN Code", text);
+            try {
+                emailService.sendEmail(InputUtils.testInput(request.getEmail()), code);
+            }catch (Exception e){
+                System.err.println(e);
+            }
+
         }
         user.setCode(code);
         user.setUsername(InputUtils.testInput(request.getUsername()));

@@ -22,6 +22,7 @@ import java.util.Optional;
 public class CustomWatchService {
     private final UserRepository userRepository;
     private final CustomWatchRepository customWatchRepository;
+
     public void addCustomWatch(CustomWatchRequest request) throws IOException {
         CustomWatch customWatch = new CustomWatch();
         User user = userRepository.findByEmail(request.getEmail())
@@ -59,7 +60,13 @@ public class CustomWatchService {
         }
     }
     public void removeCustomWatch(CustomWatchRequest request) {
-        customWatchRepository.deleteByReference(request.getReference());
+        //customWatchRepository.deleteByReference(request.getReference());
+        Optional<CustomWatch> cw = customWatchRepository.findByReference(request.getReference());
+        if(cw.isPresent()){
+            CustomWatch customWatch = cw.get();
+            customWatch.setStatus(false);
+            customWatchRepository.save(customWatch);
+        }
     }
     public Optional<CustomWatch> getWatch(String reference) {
         return customWatchRepository.findByReference(reference);
@@ -75,6 +82,7 @@ public class CustomWatchService {
             throw new IllegalArgumentException("Image file is required.");
         }
     }
+
     public boolean canUseRef(String ref){
         Optional<CustomWatch> customWatch= customWatchRepository.findByReference(ref);
 

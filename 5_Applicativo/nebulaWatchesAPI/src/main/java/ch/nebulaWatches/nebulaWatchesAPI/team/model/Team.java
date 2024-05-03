@@ -26,6 +26,8 @@ public class Team {
     private String phone;
     private String role;
 
+    private boolean status = true;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

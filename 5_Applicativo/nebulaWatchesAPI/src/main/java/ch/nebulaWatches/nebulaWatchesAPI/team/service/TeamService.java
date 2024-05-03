@@ -36,7 +36,6 @@ public class TeamService {
         team.setSurname(InputUtils.testInput(request.getSurname()));
         team.setPhone(InputUtils.testInput(request.getPhone()));
         team.setRole(InputUtils.testInput(request.getRole()));
-
         if(InputUtils.isEmailValid(request.getUserEmail())){
             User user = userRepository.findByEmail(InputUtils.testInput(request.getUserEmail()))
                     .orElseThrow(() -> new IllegalArgumentException("User not found"));
@@ -48,8 +47,13 @@ public class TeamService {
     }
 
     public void removeTeamMember(Long id) {
-        storageRepository.updateTeamIdToNull(id);
-        teamRepository.deleteById(id);
+        //storageRepository.updateTeamIdToNull(id);
+        //teamRepository.deleteById(id);
+        Optional<Team> team = teamRepository.findById(id);
+        if (team.isPresent()) {
+            team.get().setStatus(false);
+            teamRepository.save(team.get());
+        }
     }
 
     public void updateTeamMember(TeamRequest request){

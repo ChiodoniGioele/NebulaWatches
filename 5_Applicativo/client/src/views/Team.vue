@@ -381,7 +381,6 @@ async function saveTeam() {
 }
 
 async function mod(id) {
-
     const teamMod = {
         id: id,
         name: nameMod.value,
@@ -432,6 +431,7 @@ onMounted(async () => {
     const payload = JSON.parse(atob(parts[1]));
     emailUser.value = payload.sub;
     await fetchTeam(emailUser.value);
+    localStorage.removeItem('search');
 });
 
 

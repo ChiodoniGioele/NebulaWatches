@@ -10,6 +10,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 
 @CrossOrigin
@@ -36,6 +38,19 @@ public class AdminController {
             return null;
         }
     }
+
+    @GetMapping("/getUsersPaged")
+    public Page<User> getUsersPaged(@RequestHeader HttpHeaders headers,
+                               @RequestParam Optional<Integer> page,
+                               @RequestParam Optional<String> sortBy) {
+        String token = headers.getFirst("Authorization");
+        if(token != null && adminService.isAdminByToken(token)){
+            return adminService.getAllUsers(page.orElse(0), 20, sortBy.orElse("email"));
+        }else{
+            return null;
+        }
+    }
+
     @GetMapping("/getUser/{id}")
     public User getUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         String token = headers.getFirst("Authorization");

@@ -4,6 +4,7 @@ import ch.nebulaWatches.nebulaWatchesAPI.security.models.User;
 import ch.nebulaWatches.nebulaWatchesAPI.security.repository.UserRepository;
 import ch.nebulaWatches.nebulaWatchesAPI.utils.InputUtils;
 import ch.nebulaWatches.nebulaWatchesAPI.watches.model.Watch;
+import com.mailjet.client.errors.MailjetException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,10 +57,13 @@ public class UserService {
         return repository.isEmailUsed(email);
     }
 
-    public void sendAgain(String email) {
+    public void sendAgain(String email)  {
         int code = repository.getCode(email);
-        String text = "Hello," + " \n\r" + "To complete the registration process for your " +
-                "account, please use the following PIN code: \n\r" + code + "\n\r \n\r Sincerely, \n\r NebulaWatches Team";
-       emailService.sendEmail(InputUtils.testInput(email), "NebulaWatches Account Verification - Your PIN Code", text);
+        try {
+            emailService.sendEmail(InputUtils.testInput(email), code);
+        }catch (Exception e ){
+            System.err.println(e);
+        }
+
     }
 }

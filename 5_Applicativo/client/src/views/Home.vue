@@ -8,7 +8,7 @@
                     <Input class="border-stone-900 border" @click="router.push('/search')" @change="router.push('/search')" id="email" type="text" placeholder="Search a watch..." />
                     <Button @click="router.push('/search')" type="submit"> Search </Button>
                     <Button variant="outline" @click="toFavourite">
-                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png"/>
+                        <img class="m-2 h-[25px] w-[25px]" src="@/assets/favourites.png" alt="go back"/>
                         <p class="m-2">Favourites</p>
                     </Button>
                 </div>
@@ -90,8 +90,6 @@ const totalBrandCount = ref(0)
 const actualPage = ref(1)
 const isLoading = ref(true)
 
-//const pageRequestValue = ref(0)
-
 async function fetchBrands(pageRequestValue) {
     try {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -125,6 +123,7 @@ async function toFavourite(){
 
 onMounted(async () => {
     fetchBrands(1);
+    localStorage.removeItem('search');
 });
 
 

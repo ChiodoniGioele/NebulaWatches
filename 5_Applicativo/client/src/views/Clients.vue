@@ -374,6 +374,7 @@ onMounted(async () => {
   const payload = JSON.parse(atob(parts[1]));
   emailUser.value = payload.sub;
   await fetchClients(emailUser.value);
+  localStorage.removeItem('search');
 });
 
 async function mod(id) {
