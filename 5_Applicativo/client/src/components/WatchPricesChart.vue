@@ -1,3 +1,6 @@
+<!--
+Graph with the price evolution of the watch
+-->
 <template>
     <Line
         id="watch-prices-chart"

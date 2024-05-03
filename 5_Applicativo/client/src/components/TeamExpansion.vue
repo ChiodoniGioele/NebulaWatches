@@ -1,3 +1,6 @@
+<!--
+Dialog for detailed view of team data
+-->
 <template>
     <h3>Total watches sold: {{ totalSold }}</h3>
     <ScrollArea class=" max-h-[60vh]">

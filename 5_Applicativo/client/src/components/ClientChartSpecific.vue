@@ -1,3 +1,6 @@
+<!--
+ Line graph for visualization of client buy
+-->
 <template>
   <Line v-if="loaded" id="teamChart2" :options="chartOptions" :data="chartData" />
   <Skeleton v-else class="w-[37vw] h-[19vw] rounded-md"/>

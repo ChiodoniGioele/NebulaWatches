@@ -1,3 +1,6 @@
+<!--
+Watch card, which if selected goes to the page with the watch in detail. (Displayed on the home page)
+-->
 <template>
     <div class="text-center border-stone-500 border-2 rounded-md min-w-[170px]  w-[18%] min-h-[200px] max-[600px]:w-[40%] pt-2">
         <div class="h-[20px]">
@@ -50,6 +53,7 @@ const randomWatchFromBrandImage = ref('')
 const isLoading = ref(true);
 
 const piecesProduced = ref('')
+
 
 
 async function fetchRandomWatchFromBrandImage() {
