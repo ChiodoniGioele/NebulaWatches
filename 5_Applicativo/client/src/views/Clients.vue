@@ -69,6 +69,13 @@
                   Failed, please provide a valid email!
                 </AlertDescription>
               </Alert>
+              <Alert variant="destructive" v-if="phoneNotValid">
+                <AlertCircle class="w-4 h-4" />
+                <AlertTitle>Error</AlertTitle>
+                <AlertDescription>
+                  Failed, please provide a valid phone number!
+                </AlertDescription>
+              </Alert>
               <DialogFooter>
                 <Button @click="saveClient">
                   Save
@@ -81,38 +88,38 @@
 
 
 
-        <div class="px-10 flex">
-          <h1 class="font-semibold "> Client </h1>
-        </div>
+      <div class="px-10 flex">
+        <h1 class="font-semibold "> Client </h1>
+      </div>
 
-        <Tabs default-value="general" class="px-10 mt-5">
-          <TabsList>
-            <TabsTrigger value="general">
-              General
-            </TabsTrigger>
-            <TabsTrigger value="specific">
-              All Time
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="general">
-            <div class="flex justify-center">
-              <div class="w-1/2">
-                <ClientChartSpecific></ClientChartSpecific>
-              </div>
+      <Tabs default-value="general" class="px-10 mt-5">
+        <TabsList>
+          <TabsTrigger value="general">
+            General
+          </TabsTrigger>
+          <TabsTrigger value="specific">
+            All Time
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="general">
+          <div class="flex justify-center">
+            <div class="w-1/2">
+              <ClientChartSpecific></ClientChartSpecific>
             </div>
-          </TabsContent>
-          <TabsContent value="specific">
-            <div class="flex justify-center">
-              <div class="w-1/3">
-                <ClientChartGeneral></ClientChartGeneral>
-              </div>
+          </div>
+        </TabsContent>
+        <TabsContent value="specific">
+          <div class="flex justify-center">
+            <div class="w-1/3">
+              <ClientChartGeneral></ClientChartGeneral>
             </div>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </TabsContent>
+      </Tabs>
 
-        <div class="px-10 flex mt-7">
-                <h1 class="font-semibold "> Clients </h1>
-            </div>
+      <div class="px-10 flex mt-7">
+        <h1 class="font-semibold "> Clients </h1>
+      </div>
 
       <div class="mt-12 w-full gap-7 flex items-center justify-center px-10 ">
         <Table>
@@ -219,7 +226,7 @@
                         <DialogTitle>Informations of {{ client.name }} {{ client.surname }}
                         </DialogTitle>
                         <DialogDescription>
-                          <b>Email:</b> {{ client.email }} <b>Phone:</b> {{client.phone }}
+                          <b>Email:</b> {{ client.email }} <b>Phone:</b> {{ client.phone }}
                         </DialogDescription>
                       </DialogHeader>
                       <ClientExpansion :key="client.id" :client="client"></ClientExpansion>
@@ -303,6 +310,7 @@ const emailUser = ref('');
 const emailNotValid = ref(false);
 const emptyFields = ref(false);
 const restOpen = ref(false);
+const phoneNotValid = ref(false);
 
 
 async function fetchClients(email) {
@@ -336,20 +344,28 @@ async function saveClient() {
   }
   emptyFields.value = false;
   emailNotValid.value = false;
+  phoneNotValid.value = false;
+
   if (isNullOrEmpty(newClient.name) || isNullOrEmpty(newClient.surname) || isNullOrEmpty(newClient.email)) {
     emptyFields.value = true;
   }
 
   if (!emptyFields.value) {
     if (isEmailValid(newClient.email)) {
-      try {
+      if (!isNullOrEmpty(newClient.phone)) {
+        if (!verifyPhone(newClient.phone)) {
+          phoneNotValid.value = true;
+        }
+      }
+      if(!phoneNotValid.value){
+        try {
         const response = await axios.post(`${apiServerAddress}/v1/clients/add`, newClient,
           {
             headers: {
               Authorization: 'Bearer ' + localStorage.getItem('token'),
             },
           });
-          setNotVisible();
+        setNotVisible();
         fetchClients(emailUser.value);
         console.log("Client saved!", response.data)
 
@@ -361,6 +377,8 @@ async function saveClient() {
       surname.value = null;
       email.value = null;
       phone.value = null;
+      }
+      
     } else {
       emailNotValid.value = true;
     }
@@ -429,9 +447,12 @@ function isEmailValid(email) {
 function setNotVisible() {
   restOpen.value = !restOpen.value;
 }
-
-
-
-
+function verifyPhone(phoneNumber) {
+  const phoneRegex = /^\+[1-9]\d{1,14}$/;
+  return phoneRegex.test(phoneNumber);
+}
+function verifyString(inputString) {
+  return inputString.length <= 50;
+}
 
 </script>

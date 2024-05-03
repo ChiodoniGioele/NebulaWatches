@@ -39,27 +39,27 @@
                             <div class="grid gap-4 py-4">
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label for="qty" class="text-right">
-                                        Amount
+                                        Amount *
                                     </Label>
                                     <Input v-model="editStrg.quantity" id="qty" class="col-span-3" type="number"
                                         max="{{ storage.quantity  }}" />
                                 </div>
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label for="price" class="text-right">
-                                        Price
+                                        Price *
                                     </Label>
                                     <Input v-model="editStrg.sellPrice" id="price" class="col-span-3" type="number"
                                         min="0" />
                                 </div>
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label for="date" class="text-right">
-                                        Sell Date
+                                        Sell Date *
                                     </Label>
                                     <Input v-model="editStrg.sellDate" id="date" class="col-span-3" type="date" />
                                 </div>
                                 <div class="grid grid-cols-4 items-center gap-4">
                                     <Label class="text-right">
-                                        Client
+                                        Client *
                                     </Label>
                                     <div class="col-span-3">
                                         <Select v-model="editStrg.clientId">
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="grid grid-cols-4 items-center gap-4" v-if="editStrg.status == 'Sold'">
                                     <Label class="text-right">
-                                        Team
+                                        Team *
                                     </Label>
                                     <div class="col-span-3">
                                         <Select v-model="editStrg.teamId">
@@ -110,10 +110,6 @@
                                     The sell date must be after the purchase date!
                                 </AlertDescription>
                             </Alert>
-                            <div class="flex items-center text-gray-500 border border-gray-300 rounded-md p-2 text-sm">
-                                <Info class="w-4 h-4 mr-2" />
-                                <span>All fields are required!</span>
-                            </div>
                             <DialogFooter>
                                 <Button type="submit" @click="editStorage">
                                     Save Changes

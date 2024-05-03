@@ -26,7 +26,7 @@
                                 <div class="grid grid-cols-4 items-center gap-4">
 
                                     <Label for="name" class="text-right">
-                                        Name * 
+                                        Name *
                                     </Label>
                                     <Input id="name" v-model="name" class="col-span-3" />
 
@@ -75,6 +75,20 @@
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
                                     Failed, please provide a valid email!
+                                </AlertDescription>
+                            </Alert>
+                            <Alert variant="destructive" v-if="phoneNotValid">
+                                <AlertCircle class="w-4 h-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>
+                                    Failed, please provide a valid phone number!
+                                </AlertDescription>
+                            </Alert>
+                            <Alert variant="destructive" v-if="roleNotValid">
+                                <AlertCircle class="w-4 h-4" />
+                                <AlertTitle>Error</AlertTitle>
+                                <AlertDescription>
+                                    Failed, please provide a valid role, less than 50 charachters!!
                                 </AlertDescription>
                             </Alert>
                             <DialogFooter>
@@ -139,7 +153,7 @@
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="team in teams" :key="team.id">
-                            
+
                             <TableCell>{{ team.name }}</TableCell>
                             <TableCell>{{ team.surname }}</TableCell>
                             <TableCell>{{ team.email }}</TableCell>
@@ -226,23 +240,23 @@
                             </TableCell>
                             <TableCell>
                                 <Dialog>
-                                <DialogTrigger>
-                                    <Button variant="outline">Details</Button>
-                                </DialogTrigger>
-                                <DialogOverlay>
-                                    <DialogContent class="max-h-[80vh] max-w-[70vw]">
-                                        <DialogHeader>
-                                            <DialogTitle>Informations of {{ team.name }} {{ team.surname }}
-                                            </DialogTitle>
-                                            <DialogDescription><b>Email:</b> {{ team.email }} <b>Phone:</b> {{
+                                    <DialogTrigger>
+                                        <Button variant="outline">Details</Button>
+                                    </DialogTrigger>
+                                    <DialogOverlay>
+                                        <DialogContent class="max-h-[80vh] max-w-[70vw]">
+                                            <DialogHeader>
+                                                <DialogTitle>Informations of {{ team.name }} {{ team.surname }}
+                                                </DialogTitle>
+                                                <DialogDescription><b>Email:</b> {{ team.email }} <b>Phone:</b> {{
                         team.phone }} <b>Role:</b> {{ team.role }}</DialogDescription>
-                                        </DialogHeader>
+                                            </DialogHeader>
 
-                                        <TeamExpansion :key="team.id" :team="team"></TeamExpansion>
-                                    </DialogContent>
+                                            <TeamExpansion :key="team.id" :team="team"></TeamExpansion>
+                                        </DialogContent>
 
-                                </DialogOverlay>
-                            </Dialog>
+                                    </DialogOverlay>
+                                </Dialog>
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -319,6 +333,8 @@ const role = ref('');
 const saveFailed = ref(false);
 const emailNotValid = ref(false);
 const emptyFields = ref(false);
+const phoneNotValid = ref(false);
+const roleNotValid = ref(false);
 
 async function fetchTeam(email) {
     try {
@@ -346,33 +362,48 @@ async function saveTeam() {
     }
     emailNotValid.value = false;
     emptyFields.value = false;
+    roleNotValid.value = false;
+    phoneNotValid.value = false;
 
     if (isNullOrEmpty(newTeam.name) || isNullOrEmpty(newTeam.surname) || isNullOrEmpty(newTeam.email)) {
         emptyFields.value = true;
     }
 
+
     if (!emptyFields.value) {
         if (isEmailValid(newTeam.email)) {
-            try {
-                const response = await axios.post(`${apiServerAddress}/v1/team/add`, newTeam,
-                    {
-                        headers: {
-                            Authorization: 'Bearer ' + localStorage.getItem('token'),
-                        },
-                    });
-
-                setNotVisible();
-                fetchTeam(emailUser.value);
-                console.log("Team member saved!", response.data)
-
-            } catch (error) {
-                console.error('Save failed failed:', error);
-                saveFailed.value = true;
+            if (!isNullOrEmpty(newTeam.phone)) {
+                if (!verifyPhone(newTeam.phone)) {
+                    phoneNotValid.value = true;
+                }
             }
-            name.value = null;
-            surname.value = null;
-            email.value = null;
-            phone.value = null;
+            if (!isNullOrEmpty(newTeam.role)) {
+                if (!verifyString(newTeam.role)) {
+                    roleNotValid.value = true;
+                }
+            }
+            if (!roleNotValid.value && !phoneNotValid.value) {
+                try {
+                    const response = await axios.post(`${apiServerAddress}/v1/team/add`, newTeam,
+                        {
+                            headers: {
+                                Authorization: 'Bearer ' + localStorage.getItem('token'),
+                            },
+                        });
+
+                    setNotVisible();
+                    fetchTeam(emailUser.value);
+                    console.log("Team member saved!", response.data)
+
+                } catch (error) {
+                    console.error('Save failed failed:', error);
+                    saveFailed.value = true;
+                }
+                name.value = null;
+                surname.value = null;
+                email.value = null;
+                phone.value = null;
+            }
         } else {
             emailNotValid.value = true;
         }
@@ -445,5 +476,12 @@ function isEmailValid(email) {
 }
 function setNotVisible() {
     restOpen.value = !restOpen.value;
+}
+function verifyPhone(phoneNumber) {
+    const phoneRegex = /^\+[1-9]\d{1,14}$/;
+    return phoneRegex.test(phoneNumber);
+}
+function verifyString(inputString) {
+    return inputString.length <= 50;
 }
 </script>

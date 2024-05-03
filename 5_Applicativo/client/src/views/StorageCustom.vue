@@ -38,32 +38,32 @@
                                 <div class="grid gap-4 py-4">
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="reference" class="text-right">
-                                            Reference
+                                            Reference *
                                         </Label>
                                         <Input id="reference" class="col-span-3" v-model="customWatch.reference" />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="name" class="text-right">
-                                            Name
+                                            Name *
                                         </Label>
                                         <Input id="name" class="col-span-3" v-model="customWatch.name" />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="desc" class="text-right">
-                                            Description
+                                            Desc *
                                         </Label>
                                         <Input id="desc" class="col-span-3" v-model="customWatch.description" />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="retailPrice" class="text-right">
-                                            Price
+                                            Price *
                                         </Label>
                                         <Input type="number" id="retailPrice" class="col-span-3"
                                             v-model="customWatch.retailPrice" />
                                     </div>
                                     <div class="grid grid-cols-4 items-center gap-4">
                                         <Label for="image" class="text-right">
-                                            Image
+                                            Image *
                                         </Label>
                                         <Input type="file" id="image" class="col-span-3" accept="image/*"
                                             @change="handleImageChange" />
