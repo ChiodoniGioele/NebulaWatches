@@ -1,6 +1,0 @@
-- Controllo se un orologio nel proprio inventario è rubato
-- Quando aggiungi un orologio ti esce un form con le info del storage, 
-  tipo se viene spedito o lo abbiamo già
-
-- https://front.com/ per Chiodoni che collega le robe
-- https://www.chatdaddy.tech/blog/whatsapp-login-2022-how-to-implement-whatsapp-login-on-your-app
